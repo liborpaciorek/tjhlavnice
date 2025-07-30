@@ -19,12 +19,14 @@ This guide provides step-by-step instructions for deploying the TJ Družba Hlavn
 ## VPS Server Preparation
 
 ### Minimum Requirements
+
 - **RAM**: 1GB minimum (2GB recommended)
 - **Storage**: 20GB minimum (40GB recommended)
 - **CPU**: 1 core minimum (2 cores recommended)
 - **OS**: Ubuntu 20.04 LTS or 22.04 LTS
 
 ### Initial Server Access
+
 ```bash
 # Connect to your VPS via SSH
 ssh root@your-server-ip
@@ -36,6 +38,7 @@ ssh username@your-server-ip
 ## Domain Configuration
 
 ### 1. DNS Records Setup
+
 Configure the following DNS records with your domain provider:
 
 ```
@@ -46,6 +49,7 @@ CNAME   *       yourdomain.com      3600
 ```
 
 ### 2. Verify DNS Propagation
+
 ```bash
 # Check if DNS is propagated
 dig yourdomain.com
@@ -55,6 +59,7 @@ dig www.yourdomain.com
 ## Server Setup
 
 ### 1. Update System
+
 ```bash
 # Update package lists and upgrade system
 sudo apt update && sudo apt upgrade -y
@@ -64,6 +69,7 @@ sudo apt install -y curl wget git vim htop unzip software-properties-common
 ```
 
 ### 2. Create Application User
+
 ```bash
 # Create a user for the application
 sudo adduser tjhlavnice
@@ -74,6 +80,7 @@ su - tjhlavnice
 ```
 
 ### 3. Install Python and Dependencies
+
 ```bash
 # Install Python 3.11 and pip
 sudo apt install -y python3.11 python3.11-venv python3-pip python3.11-dev
@@ -83,6 +90,7 @@ sudo apt install -y build-essential libpq-dev nginx supervisor
 ```
 
 ### 4. Install PostgreSQL
+
 ```bash
 # Install PostgreSQL
 sudo apt install -y postgresql postgresql-contrib
@@ -105,6 +113,7 @@ ALTER USER tjhlavnice CREATEDB;
 ## Application Deployment
 
 ### 1. Clone Repository
+
 ```bash
 # Navigate to home directory
 cd /home/tjhlavnice
@@ -118,6 +127,7 @@ cd tjhlavnice
 ```
 
 ### 2. Create Virtual Environment
+
 ```bash
 # Create virtual environment
 python3.11 -m venv venv
@@ -130,6 +140,7 @@ pip install --upgrade pip
 ```
 
 ### 3. Install Dependencies
+
 ```bash
 # Install Python packages
 pip install -r requirements.txt
@@ -143,12 +154,14 @@ pip install python-decouple
 ```
 
 ### 4. Environment Configuration
+
 ```bash
 # Create environment file
 nano .env
 ```
 
 Add the following content to `.env`:
+
 ```env
 # Django Settings
 SECRET_KEY=your-very-long-secret-key-here
@@ -178,12 +191,14 @@ EMAIL_HOST_PASSWORD=your-app-password
 ```
 
 ### 5. Django Configuration
+
 ```bash
 # Update settings.py for production
 nano tjhlavnice/settings.py
 ```
 
 Update `settings.py`:
+
 ```python
 import os
 from decouple import config
@@ -222,6 +237,7 @@ SECURE_HSTS_PRELOAD = True
 ```
 
 ### 6. Run Django Setup
+
 ```bash
 # Collect static files
 python manage.py collectstatic --noinput
@@ -239,12 +255,14 @@ python manage.py runserver 0.0.0.0:8000
 ## Web Server Configuration
 
 ### 1. Gunicorn Configuration
+
 ```bash
 # Create Gunicorn configuration
 nano /home/tjhlavnice/tjhlavnice/gunicorn.conf.py
 ```
 
 Add Gunicorn configuration:
+
 ```python
 bind = "127.0.0.1:8000"
 workers = 3
@@ -260,12 +278,14 @@ group = "tjhlavnice"
 ```
 
 ### 2. Create Gunicorn Service
+
 ```bash
 # Create systemd service file
 sudo nano /etc/systemd/system/tjhlavnice.service
 ```
 
 Add service configuration:
+
 ```ini
 [Unit]
 Description=TJ Hlavnice Django Application
@@ -286,6 +306,7 @@ WantedBy=multi-user.target
 ```
 
 ### 3. Start Gunicorn Service
+
 ```bash
 # Reload systemd and start service
 sudo systemctl daemon-reload
@@ -297,33 +318,35 @@ sudo systemctl status tjhlavnice
 ```
 
 ### 4. Nginx Configuration
+
 ```bash
 # Create Nginx site configuration
 sudo nano /etc/nginx/sites-available/tjhlavnice
 ```
 
 Add Nginx configuration:
+
 ```nginx
 server {
     listen 80;
     server_name yourdomain.com www.yourdomain.com;
-    
+
     client_max_body_size 100M;
-    
+
     # Static files
     location /static/ {
         alias /home/tjhlavnice/tjhlavnice/staticfiles/;
         expires 30d;
         add_header Cache-Control "public, immutable";
     }
-    
+
     # Media files
     location /media/ {
         alias /home/tjhlavnice/tjhlavnice/media/;
         expires 30d;
         add_header Cache-Control "public";
     }
-    
+
     # Main application
     location / {
         proxy_pass http://127.0.0.1:8000;
@@ -337,6 +360,7 @@ server {
 ```
 
 ### 5. Enable Nginx Site
+
 ```bash
 # Enable the site
 sudo ln -s /etc/nginx/sites-available/tjhlavnice /etc/nginx/sites-enabled/
@@ -355,6 +379,7 @@ sudo systemctl enable nginx
 ## SSL Certificate Setup
 
 ### 1. Install Certbot
+
 ```bash
 # Install Certbot
 sudo apt install -y certbot python3-certbot-nginx
@@ -367,6 +392,7 @@ sudo certbot renew --dry-run
 ```
 
 ### 2. Update Nginx for HTTPS
+
 After Certbot, your Nginx config will be automatically updated. Verify the configuration:
 
 ```bash
@@ -380,12 +406,14 @@ sudo systemctl restart nginx
 ## Database Configuration
 
 ### 1. PostgreSQL Optimization
+
 ```bash
 # Edit PostgreSQL configuration
 sudo nano /etc/postgresql/14/main/postgresql.conf
 ```
 
 Optimize for your server:
+
 ```conf
 # Memory settings
 shared_buffers = 256MB
@@ -398,6 +426,7 @@ max_connections = 100
 ```
 
 ### 2. Database Backup Script
+
 ```bash
 # Create backup directory
 mkdir -p /home/tjhlavnice/backups
@@ -407,6 +436,7 @@ nano /home/tjhlavnice/backup_db.sh
 ```
 
 Add backup script:
+
 ```bash
 #!/bin/bash
 BACKUP_DIR="/home/tjhlavnice/backups"
@@ -436,6 +466,7 @@ crontab -e
 ## Static Files & Media
 
 ### 1. Create Media Directory
+
 ```bash
 # Create media directory with proper permissions
 mkdir -p /home/tjhlavnice/tjhlavnice/media
@@ -444,6 +475,7 @@ sudo chmod -R 755 /home/tjhlavnice/tjhlavnice/media
 ```
 
 ### 2. Static Files Optimization
+
 ```bash
 # Ensure static files are collected
 cd /home/tjhlavnice/tjhlavnice
@@ -458,6 +490,7 @@ sudo chmod -R 755 /home/tjhlavnice/tjhlavnice/staticfiles
 ## Process Management
 
 ### 1. Supervisor Configuration (Alternative to systemd)
+
 ```bash
 # Install Supervisor
 sudo apt install supervisor
@@ -467,6 +500,7 @@ sudo nano /etc/supervisor/conf.d/tjhlavnice.conf
 ```
 
 Add Supervisor configuration:
+
 ```ini
 [program:tjhlavnice]
 command=/home/tjhlavnice/tjhlavnice/venv/bin/gunicorn --config gunicorn.conf.py tjhlavnice.wsgi:application
@@ -488,12 +522,14 @@ sudo supervisorctl start tjhlavnice
 ## Monitoring & Maintenance
 
 ### 1. Log Management
+
 ```bash
 # Create log rotation configuration
 sudo nano /etc/logrotate.d/tjhlavnice
 ```
 
 Add log rotation:
+
 ```
 /var/log/supervisor/tjhlavnice.log {
     daily
@@ -509,12 +545,14 @@ Add log rotation:
 ```
 
 ### 2. System Monitoring Script
+
 ```bash
 # Create monitoring script
 nano /home/tjhlavnice/monitor.sh
 ```
 
 Add monitoring script:
+
 ```bash
 #!/bin/bash
 
@@ -549,12 +587,14 @@ crontab -e
 ```
 
 ### 3. Update Script
+
 ```bash
 # Create update script
 nano /home/tjhlavnice/update.sh
 ```
 
 Add update script:
+
 ```bash
 #!/bin/bash
 cd /home/tjhlavnice/tjhlavnice
@@ -593,6 +633,7 @@ chmod +x /home/tjhlavnice/update.sh
 ### 1. Common Issues
 
 #### Application Won't Start
+
 ```bash
 # Check Gunicorn logs
 sudo journalctl -u tjhlavnice -f
@@ -605,6 +646,7 @@ sudo netstat -tlnp | grep :8000
 ```
 
 #### Static Files Not Loading
+
 ```bash
 # Check static files directory
 ls -la /home/tjhlavnice/tjhlavnice/staticfiles/
@@ -619,6 +661,7 @@ sudo nginx -t
 ```
 
 #### Database Connection Issues
+
 ```bash
 # Check PostgreSQL status
 sudo systemctl status postgresql
@@ -635,7 +678,9 @@ python manage.py dbshell
 ### 2. Performance Optimization
 
 #### Enable Gzip Compression
+
 Add to Nginx configuration:
+
 ```nginx
 # Add inside server block
 gzip on;
@@ -645,7 +690,9 @@ gzip_types text/plain text/css text/xml text/javascript application/javascript a
 ```
 
 #### Cache Static Files
+
 Add to Nginx configuration:
+
 ```nginx
 # Add inside server block
 location ~* \.(css|js|png|jpg|jpeg|gif|ico|svg)$ {
@@ -658,6 +705,7 @@ location ~* \.(css|js|png|jpg|jpeg|gif|ico|svg)$ {
 ### 3. Security Hardening
 
 #### Firewall Configuration
+
 ```bash
 # Install and configure UFW
 sudo ufw enable
@@ -668,6 +716,7 @@ sudo ufw allow 'Nginx Full'
 ```
 
 #### Fail2ban Setup
+
 ```bash
 # Install Fail2ban
 sudo apt install fail2ban
@@ -677,6 +726,7 @@ sudo nano /etc/fail2ban/jail.local
 ```
 
 Add Fail2ban configuration:
+
 ```ini
 [DEFAULT]
 bantime = 3600
@@ -698,6 +748,7 @@ sudo systemctl restart fail2ban
 ## Final Verification
 
 ### 1. Test Your Website
+
 - Visit `https://yourdomain.com`
 - Check all pages load correctly
 - Test admin panel at `https://yourdomain.com/admin/`
@@ -705,6 +756,7 @@ sudo systemctl restart fail2ban
 - Test responsive design on mobile
 
 ### 2. Performance Testing
+
 ```bash
 # Install and use tools for testing
 sudo apt install apache2-utils
@@ -714,7 +766,9 @@ ab -n 100 -c 10 https://yourdomain.com/
 ```
 
 ### 3. SEO and Analytics
+
 Consider adding:
+
 - Google Analytics
 - Google Search Console
 - robots.txt file
@@ -725,6 +779,7 @@ Your Django football club website should now be fully deployed and accessible at
 ## Support
 
 For issues specific to this deployment:
+
 1. Check the troubleshooting section above
 2. Review log files in `/var/log/`
 3. Verify all services are running: `sudo systemctl status nginx tjhlavnice postgresql`

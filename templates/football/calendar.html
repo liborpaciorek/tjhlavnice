@@ -1,207 +1,232 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %}Kalendář - TJ Družba Hlavnice{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block title %}Kalendář - TJ
+Družba Hlavnice{% endblock %} {% block content %}
 <div class="px-4 sm:px-0">
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-club-black">
-            <i class="fas fa-calendar-alt text-club-red mr-3"></i>
-            Kalendář akcí
-        </h1>
-        <p class="text-gray-600 mt-2">Nadcházející akce a události klubu</p>
-    </div>
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-club-black">
+      <i class="fas fa-calendar-alt text-club-red mr-3"></i>
+      Kalendář akcí
+    </h1>
+    <p class="text-gray-600 mt-2">Nadcházející akce a události klubu</p>
+  </div>
 
-    {% if events %}
-        <div class="space-y-6">
-            {% for event in events %}
-                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                        <div class="flex-1 mb-4 md:mb-0">
-                            <div class="flex items-start">
-                                <div class="bg-club-red text-white rounded-lg p-3 mr-4 text-center min-w-16">
-                                    <div class="text-lg font-bold">{{ event.date|date:"d" }}</div>
-                                    <div class="text-xs uppercase">{{ event.date|date:"M" }}</div>
-                                </div>
-                                <div class="flex-1">
-                                    <h3 class="text-xl font-bold text-club-black mb-2">
-                                        {% if event.is_match %}
-                                            <i class="fas fa-futbol text-club-red mr-1"></i>
-                                        {% else %}
-                                            <i class="fas fa-calendar-check text-club-red mr-1"></i>
-                                        {% endif %}
-                                        {{ event.title }}
-                                    </h3>
-                                    {% if event.description %}
-                                        <p class="text-gray-600 mb-2">{{ event.description }}</p>
-                                    {% endif %}
-                                    <div class="flex flex-wrap items-center text-sm text-gray-500 gap-4">
-                                        <div class="flex items-center">
-                                            <i class="fas fa-clock mr-1"></i>
-                                            {{ event.date|date:"H:i" }}
-                                        </div>
-                                        {% if event.location %}
-                                            <div class="flex items-center">
-                                                <i class="fas fa-map-marker-alt mr-1"></i>
-                                                {{ event.location }}
-                                            </div>
-                                        {% endif %}
-                                        {% if event.is_match and event.match %}
-                                            <div class="flex items-center">
-                                                <i class="fas fa-vs mr-1"></i>
-                                                {{ event.match.home_team.name }} vs {{ event.match.away_team.name }}
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center space-x-2">
-                            {% if event.is_match %}
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-club-red text-white">
-                                    <i class="fas fa-futbol mr-1"></i>
-                                    Zápas
-                                </span>
-                            {% else %}
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    <i class="fas fa-calendar-check mr-1"></i>
-                                    Akce
-                                </span>
-                            {% endif %}
-                            
-                            <!-- Countdown -->
-                            <div class="text-right">
-                                <div class="text-xs text-gray-500">Za</div>
-                                <div class="text-sm font-medium text-club-red">
-                                    {% now "Y-m-d H:i:s" as now_str %}
-                                    {% if event.date|date:"Y-m-d" == now_str|date:"Y-m-d" %}
-                                        Dnes
-                                    {% else %}
-                                        {{ event.date|timeuntil }}
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    {% if event.match %}
-                        <div class="mt-4 pt-4 border-t border-gray-200">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                                <div>
-                                    <span class="text-gray-500">Liga:</span>
-                                    <span class="font-medium ml-1">{{ event.match.league.name }}</span>
-                                </div>
-                                {% if event.match.referee %}
-                                    <div>
-                                        <span class="text-gray-500">Rozhodčí:</span>
-                                        <span class="font-medium ml-1">{{ event.match.referee }}</span>
-                                    </div>
-                                {% endif %}
-                                {% if event.match.notes %}
-                                    <div>
-                                        <span class="text-gray-500">Poznámky:</span>
-                                        <span class="font-medium ml-1">{{ event.match.notes|truncatewords:5 }}</span>
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endif %}
+  {% if events %}
+  <div class="space-y-6">
+    {% for event in events %}
+    <div
+      class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
+    >
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+        <div class="flex-1 mb-4 md:mb-0">
+          <div class="flex items-start">
+            <div
+              class="bg-club-red text-white rounded-lg p-3 mr-4 text-center min-w-16"
+            >
+              <div class="text-lg font-bold">{{ event.date|date:"d" }}</div>
+              <div class="text-xs uppercase">{{ event.date|date:"M" }}</div>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-xl font-bold text-club-black mb-2">
+                {% if event.is_match %}
+                <i class="fas fa-futbol text-club-red mr-1"></i>
+                {% else %}
+                <i class="fas fa-calendar-check text-club-red mr-1"></i>
+                {% endif %} {{ event.title }}
+              </h3>
+              {% if event.description %}
+              <p class="text-gray-600 mb-2">{{ event.description }}</p>
+              {% endif %}
+              <div
+                class="flex flex-wrap items-center text-sm text-gray-500 gap-4"
+              >
+                <div class="flex items-center">
+                  <i class="fas fa-clock mr-1"></i>
+                  {{ event.date|date:"H:i" }}
                 </div>
-            {% endfor %}
+                {% if event.location %}
+                <div class="flex items-center">
+                  <i class="fas fa-map-marker-alt mr-1"></i>
+                  {{ event.location }}
+                </div>
+                {% endif %} {% if event.is_match and event.match %}
+                <div class="flex items-center">
+                  <i class="fas fa-vs mr-1"></i>
+                  {{ event.match.home_team.name }} vs {{
+                  event.match.away_team.name }}
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
         </div>
 
-        <!-- Pagination -->
-        {% if is_paginated %}
-            <div class="mt-12 flex justify-center">
-                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                    {% if page_obj.has_previous %}
-                        <a href="?page={{ page_obj.previous_page_number }}" 
-                           class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                            <i class="fas fa-chevron-left"></i>
-                        </a>
-                    {% endif %}
-                    
-                    {% for num in page_obj.paginator.page_range %}
-                        {% if page_obj.number == num %}
-                            <span class="relative inline-flex items-center px-4 py-2 border border-club-red bg-club-red text-sm font-medium text-white">
-                                {{ num }}
-                            </span>
-                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                            <a href="?page={{ num }}" 
-                               class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-                                {{ num }}
-                            </a>
-                        {% endif %}
-                    {% endfor %}
-                    
-                    {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}" 
-                           class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                            <i class="fas fa-chevron-right"></i>
-                        </a>
-                    {% endif %}
-                </nav>
-            </div>
-        {% endif %}
-    {% else %}
-        <div class="text-center py-12">
-            <div class="text-gray-400 mb-4">
-                <i class="fas fa-calendar-times text-6xl"></i>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-600 mb-2">Žádné akce</h3>
-            <p class="text-gray-500 mb-6">V kalendáři nejsou naplánované žádné budoucí akce.</p>
-            <a href="/admin/football/event/add/" target="_blank" 
-               class="inline-flex items-center bg-club-red hover:bg-club-red-dark text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                <i class="fas fa-plus mr-2"></i>
-                Přidat akci
-            </a>
-        </div>
-    {% endif %}
+        <div class="flex items-center space-x-2">
+          {% if event.is_match %}
+          <span
+            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-club-red text-white"
+          >
+            <i class="fas fa-futbol mr-1"></i>
+            Zápas
+          </span>
+          {% else %}
+          <span
+            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
+          >
+            <i class="fas fa-calendar-check mr-1"></i>
+            Akce
+          </span>
+          {% endif %}
 
-    <!-- Quick Add -->
-    <div class="mt-12 bg-white rounded-lg shadow-lg p-6">
-        <h2 class="text-xl font-bold text-club-black mb-4">
-            <i class="fas fa-plus-circle text-club-red mr-2"></i>
-            Přidání akce
-        </h2>
-        <p class="text-gray-600 mb-4">
-            Chcete naplánovat novou akci nebo událost? Použijte admin panel pro přidání do kalendáře.
-        </p>
-        <div class="flex flex-wrap gap-4">
-            <a href="/admin/football/event/add/" target="_blank" 
-               class="inline-flex items-center bg-club-red hover:bg-club-red-dark text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                <i class="fas fa-calendar-plus mr-2"></i>
-                Přidat akci
-            </a>
-            <a href="/admin/football/match/add/" target="_blank" 
-               class="inline-flex items-center bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                <i class="fas fa-futbol mr-2"></i>
-                Naplánovat zápas
-            </a>
+          <!-- Countdown -->
+          <div class="text-right">
+            <div class="text-xs text-gray-500">Za</div>
+            <div class="text-sm font-medium text-club-red">
+              {% now "Y-m-d H:i:s" as now_str %} {% if event.date|date:"Y-m-d"
+              == now_str|date:"Y-m-d" %} Dnes {% else %} {{ event.date|timeuntil
+              }} {% endif %}
+            </div>
+          </div>
         </div>
+      </div>
+
+      {% if event.match %}
+      <div class="mt-4 pt-4 border-t border-gray-200">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div>
+            <span class="text-gray-500">Liga:</span>
+            <span class="font-medium ml-1">{{ event.match.league.name }}</span>
+          </div>
+          {% if event.match.referee %}
+          <div>
+            <span class="text-gray-500">Rozhodčí:</span>
+            <span class="font-medium ml-1">{{ event.match.referee }}</span>
+          </div>
+          {% endif %} {% if event.match.notes %}
+          <div>
+            <span class="text-gray-500">Poznámky:</span>
+            <span class="font-medium ml-1"
+              >{{ event.match.notes|truncatewords:5 }}</span
+            >
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
     </div>
+    {% endfor %}
+  </div>
 
-    <!-- Calendar Legend -->
-    <div class="mt-8 bg-gray-50 rounded-lg p-6">
-        <h3 class="text-lg font-semibold text-club-black mb-4">Legenda</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="flex items-center">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-club-red text-white mr-3">
-                    <i class="fas fa-futbol mr-1"></i>
-                    Zápas
-                </span>
-                <span class="text-sm text-gray-600">Fotbalové utkání</span>
-            </div>
-            <div class="flex items-center">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mr-3">
-                    <i class="fas fa-calendar-check mr-1"></i>
-                    Akce
-                </span>
-                <span class="text-sm text-gray-600">Klubová akce nebo událost</span>
-            </div>
-        </div>
+  <!-- Pagination -->
+  {% if is_paginated %}
+  <div class="mt-12 flex justify-center">
+    <nav
+      class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+      aria-label="Pagination"
+    >
+      {% if page_obj.has_previous %}
+      <a
+        href="?page={{ page_obj.previous_page_number }}"
+        class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+      >
+        <i class="fas fa-chevron-left"></i>
+      </a>
+      {% endif %} {% for num in page_obj.paginator.page_range %} {% if
+      page_obj.number == num %}
+      <span
+        class="relative inline-flex items-center px-4 py-2 border border-club-red bg-club-red text-sm font-medium text-white"
+      >
+        {{ num }}
+      </span>
+      {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3'
+      %}
+      <a
+        href="?page={{ num }}"
+        class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+      >
+        {{ num }}
+      </a>
+      {% endif %} {% endfor %} {% if page_obj.has_next %}
+      <a
+        href="?page={{ page_obj.next_page_number }}"
+        class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+      >
+        <i class="fas fa-chevron-right"></i>
+      </a>
+      {% endif %}
+    </nav>
+  </div>
+  {% endif %} {% else %}
+  <div class="text-center py-12">
+    <div class="text-gray-400 mb-4">
+      <i class="fas fa-calendar-times text-6xl"></i>
     </div>
+    <h3 class="text-xl font-semibold text-gray-600 mb-2">Žádné akce</h3>
+    <p class="text-gray-500 mb-6">
+      V kalendáři nejsou naplánované žádné budoucí akce.
+    </p>
+    <a
+      href="/admin/football/event/add/"
+      target="_blank"
+      class="inline-flex items-center bg-club-red hover:bg-club-red-dark text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+    >
+      <i class="fas fa-plus mr-2"></i>
+      Přidat akci
+    </a>
+  </div>
+  {% endif %}
+
+  <!-- Quick Add -->
+  <div class="mt-12 bg-white rounded-lg shadow-lg p-6">
+    <h2 class="text-xl font-bold text-club-black mb-4">
+      <i class="fas fa-plus-circle text-club-red mr-2"></i>
+      Přidání akce
+    </h2>
+    <p class="text-gray-600 mb-4">
+      Chcete naplánovat novou akci nebo událost? Použijte admin panel pro
+      přidání do kalendáře.
+    </p>
+    <div class="flex flex-wrap gap-4">
+      <a
+        href="/admin/football/event/add/"
+        target="_blank"
+        class="inline-flex items-center bg-club-red hover:bg-club-red-dark text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+      >
+        <i class="fas fa-calendar-plus mr-2"></i>
+        Přidat akci
+      </a>
+      <a
+        href="/admin/football/match/add/"
+        target="_blank"
+        class="inline-flex items-center bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+      >
+        <i class="fas fa-futbol mr-2"></i>
+        Naplánovat zápas
+      </a>
+    </div>
+  </div>
+
+  <!-- Calendar Legend -->
+  <div class="mt-8 bg-gray-50 rounded-lg p-6">
+    <h3 class="text-lg font-semibold text-club-black mb-4">Legenda</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="flex items-center">
+        <span
+          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-club-red text-white mr-3"
+        >
+          <i class="fas fa-futbol mr-1"></i>
+          Zápas
+        </span>
+        <span class="text-sm text-gray-600">Fotbalové utkání</span>
+      </div>
+      <div class="flex items-center">
+        <span
+          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mr-3"
+        >
+          <i class="fas fa-calendar-check mr-1"></i>
+          Akce
+        </span>
+        <span class="text-sm text-gray-600">Klubová akce nebo událost</span>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

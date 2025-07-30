@@ -7,41 +7,50 @@ A modern Django website for TJ Družba Hlavnice soccer club featuring news, matc
 ## 🚀 Quick Start
 
 1. **Clone and setup the project:**
+
    ```bash
    git clone <repository-url>
    cd tjhlavnice2
    ```
 
 2. **Create virtual environment:**
+
    ```bash
    python -m venv .venv
    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
    ```
 
 3. **Install dependencies:**
+
    ```bash
    pip install -r requirements.txt
    ```
 
 4. **Run migrations:**
+
    ```bash
    python manage.py migrate
    ```
 
 5. **Create superuser:**
+
    ```bash
    python manage.py createsuperuser
    ```
+
    Or use the pre-configured admin account:
+
    - Username: `admin`
    - Password: `admin123`
 
 6. **Load sample data (optional):**
+
    ```bash
    python manage.py populate_data
    ```
 
 7. **Start development server:**
+
    ```bash
    python manage.py runserver
    ```
@@ -53,6 +62,7 @@ A modern Django website for TJ Družba Hlavnice soccer club featuring news, matc
 ## ✨ Features
 
 ### 🏠 Main Features
+
 - **📰 News Management** - Add, edit, and manage club news with images
 - **⚽ Match System** - Track fixtures, results, and upcoming matches
 - **📊 League Standings** - Display current league table with club highlighting
@@ -63,6 +73,7 @@ A modern Django website for TJ Družba Hlavnice soccer club featuring news, matc
 - **📊 Analytics** - Page visit tracking and statistics
 
 ### 🎨 Design Features
+
 - **📱 Fully Responsive** - Works perfectly on all devices
 - **🎨 Modern UI** - Clean design with red and black club theme
 - **🔧 Mobile Menu** - Collapsible navigation for mobile devices
@@ -70,6 +81,7 @@ A modern Django website for TJ Družba Hlavnice soccer club featuring news, matc
 - **♿ Accessibility** - Proper semantic HTML and ARIA labels
 
 ### 🛠️ Technical Features
+
 - **🚀 Django 5.2.4** - Latest Django framework
 - **🗄️ SQLite Database** - Lightweight database solution
 - **🎨 TailwindCSS** - Modern CSS framework
@@ -80,6 +92,7 @@ A modern Django website for TJ Družba Hlavnice soccer club featuring news, matc
 ## 📋 Content Management
 
 ### Admin Panel Access
+
 Visit `/admin/` to access the comprehensive admin interface where you can:
 
 - **Club Information** - Edit basic club details and history
@@ -93,6 +106,7 @@ Visit `/admin/` to access the comprehensive admin interface where you can:
 - **Analytics** - View page visit statistics
 
 ### Default Admin Account
+
 - **Username:** `admin`
 - **Password:** `admin123`
 - **Email:** `admin@tjhlavnice.cz`
@@ -122,6 +136,7 @@ tjhlavnice2/
 ## 🗃️ Database Models
 
 ### Core Models
+
 - **ClubInfo** - Club information and history
 - **Team** - Team details with flag upload
 - **Player** - Player profiles with positions and stats
@@ -138,6 +153,7 @@ tjhlavnice2/
 ## 🎯 Key Features Detail
 
 ### 🏠 Homepage
+
 - Latest news display (3 most recent)
 - Upcoming match information
 - Recent match results (2 latest)
@@ -145,6 +161,7 @@ tjhlavnice2/
 - Quick navigation links
 
 ### 📰 News System
+
 - Rich content management
 - Featured article highlighting
 - Image upload and automatic resizing
@@ -152,6 +169,7 @@ tjhlavnice2/
 - Publication status control
 
 ### ⚽ Match Management
+
 - Fixture scheduling
 - Result recording
 - League association
@@ -160,6 +178,7 @@ tjhlavnice2/
 - Match notes
 
 ### 📊 League Standings
+
 - Position tracking
 - Points calculation
 - Goal statistics
@@ -167,6 +186,7 @@ tjhlavnice2/
 - Multiple league support
 
 ### 👥 Team Management
+
 - Player profiles with photos
 - Position categorization (GK, DEF, MID, FWD)
 - Jersey numbers
@@ -174,6 +194,7 @@ tjhlavnice2/
 - Birth date tracking
 
 ### 📱 Responsive Design
+
 - Mobile-first approach
 - Collapsible navigation
 - Touch-friendly interface
@@ -183,11 +204,13 @@ tjhlavnice2/
 ## 🚀 Deployment
 
 ### Development
+
 ```bash
 python manage.py runserver
 ```
 
 ### Production Setup
+
 1. **Configure settings for production**
 2. **Set up proper database (PostgreSQL recommended)**
 3. **Configure static file serving**
@@ -196,7 +219,9 @@ python manage.py runserver
 6. **Configure reverse proxy (Nginx, Apache)**
 
 ### Environment Variables
+
 Create a `.env` file for production:
+
 ```env
 DEBUG=False
 SECRET_KEY=your-secret-key
@@ -207,18 +232,22 @@ ALLOWED_HOSTS=your-domain.com
 ## 🔧 Customization
 
 ### Colors
+
 The website uses a custom color scheme:
+
 - **Primary Red:** `#5f0909ff`
 - **Dark Red:** `#991B1B`
 - **Black:** `#111827`
 - **Gray:** `#374151`
 
 ### Styling
+
 - Modify `static/css/custom.css` for additional styling
 - TailwindCSS classes are used throughout templates
 - Custom CSS is loaded via CDN for rapid development
 
 ### Content
+
 - All content is manageable through the Django admin
 - Images are automatically resized for optimal performance
 - SEO-friendly URLs and meta information
@@ -226,6 +255,7 @@ The website uses a custom color scheme:
 ## 📈 Analytics
 
 The website includes built-in analytics:
+
 - **Page visit tracking** for all pages
 - **IP address logging** (GDPR compliant)
 - **User agent detection**
@@ -234,17 +264,20 @@ The website includes built-in analytics:
 ## 🆘 Support
 
 ### Getting Help
+
 - Check the Django documentation for framework questions
 - Review the admin interface for content management
 - Contact the development team for technical issues
 
 ### Contributing
+
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
 4. Submit a pull request
 
 ### Common Issues
+
 - **Images not loading:** Check media file configuration
 - **Admin access denied:** Verify superuser credentials
 - **Styles not applying:** Clear browser cache
