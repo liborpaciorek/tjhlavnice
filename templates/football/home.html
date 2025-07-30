@@ -34,14 +34,64 @@
                 </div>
             </div>
             <div class="relative">
-                <!-- Football player silhouettes would go here -->
-                <div class="text-center text-white">
-                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-                        <i class="fas fa-futbol text-6xl text-club-red mb-4"></i>
-                        <h3 class="text-2xl font-bold mb-2">TJ DRUŽBA HLAVNICE</h3>
-                        <p class="text-gray-300">Tradice • Vášeň • Úspěch</p>
+                <!-- Next Match Preview -->
+                {% if upcoming_match %}
+                    <div class="glass-card rounded-3xl p-8 border border-white/20">
+                        <div class="text-center mb-6">
+                            <span class="text-club-red text-sm font-semibold uppercase tracking-wide">Příští zápas</span>
+                            <h3 class="text-2xl font-bold text-white mt-2">{{ upcoming_match.date|date:"d.m.Y" }}</h3>
+                        </div>
+                        
+                        <div class="grid grid-cols-3 gap-4 items-center">
+                            <!-- Home Team -->
+                            <div class="text-center text-white">
+                                <div class="w-16 h-16 bg-club-red rounded-full flex items-center justify-center mx-auto mb-2">
+                                    <i class="fas fa-futbol text-2xl text-white"></i>
+                                </div>
+                                <h4 class="text-lg font-bold text-white">{{ upcoming_match.home_team.name }}</h4>
+                            </div>
+                            
+                            <!-- VS -->
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-club-red mb-1">VS</div>
+                                <div class="text-sm text-gray-300">{{ upcoming_match.date|date:"H:i" }}</div>
+                                {% if upcoming_match.location %}
+                                    <div class="text-xs text-gray-400 mt-1">
+                                        <i class="fas fa-map-marker-alt mr-1"></i>{{ upcoming_match.location|truncatechars:15 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Away Team -->
+                            <div class="text-center text-white">
+                                <div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-2">
+                                    <i class="fas fa-shield-alt text-2xl text-white"></i>
+                                </div>
+                                <h4 class="text-lg font-bold text-white">{{ upcoming_match.away_team.name }}</h4>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-6">
+                            <a href="{% url 'matches' %}" 
+                               class="inline-flex items-center bg-club-red hover:bg-club-red-dark text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105">
+                                <i class="fas fa-calendar mr-2"></i>
+                                Všechny zápasy
+                            </a>
+                        </div>
                     </div>
-                </div>
+                {% else %}
+                    <div class="glass-card rounded-3xl p-8 border border-white/20 text-center text-white">
+                        <div class="w-20 h-20 bg-club-red rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-futbol text-3xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">TJ DRUŽBA HLAVNICE</h3>
+                        <p class="text-gray-300 mb-4">Tradice • Vášeň • Úspěch</p>
+                        <div class="text-gray-400">
+                            <i class="fas fa-calendar-times text-2xl mb-2"></i>
+                            <p class="text-sm">Žádné nadcházející zápasy</p>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
