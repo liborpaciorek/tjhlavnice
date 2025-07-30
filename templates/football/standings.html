@@ -80,10 +80,10 @@
                                                 {% if standing.team.flag %}
                                                     <img src="{{ standing.team.flag.url }}" 
                                                          alt="{{ standing.team.name }}" 
-                                                         class="w-8 h-5 object-contain rounded bg-white/10 p-0.5">
+                                                         class="w-12 h-8 object-contain">
                                                 {% else %}
-                                                    <div class="w-8 h-8 bg-club-red rounded-full flex items-center justify-center">
-                                                        <i class="fas fa-futbol text-white text-xs"></i>
+                                                    <div class="w-12 h-8 bg-club-red rounded-full flex items-center justify-center">
+                                                        <i class="fas fa-futbol text-white text-sm"></i>
                                                     </div>
                                                 {% endif %}
                                                 <div>
@@ -259,7 +259,11 @@
                                                 {% if standing.team.flag %}
                                                     <img src="{{ standing.team.flag.url }}" 
                                                          alt="{{ standing.team.name }}" 
-                                                         class="w-6 h-4 object-contain rounded bg-white/10 p-0.5 mr-3">
+                                                         class="w-10 h-7 object-contain mr-3">
+                                                {% else %}
+                                                    <div class="w-10 h-7 bg-club-red rounded-full flex items-center justify-center mr-3">
+                                                        <i class="fas fa-futbol text-white text-xs"></i>
+                                                    </div>
                                                 {% endif %}
                                                 <div>
                                                     <div class="text-sm font-medium
