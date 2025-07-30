@@ -9,6 +9,10 @@ from .models import (
 class ClubInfoAdmin(admin.ModelAdmin):
     list_display = ['name', 'founded_year']
     fields = ['name', 'founded_year', 'history', 'logo', 'address', 'contact_email', 'contact_phone']
+    
+    class Meta:
+        verbose_name = "Informace o klubu"
+        verbose_name_plural = "Informace o klubu"
 
 @admin.register(League)
 class LeagueAdmin(admin.ModelAdmin):
@@ -25,8 +29,8 @@ class TeamAdmin(admin.ModelAdmin):
     def flag_preview(self, obj):
         if obj.flag:
             return format_html('<img src="{}" width="30" height="20" />', obj.flag.url)
-        return "No flag"
-    flag_preview.short_description = "Flag"
+        return "Bez vlajky"
+    flag_preview.short_description = "Vlajka"
 
 class PlayerInline(admin.TabularInline):
     model = Player
@@ -43,8 +47,8 @@ class PlayerAdmin(admin.ModelAdmin):
     def photo_preview(self, obj):
         if obj.photo:
             return format_html('<img src="{}" width="40" height="40" style="border-radius: 50%;" />', obj.photo.url)
-        return "No photo"
-    photo_preview.short_description = "Photo"
+        return "Bez fotografie"
+    photo_preview.short_description = "Fotografie"
 
 @admin.register(Management)
 class ManagementAdmin(admin.ModelAdmin):
@@ -69,12 +73,18 @@ class NewsAdmin(admin.ModelAdmin):
     search_fields = ['title', 'content']
     date_hierarchy = 'created_at'
     ordering = ['-created_at']
+    fields = ['title', 'content', 'image', 'author', 'is_featured', 'published']
     
     def image_preview(self, obj):
         if obj.image:
             return format_html('<img src="{}" width="60" height="40" />', obj.image.url)
-        return "No image"
-    image_preview.short_description = "Image"
+        return "Bez obrázku"
+    image_preview.short_description = "Náhled obrázku"
+    
+    def save_model(self, request, obj, form, change):
+        if not change:  # If creating new object
+            obj.author = request.user
+        super().save_model(request, obj, form, change)
 
 @admin.register(Match)
 class MatchAdmin(admin.ModelAdmin):

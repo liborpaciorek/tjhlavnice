@@ -1,43 +1,50 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
+from ckeditor.fields import RichTextField
 from PIL import Image
 import os
 
 class ClubInfo(models.Model):
-    name = models.CharField(max_length=100, default="TJ Družba Hlavnice")
-    founded_year = models.IntegerField(default=1952)
-    history = models.TextField(blank=True)
-    logo = models.ImageField(upload_to='club/', blank=True, null=True)
-    address = models.TextField(blank=True)
-    contact_email = models.EmailField(blank=True)
-    contact_phone = models.CharField(max_length=20, blank=True)
+    name = models.CharField(max_length=100, default="TJ Družba Hlavnice", verbose_name="Název klubu")
+    founded_year = models.IntegerField(default=1952, verbose_name="Rok založení")
+    history = models.TextField(blank=True, verbose_name="Historie")
+    logo = models.ImageField(upload_to='club/', blank=True, null=True, verbose_name="Logo")
+    address = models.TextField(blank=True, verbose_name="Adresa")
+    contact_email = models.EmailField(blank=True, verbose_name="Kontaktní email")
+    contact_phone = models.CharField(max_length=20, blank=True, verbose_name="Kontaktní telefon")
     
     class Meta:
-        verbose_name = "Club Information"
-        verbose_name_plural = "Club Information"
+        verbose_name = "Informace o klubu"
+        verbose_name_plural = "Informace o klubu"
     
     def __str__(self):
         return self.name
 
 class League(models.Model):
-    name = models.CharField(max_length=100)
-    season = models.CharField(max_length=20)
-    description = models.TextField(blank=True)
+    name = models.CharField(max_length=100, verbose_name="Název ligy")
+    season = models.CharField(max_length=20, verbose_name="Sezóna")
+    description = models.TextField(blank=True, verbose_name="Popis")
     
     class Meta:
         unique_together = ['name', 'season']
+        verbose_name = "Liga"
+        verbose_name_plural = "Ligy"
     
     def __str__(self):
         return f"{self.name} - {self.season}"
 
 class Team(models.Model):
-    name = models.CharField(max_length=100)
-    flag = models.ImageField(upload_to='teams/', blank=True, null=True)
-    founded = models.IntegerField(blank=True, null=True)
-    city = models.CharField(max_length=100, blank=True)
-    league = models.ForeignKey(League, on_delete=models.CASCADE, blank=True, null=True)
-    is_club_team = models.BooleanField(default=False, help_text="Mark if this is TJ Hlavnice team")
+    name = models.CharField(max_length=100, verbose_name="Název týmu")
+    flag = models.ImageField(upload_to='teams/', blank=True, null=True, verbose_name="Vlajka")
+    founded = models.IntegerField(blank=True, null=True, verbose_name="Rok založení")
+    city = models.CharField(max_length=100, blank=True, verbose_name="Město")
+    league = models.ForeignKey(League, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Liga")
+    is_club_team = models.BooleanField(default=False, help_text="Označte, pokud se jedná o tým TJ Hlavnice", verbose_name="Náš tým")
+    
+    class Meta:
+        verbose_name = "Tým"
+        verbose_name_plural = "Týmy"
     
     def __str__(self):
         return self.name
@@ -52,26 +59,28 @@ class Team(models.Model):
 
 class Player(models.Model):
     POSITION_CHOICES = [
-        ('GK', 'Goalkeeper'),
-        ('DEF', 'Defender'),
-        ('MID', 'Midfielder'),
-        ('FWD', 'Forward'),
+        ('GK', 'Brankář'),
+        ('DEF', 'Obránce'),
+        ('MID', 'Záložník'),
+        ('FWD', 'Útočník'),
     ]
     
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='players')
-    jersey_number = models.IntegerField()
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    position = models.CharField(max_length=3, choices=POSITION_CHOICES)
-    birth_date = models.DateField(blank=True, null=True)
-    photo = models.ImageField(upload_to='players/', blank=True, null=True)
-    goals = models.IntegerField(default=0)
-    yellow_cards = models.IntegerField(default=0)
-    red_cards = models.IntegerField(default=0)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='players', verbose_name="Tým")
+    jersey_number = models.IntegerField(verbose_name="Číslo dresu")
+    first_name = models.CharField(max_length=50, verbose_name="Jméno")
+    last_name = models.CharField(max_length=50, verbose_name="Příjmení")
+    position = models.CharField(max_length=3, choices=POSITION_CHOICES, verbose_name="Pozice")
+    birth_date = models.DateField(blank=True, null=True, verbose_name="Datum narození")
+    photo = models.ImageField(upload_to='players/', blank=True, null=True, verbose_name="Fotografie")
+    goals = models.IntegerField(default=0, verbose_name="Góly")
+    yellow_cards = models.IntegerField(default=0, verbose_name="Žluté karty")
+    red_cards = models.IntegerField(default=0, verbose_name="Červené karty")
     
     class Meta:
         unique_together = ['team', 'jersey_number']
         ordering = ['jersey_number']
+        verbose_name = "Hráč"
+        verbose_name_plural = "Hráči"
     
     def __str__(self):
         return f"{self.jersey_number}. {self.first_name} {self.last_name}"
@@ -123,18 +132,19 @@ class Management(models.Model):
                 img.save(self.photo.path)
 
 class News(models.Model):
-    title = models.CharField(max_length=200)
-    content = models.TextField()
-    image = models.ImageField(upload_to='news/', blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    is_featured = models.BooleanField(default=False)
-    published = models.BooleanField(default=True)
+    title = models.CharField(max_length=200, verbose_name="Titulek")
+    content = RichTextField(verbose_name="Obsah")
+    image = models.ImageField(upload_to='news/', blank=True, null=True, verbose_name="Obrázek")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Vytvořeno")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Aktualizováno")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Autor")
+    is_featured = models.BooleanField(default=False, verbose_name="Zvýrazněno")
+    published = models.BooleanField(default=True, verbose_name="Publikováno")
     
     class Meta:
         ordering = ['-created_at']
-        verbose_name_plural = "News"
+        verbose_name = "Novinka"
+        verbose_name_plural = "Novinky"
     
     def __str__(self):
         return self.title
