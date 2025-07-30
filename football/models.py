@@ -9,6 +9,7 @@ class ClubInfo(models.Model):
     name = models.CharField(max_length=100, default="TJ Družba Hlavnice", verbose_name="Název klubu")
     founded_year = models.IntegerField(default=1952, verbose_name="Rok založení")
     history = RichTextField(blank=True, verbose_name="Historie")
+    milestones = RichTextField(blank=True, verbose_name="Milníky")
     logo = models.ImageField(upload_to='club/', blank=True, null=True, verbose_name="Logo")
     address = models.TextField(blank=True, verbose_name="Adresa")
     contact_email = models.EmailField(blank=True, verbose_name="Kontaktní email")

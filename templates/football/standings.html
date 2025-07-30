@@ -80,7 +80,7 @@
                                                 {% if standing.team.flag %}
                                                     <img src="{{ standing.team.flag.url }}" 
                                                          alt="{{ standing.team.name }}" 
-                                                         class="w-8 h-6 object-cover rounded">
+                                                         class="w-8 h-5 object-contain rounded bg-white/10 p-0.5">
                                                 {% else %}
                                                     <div class="w-8 h-8 bg-club-red rounded-full flex items-center justify-center">
                                                         <i class="fas fa-futbol text-white text-xs"></i>
@@ -259,7 +259,7 @@
                                                 {% if standing.team.flag %}
                                                     <img src="{{ standing.team.flag.url }}" 
                                                          alt="{{ standing.team.name }}" 
-                                                         class="w-6 h-4 object-cover rounded mr-3">
+                                                         class="w-6 h-4 object-contain rounded bg-white/10 p-0.5 mr-3">
                                                 {% endif %}
                                                 <div>
                                                     <div class="text-sm font-medium

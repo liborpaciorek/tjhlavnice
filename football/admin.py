@@ -8,7 +8,7 @@ from .models import (
 @admin.register(ClubInfo)
 class ClubInfoAdmin(admin.ModelAdmin):
     list_display = ['name', 'founded_year']
-    fields = ['name', 'founded_year', 'history', 'logo', 'address', 'contact_email', 'contact_phone']
+    fields = ['name', 'founded_year', 'history', 'milestones', 'logo', 'address', 'contact_email', 'contact_phone']
     
     class Meta:
         verbose_name = "Informace o klubu"

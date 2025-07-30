@@ -50,7 +50,7 @@
                                 {% if match.home_team.flag %}
                                     <img src="{{ match.home_team.flag.url }}" 
                                          alt="{{ match.home_team.name }}" 
-                                         class="w-12 h-8 object-cover rounded mx-auto mb-2">
+                                         class="w-12 h-8 object-contain rounded bg-white/10 p-1 mx-auto mb-2">
                                 {% else %}
                                     <div class="w-12 h-12 bg-club-red rounded-full flex items-center justify-center mx-auto mb-2">
                                         <i class="fas fa-futbol text-white"></i>
@@ -71,7 +71,7 @@
                                 {% if match.away_team.flag %}
                                     <img src="{{ match.away_team.flag.url }}" 
                                          alt="{{ match.away_team.name }}" 
-                                         class="w-12 h-8 object-cover rounded mx-auto mb-2">
+                                         class="w-12 h-8 object-contain rounded bg-white/10 p-1 mx-auto mb-2">
                                 {% else %}
                                     <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2">
                                         <i class="fas fa-shield-alt text-white"></i>
@@ -131,7 +131,7 @@
                                 {% if match.home_team.flag %}
                                     <img src="{{ match.home_team.flag.url }}" 
                                          alt="{{ match.home_team.name }}" 
-                                         class="w-12 h-8 object-cover rounded">
+                                         class="w-12 h-8 object-contain rounded bg-white/10 p-1">
                                 {% else %}
                                     <div class="w-10 h-10 bg-club-red rounded-full flex items-center justify-center">
                                         <i class="fas fa-futbol text-white text-sm"></i>
@@ -156,7 +156,7 @@
                                 {% if match.away_team.flag %}
                                     <img src="{{ match.away_team.flag.url }}" 
                                          alt="{{ match.away_team.name }}" 
-                                         class="w-12 h-8 object-cover rounded">
+                                         class="w-12 h-8 object-contain rounded bg-white/10 p-1">
                                 {% else %}
                                     <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
                                         <i class="fas fa-shield-alt text-white text-sm"></i>

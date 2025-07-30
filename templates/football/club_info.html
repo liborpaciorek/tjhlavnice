@@ -109,6 +109,23 @@ Hlavnice{% endblock %}
       {% endif %}
     </div>
 
+    <!-- Milestones Section -->
+    {% if club.milestones %}
+    <div class="glass-card rounded-2xl p-8 mb-8">
+      <div class="flex items-center mb-6">
+        <div
+          class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-700 rounded-full flex items-center justify-center mr-4"
+        >
+          <i class="fas fa-trophy text-white text-lg"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-white">Milníky klubu</h3>
+      </div>
+      <div class="prose max-w-none text-gray-300 history-content">
+        {{ club.milestones|safe }}
+      </div>
+    </div>
+    {% endif %}
+
     <!-- Contact Information -->
     <div class="glass-card rounded-2xl p-8 mb-16">
       <div class="flex items-center justify-center mb-8">

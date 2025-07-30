@@ -47,9 +47,13 @@ Hlavnice{% endblock %} {% block content %}
             <!-- Home Team -->
             <div class="text-center text-white">
               <div
-                class="w-16 h-16 bg-club-red rounded-full flex items-center justify-center mx-auto mb-2"
+                class="w-16 h-16 bg-club-red rounded-full flex items-center justify-center mx-auto mb-2 overflow-hidden"
               >
-                <i class="fas fa-futbol text-2xl text-white"></i>
+                {% if upcoming_match.home_team.flag %}
+                  <img src="{{ upcoming_match.home_team.flag.url }}" alt="{{ upcoming_match.home_team.name }}" class="w-full h-full object-cover">
+                {% else %}
+                  <i class="fas fa-futbol text-2xl text-white"></i>
+                {% endif %}
               </div>
               <h4 class="text-lg font-bold text-white">
                 {{ upcoming_match.home_team.name }}
@@ -72,9 +76,13 @@ Hlavnice{% endblock %} {% block content %}
             <!-- Away Team -->
             <div class="text-center text-white">
               <div
-                class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-2"
+                class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-2 overflow-hidden"
               >
-                <i class="fas fa-shield-alt text-2xl text-white"></i>
+                {% if upcoming_match.away_team.flag %}
+                  <img src="{{ upcoming_match.away_team.flag.url }}" alt="{{ upcoming_match.away_team.name }}" class="w-full h-full object-cover">
+                {% else %}
+                  <i class="fas fa-shield-alt text-2xl text-white"></i>
+                {% endif %}
               </div>
               <h4 class="text-lg font-bold text-white">
                 {{ upcoming_match.away_team.name }}
@@ -100,9 +108,13 @@ Hlavnice{% endblock %} {% block content %}
             <!-- Home Team -->
             <div class="text-center">
               <div
-                class="w-12 h-12 bg-club-red rounded-full flex items-center justify-center mx-auto mb-2"
+                class="w-12 h-12 bg-club-red rounded-full flex items-center justify-center mx-auto mb-2 overflow-hidden"
               >
-                <i class="fas fa-futbol text-lg text-white"></i>
+                {% if latest_result.home_team.flag %}
+                  <img src="{{ latest_result.home_team.flag.url }}" alt="{{ latest_result.home_team.name }}" class="w-full h-full object-cover">
+                {% else %}
+                  <i class="fas fa-futbol text-lg text-white"></i>
+                {% endif %}
               </div>
               <h4 class="text-sm font-bold text-white">
                 {{ latest_result.home_team.name }}
@@ -119,9 +131,13 @@ Hlavnice{% endblock %} {% block content %}
             <!-- Away Team -->
             <div class="text-center">
               <div
-                class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-2"
+                class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-2 overflow-hidden"
               >
-                <i class="fas fa-shield-alt text-lg text-white"></i>
+                {% if latest_result.away_team.flag %}
+                  <img src="{{ latest_result.away_team.flag.url }}" alt="{{ latest_result.away_team.name }}" class="w-full h-full object-cover">
+                {% else %}
+                  <i class="fas fa-shield-alt text-lg text-white"></i>
+                {% endif %}
               </div>
               <h4 class="text-sm font-bold text-white">
                 {{ latest_result.away_team.name }}
