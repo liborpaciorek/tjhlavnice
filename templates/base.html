@@ -1,346 +1,453 @@
 <!DOCTYPE html>
 <html lang="cs" class="h-full">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}TJ Družba Hlavnice{% endblock %}</title>
-    
+
     <!-- TailwindCSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'club-red': '#DC2626',
-                        'club-red-dark': '#991B1B',
-                        'club-black': '#111827',
-                        'club-gray': '#374151',
-                        'dark-blue': '#0F172A',
-                        'dark-blue-light': '#1E293B',
-                        'accent-blue': '#3B82F6',
-                    },
-                    backgroundImage: {
-                        'hero-pattern': "linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%)",
-                        'card-gradient': "linear-gradient(135deg, #1E293B 0%, #334155 100%)",
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "club-red": "#DC2626",
+              "club-red-dark": "#991B1B",
+              "club-black": "#111827",
+              "club-gray": "#374151",
+              "dark-blue": "#0F172A",
+              "dark-blue-light": "#1E293B",
+              "accent-blue": "#3B82F6",
+            },
+            backgroundImage: {
+              "hero-pattern":
+                "linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%)",
+              "card-gradient":
+                "linear-gradient(135deg, #1E293B 0%, #334155 100%)",
+            },
+          },
+        },
+      };
     </script>
-    
+
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
     <!-- Alpine.js -->
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
+    <script
+      defer
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
-    
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
+
     <style>
-        .hero-bg {
-            background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        .hero-bg::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.05"><circle cx="7" cy="7" r="1"/><circle cx="30" cy="7" r="1"/><circle cx="53" cy="7" r="1"/><circle cx="7" cy="30" r="1"/><circle cx="30" cy="30" r="1"/><circle cx="53" cy="30" r="1"/><circle cx="7" cy="53" r="1"/><circle cx="30" cy="53" r="1"/><circle cx="53" cy="53" r="1"/></g></g></svg>');
-        }
-        .glass-card {
-            background: rgba(30, 41, 59, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .nav-gradient {
-            background: linear-gradient(90deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
-        }
-        
-        /* Privacy banner styles */
-        .privacy-banner {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 16px 20px;
-            z-index: 10000;
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
-            transform: translateY(100%);
-            transition: transform 0.3s ease-in-out;
-        }
-        
-        .privacy-banner.show {
-            transform: translateY(0);
-        }
-        
+      .hero-bg {
+        background: linear-gradient(
+          135deg,
+          #0f172a 0%,
+          #1e293b 50%,
+          #0f172a 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+      .hero-bg::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.05"><circle cx="7" cy="7" r="1"/><circle cx="30" cy="7" r="1"/><circle cx="53" cy="7" r="1"/><circle cx="7" cy="30" r="1"/><circle cx="30" cy="30" r="1"/><circle cx="53" cy="30" r="1"/><circle cx="7" cy="53" r="1"/><circle cx="30" cy="53" r="1"/><circle cx="53" cy="53" r="1"/></g></g></svg>');
+      }
+      .glass-card {
+        background: rgba(30, 41, 59, 0.8);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .nav-gradient {
+        background: linear-gradient(
+          90deg,
+          #0f172a 0%,
+          #1e293b 50%,
+          #0f172a 100%
+        );
+      }
+
+      /* Privacy banner styles */
+      .privacy-banner {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+        padding: 16px 20px;
+        z-index: 10000;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+        transform: translateY(100%);
+        transition: transform 0.3s ease-in-out;
+      }
+
+      .privacy-banner.show {
+        transform: translateY(0);
+      }
+
+      .privacy-banner-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .privacy-banner-text {
+        flex: 1;
+        min-width: 300px;
+      }
+
+      .privacy-banner-actions {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .privacy-link {
+        color: #60a5fa;
+        text-decoration: underline;
+        transition: color 0.2s ease;
+      }
+
+      .privacy-link:hover {
+        color: #93c5fd;
+      }
+
+      .privacy-accept-btn {
+        background: #dc2626;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+
+      .privacy-accept-btn:hover {
+        background: #991b1b;
+      }
+
+      @media (max-width: 768px) {
         .privacy-banner-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 16px;
+          flex-direction: column;
+          text-align: center;
         }
-        
+
         .privacy-banner-text {
-            flex: 1;
-            min-width: 300px;
+          min-width: auto;
         }
-        
-        .privacy-banner-actions {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        
-        .privacy-link {
-            color: #60A5FA;
-            text-decoration: underline;
-            transition: color 0.2s ease;
-        }
-        
-        .privacy-link:hover {
-            color: #93C5FD;
-        }
-        
-        .privacy-accept-btn {
-            background: #DC2626;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-        
-        .privacy-accept-btn:hover {
-            background: #991B1B;
-        }
-        
-        @media (max-width: 768px) {
-            .privacy-banner-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .privacy-banner-text {
-                min-width: auto;
-            }
-        }
+      }
     </style>
-    
+
     {% block extra_head %}{% endblock %}
-</head>
-<body class="h-full bg-dark-blue">
+  </head>
+  <body class="h-full bg-dark-blue">
     <div class="min-h-full">
-        <!-- Navigation -->
-        <nav class="nav-gradient shadow-2xl fixed w-full z-50" x-data="{ open: false }">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-20">
-                    <div class="flex items-center">
-                        <!-- Logo -->
-                        <div class="flex-shrink-0">
-                            <a href="{% url 'home' %}" class="text-white text-2xl font-bold flex items-center group">
-                                <div class="bg-club-red p-2 rounded-lg mr-3 group-hover:bg-club-red-dark transition-colors duration-200">
-                                    <i class="fas fa-futbol text-white"></i>
-                                </div>
-                                <span class="hidden sm:block">TJ DRUŽBA HLAVNICE</span>
-                                <span class="sm:hidden">TJ HLAVNICE</span>
-                            </a>
-                        </div>
-                        
-                        <!-- Desktop Navigation -->
-                        <div class="hidden lg:ml-10 lg:flex lg:space-x-1">
-                            <a href="{% url 'home' %}" class="text-white hover:text-club-red px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10">
-                                DOMŮ
-                            </a>
-                            <a href="{% url 'news_list' %}" class="text-white hover:text-club-red px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10">
-                                AKTUALITY
-                            </a>
-                            <a href="{% url 'team_lineup' %}" class="text-white hover:text-club-red px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10">
-                                TÝM
-                            </a>
-                            <a href="{% url 'matches' %}" class="text-white hover:text-club-red px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10">
-                                ZÁPASY
-                            </a>
-                            <a href="{% url 'standings' %}" class="text-white hover:text-club-red px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10">
-                                TABULKA
-                            </a>
-                            <a href="{% url 'management' %}" class="text-white hover:text-club-red px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10">
-                                VEDENÍ
-                            </a>
-                            <a href="{% url 'gallery' %}" class="text-white hover:text-club-red px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10">
-                                GALERIE
-                            </a>
-                            <a href="{% url 'club_info' %}" class="text-white hover:text-club-red px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10">
-                                O KLUBU
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <!-- Mobile menu -->
-                    <div class="flex items-center">
-                        <!-- Mobile menu button -->
-                        <div class="lg:hidden">
-                            <button @click="open = !open" class="text-white hover:text-club-red focus:outline-none p-2" aria-label="Menu">
-                                <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
-                                    <path x-show="!open" fill-rule="evenodd" d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
-                                    <path x-show="open" fill-rule="evenodd" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Mobile Navigation -->
-            <div x-show="open" x-transition class="lg:hidden">
-                <div class="px-4 pt-2 pb-4 space-y-2 bg-dark-blue-light/95 backdrop-blur-lg">
-                    <a href="{% url 'home' %}" class="text-white hover:text-club-red block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-white/10">
-                        DOMŮ
-                    </a>
-                    <a href="{% url 'news_list' %}" class="text-white hover:text-club-red block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-white/10">
-                        AKTUALITY
-                    </a>
-                    <a href="{% url 'team_lineup' %}" class="text-white hover:text-club-red block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-white/10">
-                        TÝM
-                    </a>
-                    <a href="{% url 'matches' %}" class="text-white hover:text-club-red block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-white/10">
-                        ZÁPASY
-                    </a>
-                    <a href="{% url 'standings' %}" class="text-white hover:text-club-red block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-white/10">
-                        TABULKA
-                    </a>
-                    <a href="{% url 'management' %}" class="text-white hover:text-club-red block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-white/10">
-                        VEDENÍ
-                    </a>
-                    <a href="{% url 'gallery' %}" class="text-white hover:text-club-red block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-white/10">
-                        GALERIE
-                    </a>
-                    <a href="{% url 'club_info' %}" class="text-white hover:text-club-red block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-white/10">
-                        O KLUBU
-                    </a>
-                </div>
-            </div>
-        </nav>
+      <!-- Navigation -->
+      <nav
+        class="nav-gradient shadow-2xl fixed w-full z-50"
+        x-data="{ open: false }"
+      >
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between h-20">
+            <div class="flex items-center">
+              <!-- Logo -->
+              <div class="flex-shrink-0">
+                <a
+                  href="{% url 'home' %}"
+                  class="text-white text-2xl font-bold flex items-center group"
+                >
+                  <div
+                    class="bg-club-red p-2 rounded-lg mr-3 group-hover:bg-club-red-dark transition-colors duration-200"
+                  >
+                    <i class="fas fa-futbol text-white"></i>
+                  </div>
+                  <span class="hidden sm:block">TJ DRUŽBA HLAVNICE</span>
+                  <span class="sm:hidden">TJ HLAVNICE</span>
+                </a>
+              </div>
 
-        <!-- Main content -->
-        <main class="pt-20">
-            {% block content %}
-            {% endblock %}
-        </main>
-
-        <!-- Footer -->
-        <footer class="bg-dark-blue-light text-white mt-12 border-t border-white/10">
-            <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <div class="flex items-center mb-4">
-                            <div class="bg-club-red p-2 rounded-lg mr-3">
-                                <i class="fas fa-futbol text-white"></i>
-                            </div>
-                            <h3 class="text-xl font-bold">TJ DRUŽBA HLAVNICE</h3>
-                        </div>
-                        <p class="text-gray-300 mb-4">
-                            Tradice od roku 1952. Fotbalový klub s bohatou historií a ambiciózní budoucností.
-                        </p>
-                        <div class="flex space-x-4">
-                            <a href="#" class="text-gray-300 hover:text-white transition-colors duration-200">
-                                <i class="fab fa-facebook text-2xl"></i>
-                            </a>
-                            <a href="#" class="text-gray-300 hover:text-white transition-colors duration-200">
-                                <i class="fab fa-instagram text-2xl"></i>
-                            </a>
-                            <a href="#" class="text-gray-300 hover:text-white transition-colors duration-200">
-                                <i class="fab fa-youtube text-2xl"></i>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="md:ml-8 lg:ml-16">
-                        <h4 class="text-lg font-semibold mb-4">Kontakt</h4>
-                        <div class="space-y-2 text-gray-300">
-                            <div class="flex items-center">
-                                <i class="fas fa-envelope mr-2 text-club-red"></i>
-                                <span>info@tjhlavnice.cz</span>
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-phone mr-2 text-club-red"></i>
-                                <span>+420 123 456 789</span>
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-map-marker-alt mr-2 text-club-red"></i>
-                                <span>Hlavnice, Česká republika</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="border-t border-white/10 mt-8 pt-8 text-center text-gray-300">
-                    <p>&copy; 2025 TJ Družba Hlavnice. Všechna práva vyhrazena.</p>
-                </div>
+              <!-- Desktop Navigation -->
+              <div class="hidden lg:ml-10 lg:flex lg:space-x-1">
+                <a
+                  href="{% url 'home' %}"
+                  class="text-white hover:text-club-red px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10"
+                >
+                  DOMŮ
+                </a>
+                <a
+                  href="{% url 'news_list' %}"
+                  class="text-white hover:text-club-red px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10"
+                >
+                  AKTUALITY
+                </a>
+                <a
+                  href="{% url 'team_lineup' %}"
+                  class="text-white hover:text-club-red px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10"
+                >
+                  TÝM
+                </a>
+                <a
+                  href="{% url 'matches' %}"
+                  class="text-white hover:text-club-red px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10"
+                >
+                  ZÁPASY
+                </a>
+                <a
+                  href="{% url 'standings' %}"
+                  class="text-white hover:text-club-red px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10"
+                >
+                  TABULKA
+                </a>
+                <a
+                  href="{% url 'management' %}"
+                  class="text-white hover:text-club-red px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10"
+                >
+                  VEDENÍ
+                </a>
+                <a
+                  href="{% url 'gallery' %}"
+                  class="text-white hover:text-club-red px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10"
+                >
+                  GALERIE
+                </a>
+                <a
+                  href="{% url 'club_info' %}"
+                  class="text-white hover:text-club-red px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10"
+                >
+                  O KLUBU
+                </a>
+              </div>
             </div>
-        </footer>
+
+            <!-- Mobile menu -->
+            <div class="flex items-center">
+              <!-- Mobile menu button -->
+              <div class="lg:hidden">
+                <button
+                  @click="open = !open"
+                  class="text-white hover:text-club-red focus:outline-none p-2"
+                  aria-label="Menu"
+                >
+                  <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+                    <path
+                      x-show="!open"
+                      fill-rule="evenodd"
+                      d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"
+                    />
+                    <path
+                      x-show="open"
+                      fill-rule="evenodd"
+                      d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div x-show="open" x-transition class="lg:hidden">
+          <div
+            class="px-4 pt-2 pb-4 space-y-2 bg-dark-blue-light/95 backdrop-blur-lg"
+          >
+            <a
+              href="{% url 'home' %}"
+              class="text-white hover:text-club-red block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-white/10"
+            >
+              DOMŮ
+            </a>
+            <a
+              href="{% url 'news_list' %}"
+              class="text-white hover:text-club-red block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-white/10"
+            >
+              AKTUALITY
+            </a>
+            <a
+              href="{% url 'team_lineup' %}"
+              class="text-white hover:text-club-red block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-white/10"
+            >
+              TÝM
+            </a>
+            <a
+              href="{% url 'matches' %}"
+              class="text-white hover:text-club-red block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-white/10"
+            >
+              ZÁPASY
+            </a>
+            <a
+              href="{% url 'standings' %}"
+              class="text-white hover:text-club-red block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-white/10"
+            >
+              TABULKA
+            </a>
+            <a
+              href="{% url 'management' %}"
+              class="text-white hover:text-club-red block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-white/10"
+            >
+              VEDENÍ
+            </a>
+            <a
+              href="{% url 'gallery' %}"
+              class="text-white hover:text-club-red block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-white/10"
+            >
+              GALERIE
+            </a>
+            <a
+              href="{% url 'club_info' %}"
+              class="text-white hover:text-club-red block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 hover:bg-white/10"
+            >
+              O KLUBU
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Main content -->
+      <main class="pt-20">{% block content %} {% endblock %}</main>
+
+      <!-- Footer -->
+      <footer
+        class="bg-dark-blue-light text-white mt-12 border-t border-white/10"
+      >
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <div class="flex items-center mb-4">
+                <div class="bg-club-red p-2 rounded-lg mr-3">
+                  <i class="fas fa-futbol text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold">TJ DRUŽBA HLAVNICE</h3>
+              </div>
+              <p class="text-gray-300 mb-4">
+                Tradice od roku 1952. Fotbalový klub s bohatou historií a
+                ambiciózní budoucností.
+              </p>
+              <div class="flex space-x-4">
+                <a
+                  href="#"
+                  class="text-gray-300 hover:text-white transition-colors duration-200"
+                >
+                  <i class="fab fa-facebook text-2xl"></i>
+                </a>
+                <a
+                  href="#"
+                  class="text-gray-300 hover:text-white transition-colors duration-200"
+                >
+                  <i class="fab fa-instagram text-2xl"></i>
+                </a>
+                <a
+                  href="#"
+                  class="text-gray-300 hover:text-white transition-colors duration-200"
+                >
+                  <i class="fab fa-youtube text-2xl"></i>
+                </a>
+              </div>
+            </div>
+
+            <div class="md:ml-8 lg:ml-16">
+              <h4 class="text-lg font-semibold mb-4">Kontakt</h4>
+              <div class="space-y-2 text-gray-300">
+                <div class="flex items-center">
+                  <i class="fas fa-envelope mr-2 text-club-red"></i>
+                  <span>info@tjhlavnice.cz</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-phone mr-2 text-club-red"></i>
+                  <span>+420 123 456 789</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-map-marker-alt mr-2 text-club-red"></i>
+                  <span>Hlavnice, Česká republika</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="border-t border-white/10 mt-8 pt-8 text-center text-gray-300"
+          >
+            <p>&copy; 2025 TJ Družba Hlavnice. Všechna práva vyhrazena.</p>
+          </div>
+        </div>
+      </footer>
     </div>
 
     <!-- Privacy Banner -->
     <div id="privacy-banner" class="privacy-banner">
-        <div class="privacy-banner-content">
-            <div class="privacy-banner-text">
-                <span>Tato stránka zpracovává IP adresu pouze pro technické účely. Nepoužíváme žádné sledovací cookies.</span>
-                <a href="{% url 'privacy_policy' %}" class="privacy-link ml-2">Více informací</a>
-            </div>
-            <div class="privacy-banner-actions">
-                <button onclick="acceptPrivacy()" class="privacy-accept-btn">
-                    Rozumím
-                </button>
-            </div>
+      <div class="privacy-banner-content">
+        <div class="privacy-banner-text">
+          <span
+            >Tato stránka zpracovává IP adresu pouze pro technické účely.
+            Nepoužíváme žádné sledovací cookies.</span
+          >
+          <a href="{% url 'privacy_policy' %}" class="privacy-link ml-2"
+            >Více informací</a
+          >
         </div>
+        <div class="privacy-banner-actions">
+          <button onclick="acceptPrivacy()" class="privacy-accept-btn">
+            Rozumím
+          </button>
+        </div>
+      </div>
     </div>
 
     <script>
-        // Privacy banner functionality
-        function showPrivacyBanner() {
-            const banner = document.getElementById('privacy-banner');
-            if (banner) {
-                banner.classList.add('show');
-            }
+      // Privacy banner functionality
+      function showPrivacyBanner() {
+        const banner = document.getElementById("privacy-banner");
+        if (banner) {
+          banner.classList.add("show");
         }
-        
-        function acceptPrivacy() {
-            const banner = document.getElementById('privacy-banner');
-            if (banner) {
-                banner.classList.remove('show');
-                // Set a flag in localStorage to remember user's choice
-                localStorage.setItem('privacy-accepted', 'true');
-            }
+      }
+
+      function acceptPrivacy() {
+        const banner = document.getElementById("privacy-banner");
+        if (banner) {
+          banner.classList.remove("show");
+          // Set a flag in localStorage to remember user's choice
+          localStorage.setItem("privacy-accepted", "true");
         }
-        
-        // Check if privacy was already accepted
-        document.addEventListener('DOMContentLoaded', function() {
-            const privacyAccepted = localStorage.getItem('privacy-accepted');
-            if (!privacyAccepted) {
-                // Show banner after a short delay for better UX
-                setTimeout(showPrivacyBanner, 1000);
-            }
-        });
+      }
+
+      // Check if privacy was already accepted
+      document.addEventListener("DOMContentLoaded", function () {
+        const privacyAccepted = localStorage.getItem("privacy-accepted");
+        if (!privacyAccepted) {
+          // Show banner after a short delay for better UX
+          setTimeout(showPrivacyBanner, 1000);
+        }
+      });
     </script>
 
     <!-- Alpine.js for mobile menu -->
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
+    <script
+      defer
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+
     {% block extra_js %}{% endblock %}
-</body>
+  </body>
 </html>
