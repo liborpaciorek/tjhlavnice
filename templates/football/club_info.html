@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}O klubu - TJ Družba Hlavnice{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-bg py-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto text-center">
+        <span class="inline-block bg-club-red px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide text-white mb-6">
+            🏆 Naše historie
+        </span>
+        <h1 class="text-4xl lg:text-6xl font-bold text-white mb-6">
+            O NAŠEM <span class="text-club-red">KLUBU</span>
+        </h1>
+        <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+            Poznejte historii, tradici a hodnoty TJ Družba Hlavnice - fotbalového klubu s bohatou tradicí.
+        </p>
+    </div>
+</section>
+
+<section class="py-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        {% if club %}
+            <!-- Club Header -->
+            <div class="glass-card rounded-2xl overflow-hidden mb-16">
+                <div class="bg-gradient-to-r from-club-red to-club-red-dark p-8">
+                    <div class="flex flex-col md:flex-row items-center justify-center text-center md:text-left text-white">
+                        {% if club.logo %}
+                            <img src="{{ club.logo.url }}" alt="{{ club.name }}" class="w-32 h-32 object-contain mb-6 md:mb-0 md:mr-8 border-2 border-white/20 rounded-xl">
+                        {% else %}
+                            <div class="w-32 h-32 bg-white bg-opacity-20 rounded-xl flex items-center justify-center mb-6 md:mb-0 md:mr-8">
+                                <i class="fas fa-futbol text-6xl"></i>
+                            </div>
+                        {% endif %}
+                        <div>
+                            <h2 class="text-4xl lg:text-5xl font-bold mb-4">{{ club.name }}</h2>
+                            <p class="text-2xl opacity-90 mb-2">Založen roku {{ club.founded_year }}</p>
+                            {% if club.founded_year %}
+                                <p class="text-lg opacity-75">{{ club.founded_year|floatformat:0|date:"Y"|add:"0" }}+ let tradice fotbalu</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Club Information Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+                <!-- History -->
+                <div class="glass-card rounded-2xl p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-club-red to-club-red-dark rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-history text-white text-lg"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Historie klubu</h3>
+                    </div>
+                    {% if club.history %}
+                        <div class="prose max-w-none text-gray-300">
+                            {{ club.history|linebreaks }}
+                        </div>
+                    {% else %}
+                        <p class="text-gray-300 leading-relaxed">
+                            TJ Družba Hlavnice je fotbalový klub s dlouholetou tradicí. Od svého založení 
+                            v roce {{ club.founded_year }} se klub snaží rozvíjet fotbal v regionu a 
+                            vychovávat nové generace fotbalistů.
+                        </p>
+                    {% endif %}
+                </div>
+
+                <!-- Contact Information -->
+                <div class="glass-card rounded-2xl p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-600 to-green-800 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-envelope text-white text-lg"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Kontaktní údaje</h3>
+                    </div>
+                    <div class="space-y-6">
+                        {% if club.address %}
+                            <div class="flex items-start">
+                                <i class="fas fa-map-marker-alt text-club-red mr-3 mt-1 w-5"></i>
+                                <div>
+                                    <h4 class="font-semibold text-white mb-1">Adresa</h4>
+                                    <p class="text-gray-300">{{ club.address|linebreaks }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        {% if club.contact_email %}
+                            <div class="flex items-start">
+                                <i class="fas fa-envelope text-club-red mr-3 mt-1 w-5"></i>
+                                <div>
+                                    <h4 class="font-semibold text-white mb-1">Email</h4>
+                                    <a href="mailto:{{ club.contact_email }}" 
+                                       class="text-club-red hover:text-white transition-colors duration-200">
+                                        {{ club.contact_email }}
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        {% if club.contact_phone %}
+                            <div class="flex items-start">
+                                <i class="fas fa-phone text-club-red mr-3 mt-1 w-5"></i>
+                                <div>
+                                    <h4 class="font-semibold text-white mb-1">Telefon</h4>
+                                    <a href="tel:{{ club.contact_phone }}" 
+                                       class="text-club-red hover:text-white transition-colors duration-200">
+                                        {{ club.contact_phone }}
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        {% if club.website %}
+                            <div class="flex items-start">
+                                <i class="fas fa-globe text-club-red mr-3 mt-1 w-5"></i>
+                                <div>
+                                    <h4 class="font-semibold text-white mb-1">Web</h4>
+                                    <a href="{{ club.website }}" target="_blank" 
+                                       class="text-club-red hover:text-white transition-colors duration-200">
+                                        {{ club.website }}
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                </div>
+            </div>
+        </div>
+
+            <!-- Club Facts -->
+            <div class="glass-card rounded-2xl p-8 mb-16">
+                <div class="flex items-center mb-8">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-800 rounded-full flex items-center justify-center mr-4">
+                        <i class="fas fa-chart-bar text-white text-lg"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white">Zajímavosti o klubu</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="text-center p-6 bg-black/20 rounded-xl border border-white/10 hover:bg-black/30 transition-all duration-300">
+                        <div class="text-3xl font-bold text-club-red mb-2">{{ club.founded_year }}</div>
+                        <div class="text-sm text-gray-300">Rok založení</div>
+                    </div>
+                    <div class="text-center p-6 bg-black/20 rounded-xl border border-white/10 hover:bg-black/30 transition-all duration-300">
+                        <div class="text-3xl font-bold text-club-red mb-2">{{ years_of_existence }}</div>
+                        <div class="text-sm text-gray-300">Let existence</div>
+                    </div>
+                    <div class="text-center p-6 bg-black/20 rounded-xl border border-white/10 hover:bg-black/30 transition-all duration-300">
+                        <div class="text-3xl font-bold text-club-red mb-2">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="text-sm text-gray-300">Aktivní členové</div>
+                    </div>
+                    <div class="text-center p-6 bg-black/20 rounded-xl border border-white/10 hover:bg-black/30 transition-all duration-300">
+                        <div class="text-3xl font-bold text-club-red mb-2">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="text-sm text-gray-300">Úspěchy</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Values and Mission -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                <div class="glass-card rounded-2xl p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-red-600 to-red-800 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-heart text-white text-lg"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Naše hodnoty</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-300">
+                    <li class="flex items-center">
+                        <i class="fas fa-check-circle text-club-red mr-3"></i>
+                        Respekt a fair play
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check-circle text-club-red mr-3"></i>
+                        Týmová spolupráce
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check-circle text-club-red mr-3"></i>
+                        Rozvoj mladých talentů
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check-circle text-club-red mr-3"></i>
+                        Komunita a tradice
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check-circle text-club-red mr-3"></i>
+                        Sportovní excellence
+                    </li>
+                </ul>
+            </div>
+
+                <div class="glass-card rounded-2xl p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-orange-600 to-orange-800 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-bullseye text-white text-lg"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Naše mise</h3>
+                    </div>
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        Poskytovat kvalitní fotbalové prostředí pro všechny věkové kategorie, 
+                        podporovat rozvoj mladých hráčů a udržovat tradice klubu.
+                    </p>
+                    <p class="text-gray-300 leading-relaxed">
+                        Být důležitou součástí komunity Hlavnice a reprezentovat město 
+                        na fotbalových hřištích s hrdostí a sportovním duchem.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Join Us -->
+            <div class="glass-card rounded-2xl p-8 text-center">
+                <div class="flex items-center justify-center mb-6">
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-600 to-green-800 rounded-full flex items-center justify-center mr-4">
+                        <i class="fas fa-handshake text-white text-lg"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white">Přidejte se k nám!</h3>
+                </div>
+                <p class="text-gray-300 mb-6 max-w-2xl mx-auto leading-relaxed">
+                Máte zájem o fotbal? Ať už jste začátečník nebo zkušený hráč, rádi vás přivítáme 
+                v našem klubu. Kontaktujte naše vedení pro více informací o tréninku a členství.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="{% url 'management' %}" 
+                       class="inline-flex items-center bg-club-red hover:bg-red-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 hover:scale-105">
+                        <i class="fas fa-users mr-2"></i>
+                        Kontaktovat vedení
+                    </a>
+                    <a href="{% url 'team_lineup' %}" 
+                       class="inline-flex items-center bg-black/20 hover:bg-black/30 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 hover:scale-105 border border-white/20">
+                        <i class="fas fa-eye mr-2"></i>
+                        Prohlédnout tým
+                    </a>
+                </div>
+            </div>
+    {% else %}
+        <div class="text-center py-12">
+            <div class="text-gray-400 mb-4">
+                <i class="fas fa-exclamation-triangle text-6xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-600 mb-2">Informace o klubu nejsou k dispozici</h3>
+            <p class="text-gray-500 mb-6">Kontaktujte administrátora pro nastavení základních informací o klubu.</p>
+            <a href="/admin/football/clubinfo/add/" target="_blank" 
+               class="inline-flex items-center bg-club-red hover:bg-club-red-dark text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                <i class="fas fa-plus mr-2"></i>
+                Přidat informace o klubu
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

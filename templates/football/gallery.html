@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Galerie - TJ Družba Hlavnice{% endblock %}
+
+{% block extra_head %}
+<style>
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.9);
+}
+
+.lightbox-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+.lightbox img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.lightbox-close:hover {
+    color: #ff0000;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="px-4 sm:px-0">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-club-black">
+            <i class="fas fa-images text-club-red mr-3"></i>
+            Fotogalerie
+        </h1>
+        <p class="text-gray-600 mt-2">Fotky z akcí a zápasů TJ Družba Hlavnice</p>
+    </div>
+
+    {% if photos %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for photo in photos %}
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                    <div class="aspect-w-4 aspect-h-3 cursor-pointer" onclick="openLightbox('{{ photo.image.url }}', '{{ photo.title }}')">
+                        <img src="{{ photo.image.url }}" alt="{{ photo.title }}" 
+                             class="w-full h-48 object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-club-black mb-2">{{ photo.title }}</h3>
+                        {% if photo.description %}
+                            <p class="text-gray-600 text-sm mb-2">{{ photo.description|truncatewords:15 }}</p>
+                        {% endif %}
+                        <div class="flex items-center justify-between text-xs text-gray-500">
+                            <span>
+                                <i class="fas fa-calendar-alt mr-1"></i>
+                                {{ photo.uploaded_at|date:"d.m.Y" }}
+                            </span>
+                            {% if photo.event %}
+                                <span>
+                                    <i class="fas fa-tag mr-1"></i>
+                                    {{ photo.event.title|truncatechars:15 }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+            <div class="mt-12 flex justify-center">
+                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}" 
+                           class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <span class="relative inline-flex items-center px-4 py-2 border border-club-red bg-club-red text-sm font-medium text-white">
+                                {{ num }}
+                            </span>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <a href="?page={{ num }}" 
+                               class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                {{ num }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" 
+                           class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    {% endif %}
+                </nav>
+            </div>
+        {% endif %}
+
+        <!-- Upload Information -->
+        <div class="mt-12 bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-bold text-club-black mb-4">
+                <i class="fas fa-upload text-club-red mr-2"></i>
+                Přidání fotek
+            </h2>
+            <p class="text-gray-600 mb-4">
+                Chcete přidat fotky z akce nebo zápasu? Použijte admin panel pro nahrání nových fotek do galerie.
+            </p>
+            <a href="/admin/football/gallery/add/" target="_blank" 
+               class="inline-flex items-center bg-club-red hover:bg-club-red-dark text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                <i class="fas fa-plus mr-2"></i>
+                Přidat fotku
+            </a>
+        </div>
+    {% else %}
+        <div class="text-center py-12">
+            <div class="text-gray-400 mb-4">
+                <i class="fas fa-image text-6xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-600 mb-2">Žádné fotky</h3>
+            <p class="text-gray-500 mb-6">Galerie je zatím prázdná. Buďte první, kdo přidá fotku!</p>
+            <a href="/admin/football/gallery/add/" target="_blank" 
+               class="inline-flex items-center bg-club-red hover:bg-club-red-dark text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                <i class="fas fa-plus mr-2"></i>
+                Přidat první fotku
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+    <div class="lightbox-content">
+        <img id="lightbox-img" src="" alt="">
+        <div class="text-center mt-4">
+            <p id="lightbox-title" class="text-white text-lg font-semibold"></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openLightbox(src, title) {
+    document.getElementById('lightbox').style.display = 'block';
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox-title').textContent = title;
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Close lightbox with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeLightbox();
+    }
+});
+
+// Prevent closing when clicking on the image
+document.getElementById('lightbox-img').addEventListener('click', function(event) {
+    event.stopPropagation();
+});
+</script>
+{% endblock %}

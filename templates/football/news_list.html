@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Aktuality - TJ Družba Hlavnice{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-bg py-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto text-center">
+        <span class="inline-block bg-club-red px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide text-white mb-6">
+            📰 Novinky a události
+        </span>
+        <h1 class="text-4xl lg:text-6xl font-bold text-white mb-6">
+            AKTUALITY <span class="text-club-red">KLUBU</span>
+        </h1>
+        <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+            Sledujte nejnovější zprávy, události a aktuality z TJ Družba Hlavnice.
+        </p>
+    </div>
+</section>
+
+<section class="py-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        {% if news_list %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for news in news_list %}
+                    <article class="glass-card rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300">
+                        {% if news.image %}
+                            <div class="h-48 bg-cover bg-center" style="background-image: url('{{ news.image.url }}');"></div>
+                        {% else %}
+                            <div class="h-48 bg-gradient-to-br from-club-red to-club-red-dark flex items-center justify-center">
+                                <i class="fas fa-newspaper text-4xl text-white"></i>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="p-6">
+                            {% if news.is_featured %}
+                                <div class="inline-block bg-club-red text-white text-xs px-3 py-1 rounded-full mb-3 font-semibold uppercase tracking-wide">
+                                    Vybrané
+                                </div>
+                            {% endif %}
+                            
+                            <div class="text-club-red text-sm font-semibold mb-2">
+                                {{ news.created_at|date:"d.m.Y" }}
+                            </div>
+                            
+                            <h2 class="text-xl font-bold text-white mb-3 line-clamp-2">
+                                <a href="{% url 'news_detail' news.pk %}" class="hover:text-club-red transition-colors duration-200">
+                                    {{ news.title }}
+                                </a>
+                            </h2>
+                            
+                            <p class="text-gray-300 mb-4 line-clamp-3">{{ news.content|truncatewords:20 }}</p>
+                            
+                            <div class="flex items-center justify-between pt-4 border-t border-white/10">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    {{ news.author.get_full_name|default:news.author.username }}
+                                </div>
+                                <a href="{% url 'news_detail' news.pk %}" class="text-club-red hover:text-white font-semibold text-sm transition-colors duration-200">
+                                    Číst více →
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+            <div class="mt-12 flex justify-center">
+                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}" 
+                           class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <span class="relative inline-flex items-center px-4 py-2 border border-club-red bg-club-red text-sm font-medium text-white">
+                                {{ num }}
+                            </span>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <a href="?page={{ num }}" 
+                               class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                {{ num }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" 
+                           class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    {% endif %}
+                </nav>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="text-center py-12">
+            <div class="text-gray-400 mb-4">
+                <i class="fas fa-inbox text-6xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-600 mb-2">Žádné aktuality</h3>
+            <p class="text-gray-500">Zatím nejsou k dispozici žádné aktuality.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

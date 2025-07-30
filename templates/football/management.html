@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Vedení klubu - TJ Družba Hlavnice{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-bg py-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto text-center">
+        <span class="inline-block bg-club-red px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide text-white mb-6">
+            👥 Naše vedení
+        </span>
+        <h1 class="text-4xl lg:text-6xl font-bold text-white mb-6">
+            VEDENÍ <span class="text-club-red">KLUBU</span>
+        </h1>
+        <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+            Seznamte se s lidmi, kteří řídí a rozvíjejí TJ Družba Hlavnice s vášní a odhodláním.
+        </p>
+    </div>
+</section>
+
+<section class="py-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        {% if management_team %}
+            <div class="text-center mb-12">
+                <span class="text-club-red text-sm font-semibold uppercase tracking-wide">Organizace</span>
+                <h2 class="text-4xl font-bold text-white mt-2 mb-4">NAŠE VEDENÍ</h2>
+                <p class="text-gray-300 text-lg">Zkušení lidé, kteří vedou klub k úspěchu</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for member in management_team %}
+                <div class="glass-card rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300">
+                    <div class="bg-gradient-to-r from-club-red to-club-red-dark p-4">
+                        <div class="text-center text-white">
+                            <div class="text-sm uppercase tracking-wide opacity-90">{{ member.get_role_display }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            {% if member.photo %}
+                                <img src="{{ member.photo.url }}" alt="{{ member.first_name }} {{ member.last_name }}" 
+                                     class="w-20 h-20 rounded-full object-cover mr-4 border-2 border-club-red/20">
+                            {% else %}
+                                <div class="w-20 h-20 bg-gradient-to-br from-club-red to-club-red-dark rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-user text-white text-2xl"></i>
+                                </div>
+                            {% endif %}
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-white mb-1">
+                                    {{ member.first_name }} {{ member.last_name }}
+                                </h3>
+                                {% if member.bio %}
+                                    <p class="text-gray-300 text-sm line-clamp-2">{{ member.bio|truncatewords:15 }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3 pt-4 border-t border-white/10">
+                            {% if member.phone %}
+                                <div class="flex items-center text-sm text-gray-300">
+                                    <i class="fas fa-phone text-club-red mr-3 w-4"></i>
+                                    <a href="tel:{{ member.phone }}" class="hover:text-club-red transition-colors duration-200">
+                                        {{ member.phone }}
+                                    </a>
+                                </div>
+                            {% endif %}
+                            {% if member.email %}
+                                <div class="flex items-center text-sm text-gray-300">
+                                    <i class="fas fa-envelope text-club-red mr-3 w-4"></i>
+                                    <a href="mailto:{{ member.email }}" class="hover:text-club-red transition-colors duration-200 break-all">
+                                        {{ member.email }}
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Contact Information -->
+        <div class="mt-16">
+            <div class="text-center mb-12">
+                <span class="text-club-red text-sm font-semibold uppercase tracking-wide">Kontakt</span>
+                <h2 class="text-4xl font-bold text-white mt-2 mb-4">KONTAKTNÍ INFORMACE</h2>
+                <p class="text-gray-300 text-lg">Neváhejte se na nás obrátit</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="glass-card rounded-2xl p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-club-red to-club-red-dark rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-envelope text-white text-lg"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">Obecné dotazy</h3>
+                    </div>
+                    <p class="text-gray-300 mb-6">
+                        Pro obecné dotazy týkající se klubu, členství nebo sportovních aktivit se obraťte na vedení klubu.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex items-center text-gray-300">
+                            <i class="fas fa-envelope text-club-red mr-3 w-5"></i>
+                            <a href="mailto:info@tjhlavnice.cz" class="hover:text-club-red transition-colors duration-200">
+                                info@tjhlavnice.cz
+                            </a>
+                        </div>
+                        <div class="flex items-center text-gray-300">
+                            <i class="fas fa-phone text-club-red mr-3 w-5"></i>
+                            <a href="tel:+420123456789" class="hover:text-club-red transition-colors duration-200">
+                                +420 123 456 789
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-card rounded-2xl p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-800 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-cogs text-white text-lg"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white">Administrativa</h3>
+                    </div>
+                    <p class="text-gray-300 mb-6">
+                        Pro správu webových stránek, přidávání novinek a aktualizaci informací použijte admin panel.
+                    </p>
+                    <div class="space-y-3">
+                        <a href="/admin/" target="_blank" 
+                           class="inline-flex items-center text-club-red hover:text-white font-semibold transition-colors duration-200">
+                            <i class="fas fa-external-link-alt mr-2"></i>
+                            Admin panel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Club Structure -->
+        </div>
+    {% else %}
+        <!-- No Management Message -->
+        <div class="text-center py-20">
+            <div class="glass-card rounded-2xl p-12 max-w-2xl mx-auto">
+                <div class="text-gray-400 mb-6">
+                    <i class="fas fa-users text-8xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-4">Žádné vedení</h3>
+                <p class="text-gray-300 text-lg">
+                    Informace o vedení klubu nejsou k dispozici. Sledujte nás pro aktuální informace.
+                </p>
+            </div>
+        </div>
+    {% endif %}
+    </div>
+</section>
+{% endblock %}

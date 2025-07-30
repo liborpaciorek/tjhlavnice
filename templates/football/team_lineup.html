@@ -1,0 +1,330 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tým - TJ Družba Hlavnice{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-bg py-20 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto text-center">
+        <span class="inline-block bg-club-red px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide text-white mb-6">
+            👥 Naši hráči
+        </span>
+        <h1 class="text-4xl lg:text-6xl font-bold text-white mb-6">
+            SESTAVA <span class="text-club-red">TÝMU</span>
+        </h1>
+        <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+            Poznejte naše hráče, kteří reprezentují barvy TJ Družba Hlavnice s hrdostí a odhodláním.
+        </p>
+    </div>
+</section>
+
+{% if team %}
+    <!-- Team Info Section -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="glass-card rounded-2xl overflow-hidden mb-12">
+                <div class="bg-gradient-to-r from-club-red to-club-red-dark p-8">
+                    <div class="flex items-center justify-center text-center text-white">
+                        {% if team.flag %}
+                            <img src="{{ team.flag.url }}" alt="{{ team.name }}" class="w-20 h-16 object-cover rounded-lg mr-6 border-2 border-white/20">
+                        {% endif %}
+                        <div>
+                            <h2 class="text-3xl font-bold mb-2">{{ team.name }}</h2>
+                            {% if team.city %}
+                                <p class="text-lg opacity-90 mb-1">
+                                    <i class="fas fa-map-marker-alt mr-2"></i>{{ team.city }}
+                                </p>
+                            {% endif %}
+                            {% if team.founded %}
+                                <p class="text-sm opacity-75">
+                                    <i class="fas fa-calendar-alt mr-2"></i>Založen: {{ team.founded }}
+                                </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <!-- Players by Position -->
+        {% if goalkeepers or defenders or midfielders or forwards %}
+            <!-- Goalkeepers -->
+            {% if goalkeepers %}
+                <div class="mb-16">
+                    <div class="text-center mb-12">
+                        <span class="text-club-red text-sm font-semibold uppercase tracking-wide">Pozice</span>
+                        <h3 class="text-4xl font-bold text-white mt-2 mb-4">
+                            <i class="fas fa-hand-paper text-club-red mr-3"></i>BRANKÁŘI
+                        </h3>
+                        <p class="text-gray-300 text-lg">Naše první linie obrany</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {% for player in goalkeepers %}
+                            <div class="glass-card rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300">
+                                <div class="bg-gradient-to-r from-club-red to-club-red-dark p-4">
+                                    <div class="text-center text-white">
+                                        <div class="text-3xl font-bold">{{ player.jersey_number }}</div>
+                                        <div class="text-sm uppercase tracking-wide opacity-90">{{ player.get_position_display }}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-6">
+                                    <div class="flex items-center mb-4">
+                                        {% if player.photo %}
+                                            <img src="{{ player.photo.url }}" alt="{{ player.full_name }}" 
+                                                 class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-club-red/20">
+                                        {% else %}
+                                            <div class="w-16 h-16 bg-gradient-to-br from-club-red to-club-red-dark rounded-full flex items-center justify-center mr-4">
+                                                <i class="fas fa-user text-white text-xl"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div class="flex-1">
+                                            <h4 class="text-lg font-bold text-white mb-1">{{ player.full_name }}</h4>
+                                            {% if player.birth_date %}
+                                                <p class="text-gray-300 text-sm">
+                                                    <i class="fas fa-birthday-cake mr-1"></i>
+                                                    {{ player.birth_date|date:"d.m.Y" }}
+                                                </p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-3 gap-4 text-center pt-4 border-t border-white/10">
+                                        <div class="text-center">
+                                            <div class="text-lg font-bold text-club-red">{{ player.goals }}</div>
+                                            <div class="text-xs text-gray-400 uppercase">Góly</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-lg font-bold text-yellow-400">{{ player.yellow_cards }}</div>
+                                            <div class="text-xs text-gray-400 uppercase">ŽK</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-lg font-bold text-red-400">{{ player.red_cards }}</div>
+                                            <div class="text-xs text-gray-400 uppercase">ČK</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Defenders -->
+            {% if defenders %}
+                <div class="mb-16">
+                    <div class="text-center mb-12">
+                        <span class="text-club-red text-sm font-semibold uppercase tracking-wide">Pozice</span>
+                        <h3 class="text-4xl font-bold text-white mt-2 mb-4">
+                            <i class="fas fa-shield-alt text-club-red mr-3"></i>OBRÁNCI
+                        </h3>
+                        <p class="text-gray-300 text-lg">Pevná obranná zeď</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {% for player in defenders %}
+                            <div class="glass-card rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300">
+                                <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-4">
+                                    <div class="text-center text-white">
+                                        <div class="text-3xl font-bold">{{ player.jersey_number }}</div>
+                                        <div class="text-sm uppercase tracking-wide opacity-90">{{ player.get_position_display }}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-6">
+                                    <div class="flex items-center mb-4">
+                                        {% if player.photo %}
+                                            <img src="{{ player.photo.url }}" alt="{{ player.full_name }}" 
+                                                 class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-blue-600/20">
+                                        {% else %}
+                                            <div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-800 rounded-full flex items-center justify-center mr-4">
+                                                <i class="fas fa-user text-white text-xl"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div class="flex-1">
+                                            <h4 class="text-lg font-bold text-white mb-1">{{ player.full_name }}</h4>
+                                            {% if player.birth_date %}
+                                                <p class="text-gray-300 text-sm">
+                                                    <i class="fas fa-birthday-cake mr-1"></i>
+                                                    {{ player.birth_date|date:"d.m.Y" }}
+                                                </p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-3 gap-4 text-center pt-4 border-t border-white/10">
+                                        <div class="text-center">
+                                            <div class="text-lg font-bold text-club-red">{{ player.goals }}</div>
+                                            <div class="text-xs text-gray-400 uppercase">Góly</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-lg font-bold text-yellow-400">{{ player.yellow_cards }}</div>
+                                            <div class="text-xs text-gray-400 uppercase">ŽK</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-lg font-bold text-red-400">{{ player.red_cards }}</div>
+                                            <div class="text-xs text-gray-400 uppercase">ČK</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Midfielders -->
+            {% if midfielders %}
+                <div class="mb-16">
+                    <div class="text-center mb-12">
+                        <span class="text-club-red text-sm font-semibold uppercase tracking-wide">Pozice</span>
+                        <h3 class="text-4xl font-bold text-white mt-2 mb-4">
+                            <i class="fas fa-exchange-alt text-club-red mr-3"></i>ZÁLOŽNÍCI
+                        </h3>
+                        <p class="text-gray-300 text-lg">Motor našeho týmu</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {% for player in midfielders %}
+                            <div class="glass-card rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300">
+                                <div class="bg-gradient-to-r from-green-600 to-green-800 p-4">
+                                    <div class="text-center text-white">
+                                        <div class="text-3xl font-bold">{{ player.jersey_number }}</div>
+                                        <div class="text-sm uppercase tracking-wide opacity-90">{{ player.get_position_display }}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-6">
+                                    <div class="flex items-center mb-4">
+                                        {% if player.photo %}
+                                            <img src="{{ player.photo.url }}" alt="{{ player.full_name }}" 
+                                                 class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-green-600/20">
+                                        {% else %}
+                                            <div class="w-16 h-16 bg-gradient-to-br from-green-600 to-green-800 rounded-full flex items-center justify-center mr-4">
+                                                <i class="fas fa-user text-white text-xl"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div class="flex-1">
+                                            <h4 class="text-lg font-bold text-white mb-1">{{ player.full_name }}</h4>
+                                            {% if player.birth_date %}
+                                                <p class="text-gray-300 text-sm">
+                                                    <i class="fas fa-birthday-cake mr-1"></i>
+                                                    {{ player.birth_date|date:"d.m.Y" }}
+                                                </p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-3 gap-4 text-center pt-4 border-t border-white/10">
+                                        <div class="text-center">
+                                            <div class="text-lg font-bold text-club-red">{{ player.goals }}</div>
+                                            <div class="text-xs text-gray-400 uppercase">Góly</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-lg font-bold text-yellow-400">{{ player.yellow_cards }}</div>
+                                            <div class="text-xs text-gray-400 uppercase">ŽK</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-lg font-bold text-red-400">{{ player.red_cards }}</div>
+                                            <div class="text-xs text-gray-400 uppercase">ČK</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Forwards -->
+            {% if forwards %}
+                <div class="mb-16">
+                    <div class="text-center mb-12">
+                        <span class="text-club-red text-sm font-semibold uppercase tracking-wide">Pozice</span>
+                        <h3 class="text-4xl font-bold text-white mt-2 mb-4">
+                            <i class="fas fa-bullseye text-club-red mr-3"></i>ÚTOČNÍCI
+                        </h3>
+                        <p class="text-gray-300 text-lg">Střelci našich gólů</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {% for player in forwards %}
+                            <div class="glass-card rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300">
+                                <div class="bg-gradient-to-r from-orange-600 to-orange-800 p-4">
+                                    <div class="text-center text-white">
+                                        <div class="text-3xl font-bold">{{ player.jersey_number }}</div>
+                                        <div class="text-sm uppercase tracking-wide opacity-90">{{ player.get_position_display }}</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-6">
+                                    <div class="flex items-center mb-4">
+                                        {% if player.photo %}
+                                            <img src="{{ player.photo.url }}" alt="{{ player.full_name }}" 
+                                                 class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-orange-600/20">
+                                        {% else %}
+                                            <div class="w-16 h-16 bg-gradient-to-br from-orange-600 to-orange-800 rounded-full flex items-center justify-center mr-4">
+                                                <i class="fas fa-user text-white text-xl"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div class="flex-1">
+                                            <h4 class="text-lg font-bold text-white mb-1">{{ player.full_name }}</h4>
+                                            {% if player.birth_date %}
+                                                <p class="text-gray-300 text-sm">
+                                                    <i class="fas fa-birthday-cake mr-1"></i>
+                                                    {{ player.birth_date|date:"d.m.Y" }}
+                                                </p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-3 gap-4 text-center pt-4 border-t border-white/10">
+                                        <div class="text-center">
+                                            <div class="text-lg font-bold text-club-red">{{ player.goals }}</div>
+                                            <div class="text-xs text-gray-400 uppercase">Góly</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-lg font-bold text-yellow-400">{{ player.yellow_cards }}</div>
+                                            <div class="text-xs text-gray-400 uppercase">ŽK</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-lg font-bold text-red-400">{{ player.red_cards }}</div>
+                                            <div class="text-xs text-gray-400 uppercase">ČK</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% else %}
+            <!-- No Players Message -->
+            <div class="text-center py-20">
+                <div class="glass-card rounded-2xl p-12 max-w-2xl mx-auto">
+                    <div class="text-gray-400 mb-6">
+                        <i class="fas fa-users text-8xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Žádní hráči</h3>
+                    <p class="text-gray-300 text-lg">
+                        V týmu zatím nejsou registrováni žádní hráči. Sledujte nás pro aktuální informace o sestavě.
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% else %}
+    <!-- No Team Message -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="glass-card rounded-2xl p-12">
+                <div class="text-gray-400 mb-6">
+                    <i class="fas fa-exclamation-triangle text-8xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-4">Tým nenalezen</h3>
+                <p class="text-gray-300 text-lg">
+                    Hlavní tým klubu není nastaven. Kontaktujte administrátora pro více informací.
+                </p>
+            </div>
+        </div>
+    </section>
+{% endif %}
+{% endblock %}
