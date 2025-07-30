@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% block title %}Zásady ochrany osobních údajů - TJ Družba Hlavnice{% endblock %}
+
+{% block content %}
+<div class="hero-bg relative py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                Zásady ochrany osobních údajů
+            </h1>
+            <div class="w-24 h-1 bg-club-red mx-auto"></div>
+        </div>
+    </div>
+</div>
+
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="glass-card rounded-xl p-8 md:p-12">
+        <div class="prose prose-lg max-w-none text-white">
+            <p class="text-xl text-gray-300 mb-8 leading-relaxed">
+                Tato webová stránka (dále jen „web") respektuje soukromí svých návštěvníků. Níže najdete informace o tom, jaké údaje shromažďujeme a proč.
+            </p>
+
+            <div class="space-y-8">
+                <section>
+                    <h2 class="text-2xl font-bold text-white mb-4 flex items-center">
+                        <div class="w-8 h-8 bg-club-red rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-database text-white text-sm"></i>
+                        </div>
+                        Jaké údaje shromažďujeme:
+                    </h2>
+                    <div class="bg-dark-blue-light/50 rounded-lg p-6 border border-white/10">
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <div class="w-2 h-2 bg-club-red rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                                <span class="text-gray-300">
+                                    <strong class="text-white">IP adresa</strong> – ukládáme ji dočasně pro účely zabezpečení webu, odhalování chyb a zamezení zneužití (např. blokace útoků).
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-2xl font-bold text-white mb-4 flex items-center">
+                        <div class="w-8 h-8 bg-club-red rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-question-circle text-white text-sm"></i>
+                        </div>
+                        Proč údaje zpracováváme:
+                    </h2>
+                    <div class="bg-dark-blue-light/50 rounded-lg p-6 border border-white/10">
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <div class="w-2 h-2 bg-club-red rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                                <span class="text-gray-300">
+                                    <strong class="text-white">Zabezpečení a provoz webu</strong> (např. ochrana proti útokům, technická analýza chyb).
+                                </span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-2 h-2 bg-club-red rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                                <span class="text-gray-300">
+                                    <strong class="text-white">Zákonný důvod zpracování</strong>: Oprávněný zájem správce dle čl. 6 odst. 1 písm. f) GDPR.
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-2xl font-bold text-white mb-4 flex items-center">
+                        <div class="w-8 h-8 bg-club-red rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-share-alt text-white text-sm"></i>
+                        </div>
+                        Komu jsou údaje zpřístupněny:
+                    </h2>
+                    <div class="bg-dark-blue-light/50 rounded-lg p-6 border border-white/10">
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <div class="w-2 h-2 bg-club-red rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                                <span class="text-gray-300">Poskytovateli webhostingu (server, na kterém je web provozován).</span>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="w-2 h-2 bg-club-red rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                                <span class="text-gray-300">Údaje nejsou předávány třetím stranám k marketingovým nebo reklamním účelům.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-2xl font-bold text-white mb-4 flex items-center">
+                        <div class="w-8 h-8 bg-club-red rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-clock text-white text-sm"></i>
+                        </div>
+                        Doba uchování:
+                    </h2>
+                    <div class="bg-dark-blue-light/50 rounded-lg p-6 border border-white/10">
+                        <p class="text-gray-300">
+                            IP adresa je uchovávána maximálně 30 dní (nebo dle nastavení serverových logů).
+                        </p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-2xl font-bold text-white mb-4 flex items-center">
+                        <div class="w-8 h-8 bg-club-red rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-user-shield text-white text-sm"></i>
+                        </div>
+                        Vaše práva:
+                    </h2>
+                    <div class="bg-dark-blue-light/50 rounded-lg p-6 border border-white/10">
+                        <p class="text-gray-300">
+                            Máte právo požádat o přístup k údajům, opravu, výmaz nebo omezení zpracování. V případě pochybností se můžete obrátit na Úřad pro ochranu osobních údajů.
+                        </p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-2xl font-bold text-white mb-4 flex items-center">
+                        <div class="w-8 h-8 bg-club-red rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-envelope text-white text-sm"></i>
+                        </div>
+                        Kontakt:
+                    </h2>
+                    <div class="bg-dark-blue-light/50 rounded-lg p-6 border border-white/10">
+                        <p class="text-gray-300">
+                            Pokud máte dotazy ohledně zpracování údajů, kontaktujte nás na: 
+                            <a href="mailto:info@tjhlavnice.cz" class="text-club-red hover:text-club-red-dark transition-colors duration-200 font-medium">
+                                info@tjhlavnice.cz
+                            </a>
+                        </p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Back to Home Button -->
+            <div class="mt-12 text-center">
+                <a href="{% url 'home' %}" class="inline-flex items-center px-6 py-3 bg-club-red hover:bg-club-red-dark text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Zpět na hlavní stránku
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_head %}
+<style>
+    .prose h2 {
+        color: white !important;
+    }
+    .prose p {
+        color: #D1D5DB !important;
+    }
+    .prose ul li {
+        color: #D1D5DB !important;
+    }
+    .prose strong {
+        color: white !important;
+    }
+</style>
+{% endblock %}
+{% endblock %}

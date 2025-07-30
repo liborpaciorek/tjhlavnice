@@ -61,6 +61,84 @@
         .nav-gradient {
             background: linear-gradient(90deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
         }
+        
+        /* Privacy banner styles */
+        .privacy-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 16px 20px;
+            z-index: 10000;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .privacy-banner.show {
+            transform: translateY(0);
+        }
+        
+        .privacy-banner-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        
+        .privacy-banner-text {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .privacy-banner-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .privacy-link {
+            color: #60A5FA;
+            text-decoration: underline;
+            transition: color 0.2s ease;
+        }
+        
+        .privacy-link:hover {
+            color: #93C5FD;
+        }
+        
+        .privacy-accept-btn {
+            background: #DC2626;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        
+        .privacy-accept-btn:hover {
+            background: #991B1B;
+        }
+        
+        @media (max-width: 768px) {
+            .privacy-banner-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .privacy-banner-text {
+                min-width: auto;
+            }
+        }
     </style>
     
     {% block extra_head %}{% endblock %}
@@ -226,9 +304,49 @@
             </div>
         </footer>
     </div>
-</body>
-</html>
 
+    <!-- Privacy Banner -->
+    <div id="privacy-banner" class="privacy-banner">
+        <div class="privacy-banner-content">
+            <div class="privacy-banner-text">
+                <span>Tato stránka zpracovává IP adresu pouze pro technické účely. Nepoužíváme žádné sledovací cookies.</span>
+                <a href="{% url 'privacy_policy' %}" class="privacy-link ml-2">Více informací</a>
+            </div>
+            <div class="privacy-banner-actions">
+                <button onclick="acceptPrivacy()" class="privacy-accept-btn">
+                    Rozumím
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Privacy banner functionality
+        function showPrivacyBanner() {
+            const banner = document.getElementById('privacy-banner');
+            if (banner) {
+                banner.classList.add('show');
+            }
+        }
+        
+        function acceptPrivacy() {
+            const banner = document.getElementById('privacy-banner');
+            if (banner) {
+                banner.classList.remove('show');
+                // Set a flag in localStorage to remember user's choice
+                localStorage.setItem('privacy-accepted', 'true');
+            }
+        }
+        
+        // Check if privacy was already accepted
+        document.addEventListener('DOMContentLoaded', function() {
+            const privacyAccepted = localStorage.getItem('privacy-accepted');
+            if (!privacyAccepted) {
+                // Show banner after a short delay for better UX
+                setTimeout(showPrivacyBanner, 1000);
+            }
+        });
+    </script>
 
     <!-- Alpine.js for mobile menu -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>

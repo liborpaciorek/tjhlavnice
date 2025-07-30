@@ -150,36 +150,34 @@
             <div class="text-gray-400 mb-4">
                 <i class="fas fa-calendar-times text-6xl"></i>
             </div>
-            <h3 class="text-xl font-semibold text-gray-600 mb-2">Žádné akce</h3>
-            <p class="text-gray-500 mb-6">V kalendáři nejsou naplánované žádné budoucí akce.</p>
-            <a href="/admin/football/event/add/" target="_blank" 
-               class="inline-flex items-center bg-club-red hover:bg-club-red-dark text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                <i class="fas fa-plus mr-2"></i>
-                Přidat akci
+            <h3 class="text-xl font-semibold text-gray-300 mb-2">Žádné akce</h3>
+            <p class="text-gray-400 mb-6">V kalendáři nejsou naplánované žádné budoucí akce.</p>
+            <a href="{% url 'home' %}" 
+               class="inline-flex items-center bg-club-red hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                <i class="fas fa-home mr-2"></i>
+                Zpět na hlavní stránku
             </a>
         </div>
     {% endif %}
 
-    <!-- Quick Add -->
-    <div class="mt-12 bg-white rounded-lg shadow-lg p-6">
-        <h2 class="text-xl font-bold text-club-black mb-4">
-            <i class="fas fa-plus-circle text-club-red mr-2"></i>
-            Přidání akce
+    <!-- Contact Info -->
+    <div class="mt-12 glass-card rounded-2xl p-8">
+        <h2 class="text-xl font-bold text-white mb-4">
+            <i class="fas fa-calendar-plus text-club-red mr-2"></i>
+            Nové akce a události
         </h2>
-        <p class="text-gray-600 mb-4">
-            Chcete naplánovat novou akci nebo událost? Použijte admin panel pro přidání do kalendáře.
+        <p class="text-gray-300 mb-4">
+            Chcete navrhnout nebo zorganizovat akci? Kontaktujte vedení klubu s vašimi nápady.
         </p>
-        <div class="flex flex-wrap gap-4">
-            <a href="/admin/football/event/add/" target="_blank" 
-               class="inline-flex items-center bg-club-red hover:bg-club-red-dark text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                <i class="fas fa-calendar-plus mr-2"></i>
-                Přidat akci
-            </a>
-            <a href="/admin/football/match/add/" target="_blank" 
-               class="inline-flex items-center bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                <i class="fas fa-futbol mr-2"></i>
-                Naplánovat zápas
-            </a>
+        <div class="flex flex-wrap gap-6">
+            <div class="flex items-center text-gray-300">
+                <i class="fas fa-envelope mr-3 text-club-red"></i>
+                <span>akce@tjhlavnice.cz</span>
+            </div>
+            <div class="flex items-center text-gray-300">
+                <i class="fas fa-phone mr-3 text-club-red"></i>
+                <span>+420 123 456 789</span>
+            </div>
         </div>
     </div>
 

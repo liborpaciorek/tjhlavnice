@@ -147,3 +147,7 @@ def club_info(request):
         'years_of_existence': years_of_existence
     }
     return render(request, 'football/club_info.html', context)
+
+def privacy_policy(request):
+    """Privacy policy page view"""
+    return render(request, 'football/zasady-ochrany-osobnich-udaju.html')

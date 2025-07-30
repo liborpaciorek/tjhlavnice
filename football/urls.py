@@ -12,4 +12,5 @@ urlpatterns = [
     path('calendar/', views.EventListView.as_view(), name='calendar'),
     path('gallery/', views.GalleryListView.as_view(), name='gallery'),
     path('club/', views.club_info, name='club_info'),
+    path('zasady-ochrany-osobnich-udaju/', views.privacy_policy, name='privacy_policy'),
 ]

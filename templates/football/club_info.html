@@ -241,12 +241,12 @@
             <div class="text-gray-400 mb-4">
                 <i class="fas fa-exclamation-triangle text-6xl"></i>
             </div>
-            <h3 class="text-xl font-semibold text-gray-600 mb-2">Informace o klubu nejsou k dispozici</h3>
-            <p class="text-gray-500 mb-6">Kontaktujte administrátora pro nastavení základních informací o klubu.</p>
-            <a href="/admin/football/clubinfo/add/" target="_blank" 
-               class="inline-flex items-center bg-club-red hover:bg-club-red-dark text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                <i class="fas fa-plus mr-2"></i>
-                Přidat informace o klubu
+            <h3 class="text-xl font-semibold text-gray-300 mb-2">Informace o klubu nejsou k dispozici</h3>
+            <p class="text-gray-400 mb-6">Informace o klubu budou brzy doplněny. Děkujeme za pochopení.</p>
+            <a href="{% url 'home' %}" 
+               class="inline-flex items-center bg-club-red hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                <i class="fas fa-home mr-2"></i>
+                Zpět na hlavní stránku
             </a>
         </div>
     {% endif %}
