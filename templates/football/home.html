@@ -79,6 +79,44 @@
                             </a>
                         </div>
                     </div>
+                    
+                    <!-- Latest Result -->
+                    {% if recent_matches %}
+                        {% with recent_matches|first as latest_result %}
+                            <div class="glass-card rounded-3xl p-6 border border-white/20 mt-6">
+                                <div class="text-center mb-4">
+                                    <span class="text-gray-400 text-sm font-semibold uppercase tracking-wide">Poslední výsledek</span>
+                                    <h3 class="text-lg font-bold text-white mt-1">{{ latest_result.date|date:"d.m.Y" }}</h3>
+                                </div>
+                                
+                                <div class="grid grid-cols-3 gap-3 items-center">
+                                    <!-- Home Team -->
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 bg-club-red rounded-full flex items-center justify-center mx-auto mb-2">
+                                            <i class="fas fa-futbol text-lg text-white"></i>
+                                        </div>
+                                        <h4 class="text-sm font-bold text-white">{{ latest_result.home_team.name }}</h4>
+                                    </div>
+                                    
+                                    <!-- Score -->
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-white mb-1">
+                                            {{ latest_result.home_score|default:"0" }} - {{ latest_result.away_score|default:"0" }}
+                                        </div>
+                                        <div class="text-xs text-gray-400">FT</div>
+                                    </div>
+                                    
+                                    <!-- Away Team -->
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-2">
+                                            <i class="fas fa-shield-alt text-lg text-white"></i>
+                                        </div>
+                                        <h4 class="text-sm font-bold text-white">{{ latest_result.away_team.name }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endwith %}
+                    {% endif %}
                 {% else %}
                     <div class="glass-card rounded-3xl p-8 border border-white/20 text-center text-white">
                         <div class="w-20 h-20 bg-club-red rounded-full flex items-center justify-center mx-auto mb-4">
