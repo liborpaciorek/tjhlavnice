@@ -45,24 +45,26 @@
                                 </div>
                                 
                                 <div class="p-6">
-                                    <div class="flex items-center mb-4">
+                                    <!-- Dominant Player Photo at Top -->
+                                    <div class="text-center mb-4">
                                         {% if player.photo %}
                                             <img src="{{ player.photo.url }}" alt="{{ player.full_name }}" 
-                                                 class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-club-red/20">
+                                                 class="w-32 h-40 rounded-lg object-cover mx-auto border-3 border-club-red/30 shadow-lg">
                                         {% else %}
-                                            <div class="w-16 h-16 bg-gradient-to-br from-club-red to-club-red-dark rounded-full flex items-center justify-center mr-4">
-                                                <i class="fas fa-user text-white text-xl"></i>
-                                            </div>
+                                            <img src="{% static 'images/players/default_player.png' %}" alt="{{ player.full_name }}" 
+                                                 class="w-32 h-40 rounded-lg object-cover mx-auto border-3 border-club-red/30 shadow-lg">
                                         {% endif %}
-                                        <div class="flex-1">
-                                            <h4 class="text-lg font-bold text-white mb-1">{{ player.full_name }}</h4>
-                                            {% if player.birth_date %}
-                                                <p class="text-gray-300 text-sm">
-                                                    <i class="fas fa-birthday-cake mr-1"></i>
-                                                    {{ player.birth_date|date:"d.m.Y" }}
-                                                </p>
-                                            {% endif %}
-                                        </div>
+                                    </div>
+                                    
+                                    <!-- Player Info Below Image -->
+                                    <div class="text-center mb-4">
+                                        <h4 class="text-lg font-bold text-white mb-1">{{ player.full_name }}</h4>
+                                        {% if player.birth_date %}
+                                            <p class="text-gray-300 text-sm">
+                                                <i class="fas fa-birthday-cake mr-1"></i>
+                                                {{ player.birth_date|date:"d.m.Y" }}
+                                            </p>
+                                        {% endif %}
                                     </div>
                                     
                                     <div class="grid grid-cols-3 gap-4 text-center pt-4 border-t border-white/10">
@@ -107,24 +109,26 @@
                                 </div>
                                 
                                 <div class="p-6">
-                                    <div class="flex items-center mb-4">
+                                    <!-- Dominant Player Photo at Top -->
+                                    <div class="text-center mb-4">
                                         {% if player.photo %}
                                             <img src="{{ player.photo.url }}" alt="{{ player.full_name }}" 
-                                                 class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-blue-600/20">
+                                                 class="w-32 h-40 rounded-lg object-cover mx-auto border-3 border-blue-600/30 shadow-lg">
                                         {% else %}
-                                            <div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-800 rounded-full flex items-center justify-center mr-4">
-                                                <i class="fas fa-user text-white text-xl"></i>
-                                            </div>
+                                            <img src="{% static 'images/players/default_player.png' %}" alt="{{ player.full_name }}" 
+                                                 class="w-32 h-40 rounded-lg object-cover mx-auto border-3 border-blue-600/30 shadow-lg">
                                         {% endif %}
-                                        <div class="flex-1">
-                                            <h4 class="text-lg font-bold text-white mb-1">{{ player.full_name }}</h4>
-                                            {% if player.birth_date %}
-                                                <p class="text-gray-300 text-sm">
-                                                    <i class="fas fa-birthday-cake mr-1"></i>
-                                                    {{ player.birth_date|date:"d.m.Y" }}
-                                                </p>
-                                            {% endif %}
-                                        </div>
+                                    </div>
+                                    
+                                    <!-- Player Info Below Image -->
+                                    <div class="text-center mb-4">
+                                        <h4 class="text-lg font-bold text-white mb-1">{{ player.full_name }}</h4>
+                                        {% if player.birth_date %}
+                                            <p class="text-gray-300 text-sm">
+                                                <i class="fas fa-birthday-cake mr-1"></i>
+                                                {{ player.birth_date|date:"d.m.Y" }}
+                                            </p>
+                                        {% endif %}
                                     </div>
                                     
                                     <div class="grid grid-cols-3 gap-4 text-center pt-4 border-t border-white/10">
@@ -169,24 +173,26 @@
                                 </div>
                                 
                                 <div class="p-6">
-                                    <div class="flex items-center mb-4">
+                                    <!-- Dominant Player Photo at Top -->
+                                    <div class="text-center mb-4">
                                         {% if player.photo %}
                                             <img src="{{ player.photo.url }}" alt="{{ player.full_name }}" 
-                                                 class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-green-600/20">
+                                                 class="w-32 h-40 rounded-lg object-cover mx-auto border-3 border-green-600/30 shadow-lg">
                                         {% else %}
-                                            <div class="w-16 h-16 bg-gradient-to-br from-green-600 to-green-800 rounded-full flex items-center justify-center mr-4">
-                                                <i class="fas fa-user text-white text-xl"></i>
-                                            </div>
+                                            <img src="{% static 'images/players/default_player.png' %}" alt="{{ player.full_name }}" 
+                                                 class="w-32 h-40 rounded-lg object-cover mx-auto border-3 border-green-600/30 shadow-lg">
                                         {% endif %}
-                                        <div class="flex-1">
-                                            <h4 class="text-lg font-bold text-white mb-1">{{ player.full_name }}</h4>
-                                            {% if player.birth_date %}
-                                                <p class="text-gray-300 text-sm">
-                                                    <i class="fas fa-birthday-cake mr-1"></i>
-                                                    {{ player.birth_date|date:"d.m.Y" }}
-                                                </p>
-                                            {% endif %}
-                                        </div>
+                                    </div>
+                                    
+                                    <!-- Player Info Below Image -->
+                                    <div class="text-center mb-4">
+                                        <h4 class="text-lg font-bold text-white mb-1">{{ player.full_name }}</h4>
+                                        {% if player.birth_date %}
+                                            <p class="text-gray-300 text-sm">
+                                                <i class="fas fa-birthday-cake mr-1"></i>
+                                                {{ player.birth_date|date:"d.m.Y" }}
+                                            </p>
+                                        {% endif %}
                                     </div>
                                     
                                     <div class="grid grid-cols-3 gap-4 text-center pt-4 border-t border-white/10">
@@ -231,24 +237,26 @@
                                 </div>
                                 
                                 <div class="p-6">
-                                    <div class="flex items-center mb-4">
+                                    <!-- Dominant Player Photo at Top -->
+                                    <div class="text-center mb-4">
                                         {% if player.photo %}
                                             <img src="{{ player.photo.url }}" alt="{{ player.full_name }}" 
-                                                 class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-orange-600/20">
+                                                 class="w-32 h-40 rounded-lg object-cover mx-auto border-3 border-orange-600/30 shadow-lg">
                                         {% else %}
-                                            <div class="w-16 h-16 bg-gradient-to-br from-orange-600 to-orange-800 rounded-full flex items-center justify-center mr-4">
-                                                <i class="fas fa-user text-white text-xl"></i>
-                                            </div>
+                                            <img src="{% static 'images/players/default_player.png' %}" alt="{{ player.full_name }}" 
+                                                 class="w-32 h-40 rounded-lg object-cover mx-auto border-3 border-orange-600/30 shadow-lg">
                                         {% endif %}
-                                        <div class="flex-1">
-                                            <h4 class="text-lg font-bold text-white mb-1">{{ player.full_name }}</h4>
-                                            {% if player.birth_date %}
-                                                <p class="text-gray-300 text-sm">
-                                                    <i class="fas fa-birthday-cake mr-1"></i>
-                                                    {{ player.birth_date|date:"d.m.Y" }}
-                                                </p>
-                                            {% endif %}
-                                        </div>
+                                    </div>
+                                    
+                                    <!-- Player Info Below Image -->
+                                    <div class="text-center mb-4">
+                                        <h4 class="text-lg font-bold text-white mb-1">{{ player.full_name }}</h4>
+                                        {% if player.birth_date %}
+                                            <p class="text-gray-300 text-sm">
+                                                <i class="fas fa-birthday-cake mr-1"></i>
+                                                {{ player.birth_date|date:"d.m.Y" }}
+                                            </p>
+                                        {% endif %}
                                     </div>
                                     
                                     <div class="grid grid-cols-3 gap-4 text-center pt-4 border-t border-white/10">
