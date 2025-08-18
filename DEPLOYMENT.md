@@ -2,11 +2,49 @@
 
 This guide describes a minimal, production-ready deployment of this Django project on an Ubuntu VPS using your own domain and the built-in SQLite database.
 
-It assumes a clean server, Nginx as reverse proxy, Gunicorn for the WSGI server, and free HTTPS with Certbot.
+It assumes a clean server, Nginx as reverse proxy, Gunicorn for the WSGI server, and free HTTPS with Certbot### Logs and troubleshooting
 
----
+```bash
+# App (Gunicorn) - Real-time logs
+sudo journalctl -u tjhlavnice -f --no-pager
 
-## 0) Project snapshot (what you have)
+# App (Gunicorn) - Recent logs
+sudo journalctl -u tjhlavnice -n 50 --no-pager
+
+# Nginx error logs
+sudo tail -f /var/log/nginx/error.log
+
+# Nginx access logs
+sudo tail -f /var/log/nginx/access.log
+
+# Service status
+sudo systemctl status tjhlavnice --no-pager
+sudo systemctl status nginx --no-pager
+```
+
+### Common Issues and Solutions
+
+**500 Internal Server Error:**
+1. Check Gunicorn logs: `sudo journalctl -u tjhlavnice -n 50`
+2. Verify Django settings: Ensure `DEBUG = False` and `ALLOWED_HOSTS` includes your domain
+3. Check file permissions: `ls -la db.sqlite3` (should be writable by tjhlavnice user)
+4. Test Django directly: `python manage.py check --deploy`
+5. Verify static files: `python manage.py collectstatic --noinput`
+
+**Static files not loading:**
+- Re-run `collectstatic` and verify the Nginx `alias` paths
+- Check permissions: `sudo chown -R tjhlavnice:www-data staticfiles/`
+
+**Database errors:**
+- If you see SQLite "database is locked" or permission errors, ensure `db.sqlite3` and the project directory are owned by the running user and writable
+- Run: `sudo chown tjhlavnice:tjhlavnice db.sqlite3 && chmod 664 db.sqlite3`
+
+**CSRF errors:**
+- If CSRF errors occur after enabling HTTPS, verify `CSRF_TRUSTED_ORIGINS` includes your `https://` domains
+
+**Service won't start:**
+- Check systemd service: `sudo systemctl status tjhlavnice`
+- Check for syntax errors: `sudo systemctl daemon-reload`ject snapshot (what you have)
 
 - Framework: Django 5.2.4
 - App: `football`
@@ -285,7 +323,13 @@ After HTTPS, ensure Django security settings (see step 5) are set, especially `C
 cd /home/tjhlavnice/apps/tjhlavnice
 source venv/bin/activate
 
-git pull origin main  # or your branch
+# Method 1: Simple pull (if no conflicts)
+git pull origin main
+
+# Method 2: If you get merge conflicts, reset first
+git fetch origin
+git reset --hard origin/main
+
 pip install -r requirements.txt --upgrade
 python manage.py collectstatic --noinput
 python manage.py migrate
