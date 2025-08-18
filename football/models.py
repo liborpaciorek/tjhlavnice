@@ -153,6 +153,18 @@ class News(models.Model):
     def get_absolute_url(self):
         return reverse('news_detail', kwargs={'pk': self.pk})
     
+    # Safe helper to render author without throwing if related user is missing
+    @property
+    def author_display(self) -> str:
+        try:
+            user = self.author
+            if not user:
+                return "TJ Hlavnice"
+            full = user.get_full_name()
+            return full or user.username
+        except User.DoesNotExist:
+            return "TJ Hlavnice"
+    
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.image:

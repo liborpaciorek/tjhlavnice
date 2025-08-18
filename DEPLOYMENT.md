@@ -360,7 +360,7 @@ sudo systemctl enable nginx
 sudo apt install -y certbot python3-certbot-nginx
 
 # Obtain SSL certificate
-sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+sudo certbot --nginx -d tjhlavnice.cz -d www.tjhlavnice.cz
 
 # Test automatic renewal
 sudo certbot renew --dry-run
