@@ -1,353 +1,243 @@
-# Django Football Club Website - VPS Deployment Guide
+# VPS Deployment Guide (Own Domain + SQLite)
 
-This guide provides step-by-step instructions for deploying the TJ Družba Hlavnice Django website on an Ubuntu VPS with a custom domain.
+This guide describes a minimal, production-ready deployment of this Django project on an Ubuntu VPS using your own domain and the built-in SQLite database.
 
-## Table of Contents
+It assumes a clean server, Nginx as reverse proxy, Gunicorn for the WSGI server, and free HTTPS with Certbot.
 
-1. [VPS Server Preparation](#vps-server-preparation)
-2. [Domain Configuration](#domain-configuration)
-3. [Server Setup](#server-setup)
-4. [Application Deployment](#application-deployment)
-5. [Web Server Configuration](#web-server-configuration)
-6. [SSL Certificate Setup](#ssl-certificate-setup)
-7. [Database Configuration](#database-configuration)
-8. [Static Files & Media](#static-files--media)
-9. [Process Management](#process-management)
-10. [Monitoring & Maintenance](#monitoring--maintenance)
-11. [Troubleshooting](#troubleshooting)
+---
 
-## VPS Server Preparation
+## 0) Project snapshot (what you have)
 
-### Minimum Requirements
+- Framework: Django 5.2.4
+- App: `football`
+- DB: SQLite (file `db.sqlite3` located in project root)
+- Static config:
+  - `STATIC_URL = 'static/'` (recommend: change to `/static/` in production)
+  - `STATIC_ROOT = <project>/staticfiles`
+  - Additional static in `<project>/static`
+- Media config:
+  - `MEDIA_URL = '/media/'`
+  - `MEDIA_ROOT = <project>/media`
+- Admin/media tools: `django-ckeditor`
 
-- **RAM**: 1GB minimum (2GB recommended)
-- **Storage**: 20GB minimum (40GB recommended)
-- **CPU**: 1 core minimum (2 cores recommended)
-- **OS**: Ubuntu 20.04 LTS or 22.04 LTS
+---
 
-### Initial Server Access
+## 1) Prerequisites
 
-```bash
-# Connect to your VPS via SSH
-ssh root@your-server-ip
+- Ubuntu 20.04/22.04 LTS VPS
+- A domain, e.g. `example.com`, pointed to the server IP (A records for `example.com` and `www.example.com`).
+- A non-root user with sudo (shown here as `deploy` but you can use another name).
 
-# Or if you have a non-root user
-ssh username@your-server-ip
-```
-
-## Domain Configuration
-
-### 1. DNS Records Setup
-
-Configure the following DNS records with your domain provider:
-
-```
-Type    Name    Value               TTL
-A       @       your-server-ip      3600
-A       www     your-server-ip      3600
-CNAME   *       yourdomain.com      3600
-```
-
-### 2. Verify DNS Propagation
+### Install system packages
 
 ```bash
-# Check if DNS is propagated
-dig yourdomain.com
-dig www.yourdomain.com
-```
-
-## Server Setup
-
-### 1. Update System
-
-```bash
-# Update package lists and upgrade system
 sudo apt update && sudo apt upgrade -y
-
-# Install essential packages
-sudo apt install -y curl wget git vim htop unzip software-properties-common
+sudo apt install -y python3.11 python3.11-venv python3-pip nginx git
+# For HTTPS later
+sudo apt install -y certbot python3-certbot-nginx
 ```
 
-### 2. Create Application User
+---
+
+## 2) Create user and directories
 
 ```bash
-# Create a user for the application
-sudo adduser tjhlavnice
-sudo usermod -aG sudo tjhlavnice
+# Create a deployment user (skip if you already have one)
+sudo adduser deploy
+sudo usermod -aG sudo deploy
 
-# Switch to the new user
-su - tjhlavnice
+# Switch to the user
+su - deploy
+
+# Create project directory
+mkdir -p ~/apps && cd ~/apps
 ```
 
-### 3. Install Python and Dependencies
+---
+
+## 3) Get the code on the server
 
 ```bash
-# Install Python 3.11 and pip
-sudo apt install -y python3.11 python3.11-venv python3-pip python3.11-dev
-
-# Install system dependencies
-sudo apt install -y build-essential libpq-dev nginx supervisor
-```
-
-### 4. Install PostgreSQL
-
-```bash
-# Install PostgreSQL
-sudo apt install -y postgresql postgresql-contrib
-
-# Start and enable PostgreSQL
-sudo systemctl start postgresql
-sudo systemctl enable postgresql
-
-# Create database and user
-sudo -u postgres psql
-
--- In PostgreSQL shell:
-CREATE DATABASE tjhlavnice;
-CREATE USER tjhlavnice WITH ENCRYPTED PASSWORD 'your-strong-password';
-GRANT ALL PRIVILEGES ON DATABASE tjhlavnice TO tjhlavnice;
-ALTER USER tjhlavnice CREATEDB;
-\q
-```
-
-## Application Deployment
-
-### 1. Clone Repository
-
-```bash
-# Navigate to home directory
-cd /home/tjhlavnice
-
-# Clone your repository
-git clone https://github.com/yourusername/tjhlavnice.git
+# If using Git
+git clone https://github.com/<your-account>/tjhlavnice.git
 cd tjhlavnice
 
-# Or upload files via SCP if not using Git
-# scp -r /path/to/local/project tjhlavnice@your-server-ip:/home/tjhlavnice/
+# Or upload the project via scp/rsync and then cd into it
 ```
 
-### 2. Create Virtual Environment
+The project root should contain: `manage.py`, `requirements.txt`, `tjhlavnice/`, `football/`, `templates/`, `static/`, `media/`, `db.sqlite3`, etc.
+
+---
+
+## 4) Python virtual environment + dependencies
 
 ```bash
-# Create virtual environment
+# Create and activate venv
 python3.11 -m venv venv
-
-# Activate virtual environment
 source venv/bin/activate
 
-# Upgrade pip
+# Upgrade pip and install requirements
 pip install --upgrade pip
-```
-
-### 3. Install Dependencies
-
-```bash
-# Install Python packages
 pip install -r requirements.txt
 
-# If requirements.txt doesn't exist, install manually:
-pip install django==5.2.4
-pip install psycopg2-binary
+# Install a production WSGI server
 pip install gunicorn
-pip install pillow
-pip install python-decouple
 ```
 
-### 4. Environment Configuration
+Optional: Save Gunicorn to requirements for future installs:
 
 ```bash
-# Create environment file
-nano .env
+echo 'gunicorn' >> requirements.txt
 ```
 
-Add the following content to `.env`:
+---
 
-```env
-# Django Settings
-SECRET_KEY=your-very-long-secret-key-here
-DEBUG=False
-ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com,your-server-ip
+## 5) Configure Django for production
 
-# Database Configuration
-DB_NAME=tjhlavnice
-DB_USER=tjhlavnice
-DB_PASSWORD=your-strong-password
-DB_HOST=localhost
-DB_PORT=5432
+Open `tjhlavnice/settings.py` and apply/verify these changes:
 
-# Static and Media Files
-STATIC_URL=/static/
-STATIC_ROOT=/home/tjhlavnice/tjhlavnice/staticfiles/
-MEDIA_URL=/media/
-MEDIA_ROOT=/home/tjhlavnice/tjhlavnice/media/
-
-# Email Configuration (optional)
-EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-EMAIL_HOST_USER=your-email@gmail.com
-EMAIL_HOST_PASSWORD=your-app-password
-```
-
-### 5. Django Configuration
-
-```bash
-# Update settings.py for production
-nano tjhlavnice/settings.py
-```
-
-Update `settings.py`:
+- Set your domain and disable debug:
 
 ```python
-import os
-from decouple import config
+DEBUG = False
+ALLOWED_HOSTS = [
+    'example.com',
+    'www.example.com',
+]
+```
 
-# Production settings
-DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')
+- Add CSRF trusted origins (Django 4+/5+):
 
-# Database
+```python
+CSRF_TRUSTED_ORIGINS = [
+    'https://example.com',
+    'https://www.example.com',
+]
+```
+
+- Ensure static URL is absolute (recommended in production):
+
+```python
+STATIC_URL = '/static/'  # instead of 'static/'
+```
+
+- Keep SQLite as-is:
+
+```python
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST', default='localhost'),
-        'PORT': config('DB_PORT', default='5432'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+```
 
-# Static files
-STATIC_URL = config('STATIC_URL', default='/static/')
-STATIC_ROOT = config('STATIC_ROOT', default=os.path.join(BASE_DIR, 'staticfiles'))
+- Optional security hardening for HTTPS:
 
-# Media files
-MEDIA_URL = config('MEDIA_URL', default='/media/')
-MEDIA_ROOT = config('MEDIA_ROOT', default=os.path.join(BASE_DIR, 'media'))
-
-# Security settings
-SECURE_BROWSER_XSS_FILTER = True
+```python
 SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'
+SECURE_BROWSER_XSS_FILTER = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 ```
 
-### 6. Run Django Setup
+Notes:
+
+- SQLite file `db.sqlite3` must be writable by the system user running the app (we use user `deploy`).
+- Consider restricting CORS in production (current project enables `CORS_ALLOW_ALL_ORIGINS = True`).
+
+---
+
+## 6) Django setup
 
 ```bash
-# Collect static files
-python manage.py collectstatic --noinput
+# From project root
+source venv/bin/activate
 
-# Run migrations
+# Apply migrations
 python manage.py migrate
 
-# Create superuser
+# Collect static
+python manage.py collectstatic --noinput
+
+# Create a superuser (if needed)
 python manage.py createsuperuser
-
-# Test the application
-python manage.py runserver 0.0.0.0:8000
 ```
 
-## Web Server Configuration
-
-### 1. Gunicorn Configuration
+Set permissions so the app user owns the project and the SQLite database:
 
 ```bash
-# Create Gunicorn configuration
-nano /home/tjhlavnice/tjhlavnice/gunicorn.conf.py
+cd ~/apps/tjhlavnice
+chown -R deploy:deploy .
+chmod 664 db.sqlite3 || true
+# Make sure the directory is writable by the owner
+chmod 775 .
 ```
 
-Add Gunicorn configuration:
+---
 
-```python
-bind = "127.0.0.1:8000"
-workers = 3
-worker_class = "sync"
-worker_connections = 1000
-max_requests = 1000
-max_requests_jitter = 100
-timeout = 30
-keepalive = 5
-preload_app = True
-user = "tjhlavnice"
-group = "tjhlavnice"
-```
+## 7) Run Gunicorn with systemd
 
-### 2. Create Gunicorn Service
+Create a systemd service file:
 
 ```bash
-# Create systemd service file
-sudo nano /etc/systemd/system/tjhlavnice.service
-```
-
-Add service configuration:
-
-```ini
+sudo tee /etc/systemd/system/tjhlavnice.service > /dev/null << 'EOF'
 [Unit]
-Description=TJ Hlavnice Django Application
+Description=TJ Hlavnice Django (Gunicorn)
 After=network.target
-
 [Service]
-User=tjhlavnice
-Group=tjhlavnice
-WorkingDirectory=/home/tjhlavnice/tjhlavnice
-Environment="PATH=/home/tjhlavnice/tjhlavnice/venv/bin"
-ExecStart=/home/tjhlavnice/tjhlavnice/venv/bin/gunicorn --config gunicorn.conf.py tjhlavnice.wsgi:application
-ExecReload=/bin/kill -s HUP $MAINPID
+User=deploy
+Group=www-data
+WorkingDirectory=/home/deploy/apps/tjhlavnice
+Environment="PATH=/home/deploy/apps/tjhlavnice/venv/bin"
+ExecStart=/home/deploy/apps/tjhlavnice/venv/bin/gunicorn \
+  --workers 3 \
+  --bind 127.0.0.1:8000 \
+  tjhlavnice.wsgi:application
 Restart=always
-RestartSec=10
-
+RestartSec=5
 [Install]
 WantedBy=multi-user.target
+EOF
 ```
 
-### 3. Start Gunicorn Service
+Start and enable the service:
 
 ```bash
-# Reload systemd and start service
 sudo systemctl daemon-reload
 sudo systemctl start tjhlavnice
 sudo systemctl enable tjhlavnice
-
-# Check status
-sudo systemctl status tjhlavnice
+sudo systemctl status tjhlavnice --no-pager
 ```
 
-### 4. Nginx Configuration
+---
+
+## 8) Nginx reverse proxy for your domain
+
+Create an Nginx site config:
 
 ```bash
-# Create Nginx site configuration
-sudo nano /etc/nginx/sites-available/tjhlavnice
-```
-
-Add Nginx configuration:
-
-```nginx
+sudo tee /etc/nginx/sites-available/tjhlavnice > /dev/null << 'EOF'
 server {
     listen 80;
-    server_name yourdomain.com www.yourdomain.com;
-
+    server_name example.com www.example.com;
     client_max_body_size 100M;
-
-    # Static files
+    # Static
     location /static/ {
-        alias /home/tjhlavnice/tjhlavnice/staticfiles/;
+        alias /home/tjhlavnice/apps/tjhlavnice/staticfiles/;
         expires 30d;
         add_header Cache-Control "public, immutable";
     }
-
-    # Media files
+    # Media (uploads, CKEditor)
     location /media/ {
-        alias /home/tjhlavnice/tjhlavnice/media/;
+        alias /home/deploy/apps/tjhlavnice/media/;
         expires 30d;
         add_header Cache-Control "public";
     }
-
-    # Main application
+    # Django app
     location / {
         proxy_pass http://127.0.0.1:8000;
         proxy_set_header Host $host;
@@ -357,431 +247,106 @@ server {
         proxy_redirect off;
     }
 }
+EOF
 ```
 
-### 5. Enable Nginx Site
+Enable and reload Nginx:
 
 ```bash
-# Enable the site
 sudo ln -s /etc/nginx/sites-available/tjhlavnice /etc/nginx/sites-enabled/
-
-# Remove default site
-sudo rm /etc/nginx/sites-enabled/default
-
-# Test Nginx configuration
+sudo rm -f /etc/nginx/sites-enabled/default
 sudo nginx -t
-
-# Restart Nginx
 sudo systemctl restart nginx
-sudo systemctl enable nginx
 ```
 
-## SSL Certificate Setup
+Visit: `http://example.com`
 
-### 1. Install Certbot
+---
+
+## 9) Enable HTTPS (Let’s Encrypt)
 
 ```bash
-# Install Certbot
-sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d example.com -d www.example.com
+# Follow the prompts; Certbot will update Nginx automatically.
 
-# Obtain SSL certificate
-sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
-
-# Test automatic renewal
+# Test renewal
 sudo certbot renew --dry-run
 ```
 
-### 2. Update Nginx for HTTPS
+After HTTPS, ensure Django security settings (see step 5) are set, especially `CSRF_TRUSTED_ORIGINS` and the cookie security flags.
 
-After Certbot, your Nginx config will be automatically updated. Verify the configuration:
+---
 
-```bash
-# Check updated configuration
-sudo nano /etc/nginx/sites-available/tjhlavnice
+## 10) Routine operations
 
-# Restart Nginx
-sudo systemctl restart nginx
-```
-
-## Database Configuration
-
-### 1. PostgreSQL Optimization
+### Deploying updates
 
 ```bash
-# Edit PostgreSQL configuration
-sudo nano /etc/postgresql/14/main/postgresql.conf
-```
-
-Optimize for your server:
-
-```conf
-# Memory settings
-shared_buffers = 256MB
-effective_cache_size = 1GB
-work_mem = 4MB
-maintenance_work_mem = 64MB
-
-# Connection settings
-max_connections = 100
-```
-
-### 2. Database Backup Script
-
-```bash
-# Create backup directory
-mkdir -p /home/tjhlavnice/backups
-
-# Create backup script
-nano /home/tjhlavnice/backup_db.sh
-```
-
-Add backup script:
-
-```bash
-#!/bin/bash
-BACKUP_DIR="/home/tjhlavnice/backups"
-DB_NAME="tjhlavnice"
-DATE=$(date +%Y%m%d_%H%M%S)
-
-# Create backup
-pg_dump $DB_NAME > $BACKUP_DIR/tjhlavnice_$DATE.sql
-
-# Keep only last 7 days of backups
-find $BACKUP_DIR -name "tjhlavnice_*.sql" -mtime +7 -delete
-
-echo "Backup completed: tjhlavnice_$DATE.sql"
-```
-
-```bash
-# Make script executable
-chmod +x /home/tjhlavnice/backup_db.sh
-
-# Add to crontab for daily backups
-crontab -e
-
-# Add this line for daily backup at 2 AM
-0 2 * * * /home/tjhlavnice/backup_db.sh
-```
-
-## Static Files & Media
-
-### 1. Create Media Directory
-
-```bash
-# Create media directory with proper permissions
-mkdir -p /home/tjhlavnice/tjhlavnice/media
-sudo chown -R tjhlavnice:tjhlavnice /home/tjhlavnice/tjhlavnice/media
-sudo chmod -R 755 /home/tjhlavnice/tjhlavnice/media
-```
-
-### 2. Static Files Optimization
-
-```bash
-# Ensure static files are collected
-cd /home/tjhlavnice/tjhlavnice
-source venv/bin/activate
-python manage.py collectstatic --noinput
-
-# Set proper permissions
-sudo chown -R tjhlavnice:tjhlavnice /home/tjhlavnice/tjhlavnice/staticfiles
-sudo chmod -R 755 /home/tjhlavnice/tjhlavnice/staticfiles
-```
-
-## Process Management
-
-### 1. Supervisor Configuration (Alternative to systemd)
-
-```bash
-# Install Supervisor
-sudo apt install supervisor
-
-# Create Supervisor configuration
-sudo nano /etc/supervisor/conf.d/tjhlavnice.conf
-```
-
-Add Supervisor configuration:
-
-```ini
-[program:tjhlavnice]
-command=/home/tjhlavnice/tjhlavnice/venv/bin/gunicorn --config gunicorn.conf.py tjhlavnice.wsgi:application
-directory=/home/tjhlavnice/tjhlavnice
-user=tjhlavnice
-autostart=true
-autorestart=true
-redirect_stderr=true
-stdout_logfile=/var/log/supervisor/tjhlavnice.log
-```
-
-```bash
-# Update Supervisor
-sudo supervisorctl reread
-sudo supervisorctl update
-sudo supervisorctl start tjhlavnice
-```
-
-## Monitoring & Maintenance
-
-### 1. Log Management
-
-```bash
-# Create log rotation configuration
-sudo nano /etc/logrotate.d/tjhlavnice
-```
-
-Add log rotation:
-
-```
-/var/log/supervisor/tjhlavnice.log {
-    daily
-    missingok
-    rotate 30
-    compress
-    notifempty
-    create 644 tjhlavnice tjhlavnice
-    postrotate
-        supervisorctl restart tjhlavnice
-    endscript
-}
-```
-
-### 2. System Monitoring Script
-
-```bash
-# Create monitoring script
-nano /home/tjhlavnice/monitor.sh
-```
-
-Add monitoring script:
-
-```bash
-#!/bin/bash
-
-# Check if Gunicorn is running
-if ! pgrep -f "gunicorn.*tjhlavnice" > /dev/null; then
-    echo "$(date): Gunicorn not running, restarting..." >> /home/tjhlavnice/monitor.log
-    sudo systemctl restart tjhlavnice
-fi
-
-# Check if Nginx is running
-if ! pgrep nginx > /dev/null; then
-    echo "$(date): Nginx not running, restarting..." >> /home/tjhlavnice/monitor.log
-    sudo systemctl restart nginx
-fi
-
-# Check disk space
-DISK_USAGE=$(df / | tail -1 | awk '{print $5}' | sed 's/%//')
-if [ $DISK_USAGE -gt 80 ]; then
-    echo "$(date): Disk usage is ${DISK_USAGE}%" >> /home/tjhlavnice/monitor.log
-fi
-```
-
-```bash
-# Make executable and add to crontab
-chmod +x /home/tjhlavnice/monitor.sh
-
-# Add to crontab (every 5 minutes)
-crontab -e
-
-# Add this line
-*/5 * * * * /home/tjhlavnice/monitor.sh
-```
-
-### 3. Update Script
-
-```bash
-# Create update script
-nano /home/tjhlavnice/update.sh
-```
-
-Add update script:
-
-```bash
-#!/bin/bash
-cd /home/tjhlavnice/tjhlavnice
-
-# Backup database
-./backup_db.sh
-
-# Pull latest changes
-git pull origin main
-
-# Activate virtual environment
+cd /home/deploy/apps/tjhlavnice
 source venv/bin/activate
 
-# Install new dependencies
-pip install -r requirements.txt
-
-# Collect static files
+git pull origin main  # or your branch
+pip install -r requirements.txt --upgrade
 python manage.py collectstatic --noinput
-
-# Run migrations
 python manage.py migrate
 
-# Restart application
 sudo systemctl restart tjhlavnice
-
-echo "Update completed successfully!"
 ```
 
+### Backups (SQLite + media)
+
 ```bash
-# Make executable
-chmod +x /home/tjhlavnice/update.sh
+cd /home/deploy/apps/tjhlavnice
+# Simple timestamped backup of DB and media
+TS=$(date +%Y%m%d_%H%M%S)
+cp db.sqlite3 ~/backup_db_$TS.sqlite3
+rsync -a media/ ~/backup_media_$TS/
 ```
 
-## Troubleshooting
-
-### 1. Common Issues
-
-#### Application Won't Start
+### Logs and troubleshooting
 
 ```bash
-# Check Gunicorn logs
-sudo journalctl -u tjhlavnice -f
+# App (Gunicorn)
+sudo journalctl -u tjhlavnice -f --no-pager
 
-# Check Nginx logs
+# Nginx
 sudo tail -f /var/log/nginx/error.log
 
-# Check if port is in use
-sudo netstat -tlnp | grep :8000
+# Service status
+sudo systemctl status tjhlavnice --no-pager
+sudo systemctl status nginx --no-pager
 ```
 
-#### Static Files Not Loading
+- If you see SQLite "database is locked" or permission errors, ensure `db.sqlite3` and the project directory are owned by the running user and writable.
+- If static files don’t load, re-run `collectstatic` and verify the Nginx `alias` paths.
+- If CSRF errors occur after enabling HTTPS, verify `CSRF_TRUSTED_ORIGINS` includes your `https://` domains.
+
+---
+
+## 11) Optional hardening
+
+- Use a firewall (UFW):
 
 ```bash
-# Check static files directory
-ls -la /home/tjhlavnice/tjhlavnice/staticfiles/
-
-# Recollect static files
-cd /home/tjhlavnice/tjhlavnice
-source venv/bin/activate
-python manage.py collectstatic --noinput
-
-# Check Nginx configuration
-sudo nginx -t
-```
-
-#### Database Connection Issues
-
-```bash
-# Check PostgreSQL status
-sudo systemctl status postgresql
-
-# Test database connection
-sudo -u postgres psql -c "SELECT version();"
-
-# Check Django database connection
-cd /home/tjhlavnice/tjhlavnice
-source venv/bin/activate
-python manage.py dbshell
-```
-
-### 2. Performance Optimization
-
-#### Enable Gzip Compression
-
-Add to Nginx configuration:
-
-```nginx
-# Add inside server block
-gzip on;
-gzip_vary on;
-gzip_min_length 1024;
-gzip_types text/plain text/css text/xml text/javascript application/javascript application/xml+rss application/json;
-```
-
-#### Cache Static Files
-
-Add to Nginx configuration:
-
-```nginx
-# Add inside server block
-location ~* \.(css|js|png|jpg|jpeg|gif|ico|svg)$ {
-    expires 1y;
-    add_header Cache-Control "public, immutable";
-    access_log off;
-}
-```
-
-### 3. Security Hardening
-
-#### Firewall Configuration
-
-```bash
-# Install and configure UFW
-sudo ufw enable
-sudo ufw default deny incoming
-sudo ufw default allow outgoing
-sudo ufw allow ssh
+sudo ufw allow OpenSSH
 sudo ufw allow 'Nginx Full'
+sudo ufw enable
+sudo ufw status
 ```
 
-#### Fail2ban Setup
+- Create a dedicated system user and directory just for the app (already done with `deploy`).
+- Restrict CORS in production (avoid `CORS_ALLOW_ALL_ORIGINS = True`).
 
-```bash
-# Install Fail2ban
-sudo apt install fail2ban
+---
 
-# Create jail configuration
-sudo nano /etc/fail2ban/jail.local
-```
+## 12) Quick checklist
 
-Add Fail2ban configuration:
+- DNS A records point to server
+- `DEBUG=False`, `ALLOWED_HOSTS` set, `CSRF_TRUSTED_ORIGINS` set
+- `STATIC_URL='/static/'`, `STATIC_ROOT` exists and `collectstatic` run
+- Gunicorn service running on `127.0.0.1:8000`
+- Nginx reverse proxy configured for domain
+- HTTPS enabled with Certbot
+- SQLite file owned by the app user and writable
 
-```ini
-[DEFAULT]
-bantime = 3600
-findtime = 600
-maxretry = 3
-
-[nginx-http-auth]
-enabled = true
-
-[nginx-limit-req]
-enabled = true
-```
-
-```bash
-# Restart Fail2ban
-sudo systemctl restart fail2ban
-```
-
-## Final Verification
-
-### 1. Test Your Website
-
-- Visit `https://yourdomain.com`
-- Check all pages load correctly
-- Test admin panel at `https://yourdomain.com/admin/`
-- Verify SSL certificate is working
-- Test responsive design on mobile
-
-### 2. Performance Testing
-
-```bash
-# Install and use tools for testing
-sudo apt install apache2-utils
-
-# Test concurrent connections
-ab -n 100 -c 10 https://yourdomain.com/
-```
-
-### 3. SEO and Analytics
-
-Consider adding:
-
-- Google Analytics
-- Google Search Console
-- robots.txt file
-- sitemap.xml
-
-Your Django football club website should now be fully deployed and accessible at your custom domain with SSL encryption!
-
-## Support
-
-For issues specific to this deployment:
-
-1. Check the troubleshooting section above
-2. Review log files in `/var/log/`
-3. Verify all services are running: `sudo systemctl status nginx tjhlavnice postgresql`
-
-Remember to keep your system updated and monitor your application regularly for optimal performance and security.
+You are now running the site on your own domain with SQLite.
