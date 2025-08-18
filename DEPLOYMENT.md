@@ -227,7 +227,7 @@ server {
     client_max_body_size 100M;
     # Static
     location /static/ {
-        alias /home/tjhlavnice/apps/tjhlavnice/staticfiles/;
+        alias /home/deploy/apps/tjhlavnice/staticfiles/;
         expires 30d;
         add_header Cache-Control "public, immutable";
     }
