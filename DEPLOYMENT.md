@@ -24,6 +24,13 @@ sudo systemctl status nginx --no-pager
 
 ### Common Issues and Solutions
 
+**502 Bad Gateway:**
+1. Check if Gunicorn service is running: `sudo systemctl status tjhlavnice`
+2. Check Gunicorn logs: `sudo journalctl -u tjhlavnice -n 50`
+3. Restart the service: `sudo systemctl restart tjhlavnice`
+4. Verify port binding: `sudo netstat -tlnp | grep :8000`
+5. Check if Django can start: `python manage.py check`
+
 **500 Internal Server Error:**
 1. Check Gunicorn logs: `sudo journalctl -u tjhlavnice -n 50`
 2. Verify Django settings: Ensure `DEBUG = False` and `ALLOWED_HOSTS` includes your domain
