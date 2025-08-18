@@ -26,7 +26,7 @@ It assumes a clean server, Nginx as reverse proxy, Gunicorn for the WSGI server,
 
 - Ubuntu 20.04/22.04 LTS VPS
 - A domain, e.g. `example.com`, pointed to the server IP (A records for `example.com` and `www.example.com`).
-- A non-root user with sudo (shown here as `deploy` but you can use another name).
+- A non-root user with sudo (shown here as `tjhlavnice` but you can use another name).
 
 ### Install system packages
 
@@ -43,11 +43,11 @@ sudo apt install -y certbot python3-certbot-nginx
 
 ```bash
 # Create a deployment user (skip if you already have one)
-sudo adduser deploy
-sudo usermod -aG sudo deploy
+sudo adduser tjhlavnice
+sudo usermod -aG sudo tjhlavnice
 
 # Switch to the user
-su - deploy
+su - tjhlavnice
 
 # Create project directory
 mkdir -p ~/apps && cd ~/apps
@@ -146,7 +146,7 @@ SECURE_HSTS_PRELOAD = True
 
 Notes:
 
-- SQLite file `db.sqlite3` must be writable by the system user running the app (we use user `deploy`).
+- SQLite file `db.sqlite3` must be writable by the system user running the app (we use user `tjhlavnice`).
 - Consider restricting CORS in production (current project enables `CORS_ALLOW_ALL_ORIGINS = True`).
 
 ---
@@ -171,7 +171,7 @@ Set permissions so the app user owns the project and the SQLite database:
 
 ```bash
 cd ~/apps/tjhlavnice
-chown -R deploy:deploy .
+chown -R tjhlavnice:tjhlavnice .
 chmod 664 db.sqlite3 || true
 # Make sure the directory is writable by the owner
 chmod 775 .
@@ -189,11 +189,11 @@ sudo tee /etc/systemd/system/tjhlavnice.service > /dev/null << 'EOF'
 Description=TJ Hlavnice Django (Gunicorn)
 After=network.target
 [Service]
-User=deploy
+User=tjhlavnice
 Group=www-data
-WorkingDirectory=/home/deploy/apps/tjhlavnice
-Environment="PATH=/home/deploy/apps/tjhlavnice/venv/bin"
-ExecStart=/home/deploy/apps/tjhlavnice/venv/bin/gunicorn \
+WorkingDirectory=/home/tjhlavnice/apps/tjhlavnice
+Environment="PATH=/home/tjhlavnice/apps/tjhlavnice/venv/bin"
+ExecStart=/home/tjhlavnice/apps/tjhlavnice/venv/bin/gunicorn \
   --workers 3 \
   --bind 127.0.0.1:8000 \
   tjhlavnice.wsgi:application
@@ -227,13 +227,13 @@ server {
     client_max_body_size 100M;
     # Static
     location /static/ {
-        alias /home/deploy/apps/tjhlavnice/staticfiles/;
+        alias /home/tjhlavnice/apps/tjhlavnice/staticfiles/;
         expires 30d;
         add_header Cache-Control "public, immutable";
     }
     # Media (uploads, CKEditor)
     location /media/ {
-        alias /home/deploy/apps/tjhlavnice/media/;
+        alias /home/tjhlavnice/apps/tjhlavnice/media/;
         expires 30d;
         add_header Cache-Control "public";
     }
@@ -282,7 +282,7 @@ After HTTPS, ensure Django security settings (see step 5) are set, especially `C
 ### Deploying updates
 
 ```bash
-cd /home/deploy/apps/tjhlavnice
+cd /home/tjhlavnice/apps/tjhlavnice
 source venv/bin/activate
 
 git pull origin main  # or your branch
@@ -296,7 +296,7 @@ sudo systemctl restart tjhlavnice
 ### Backups (SQLite + media)
 
 ```bash
-cd /home/deploy/apps/tjhlavnice
+cd /home/tjhlavnice/apps/tjhlavnice
 # Simple timestamped backup of DB and media
 TS=$(date +%Y%m%d_%H%M%S)
 cp db.sqlite3 ~/backup_db_$TS.sqlite3
@@ -334,7 +334,7 @@ sudo ufw enable
 sudo ufw status
 ```
 
-- Create a dedicated system user and directory just for the app (already done with `deploy`).
+- Create a dedicated system user and directory just for the app (already done with `tjhlavnice`).
 - Restrict CORS in production (avoid `CORS_ALLOW_ALL_ORIGINS = True`).
 
 ---
