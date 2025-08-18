@@ -26,10 +26,12 @@ sudo systemctl status nginx --no-pager
 
 **502 Bad Gateway:**
 1. Check if Gunicorn service is running: `sudo systemctl status tjhlavnice`
-2. Check Gunicorn logs: `sudo journalctl -u tjhlavnice -n 50`
-3. Restart the service: `sudo systemctl restart tjhlavnice`
-4. Verify port binding: `sudo netstat -tlnp | grep :8000`
-5. Check if Django can start: `python manage.py check`
+2. If you see "code=exited, status=203/EXEC" - Gunicorn binary not found in path
+3. Check Gunicorn logs: `sudo journalctl -u tjhlavnice -n 50`
+4. Verify Gunicorn is installed: `source venv/bin/activate && which gunicorn`
+5. Restart the service: `sudo systemctl restart tjhlavnice`
+6. Verify port binding: `sudo netstat -tlnp | grep :8000`
+7. Check if Django can start: `python manage.py check`
 
 **500 Internal Server Error:**
 1. Check Gunicorn logs: `sudo journalctl -u tjhlavnice -n 50`
