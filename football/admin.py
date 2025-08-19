@@ -13,7 +13,7 @@ class ClubInfoAdmin(admin.ModelAdmin):
     
     class Media:
         css = {
-            'all': ('admin/css/widgets.css',),
+            'all': ('admin/css/widgets.css', 'css/custom.css',),
         }
     
     def __init__(self, *args, **kwargs):
@@ -77,7 +77,7 @@ class ManagementAdmin(admin.ModelAdmin):
     
     class Media:
         css = {
-            'all': ('admin/css/widgets.css',),
+            'all': ('admin/css/widgets.css', 'css/custom.css',),
         }
 
 @admin.register(News)
@@ -102,7 +102,7 @@ class NewsAdmin(admin.ModelAdmin):
     
     class Media:
         css = {
-            'all': ('admin/css/widgets.css',),
+            'all': ('admin/css/widgets.css', 'css/custom.css',),
         }
 
 @admin.register(Match)

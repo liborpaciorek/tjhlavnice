@@ -1,0 +1,726 @@
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 200 19233
+Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/utils/deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/http/request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/utils/deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/http/request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+Internal Server Error: /news/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endif'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader.py", line 42, in select_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+        (
+    ...<2 lines>...
+        )
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 567, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 114: 'endif', expected 'empty' or 'endfor'. Did you forget to register or load this tag?
+Internal Server Error: /gallery/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endif'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader.py", line 42, in select_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+        (
+    ...<2 lines>...
+        )
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/template/base.py", line 567, in invalid_block_tag
+    raise self.error(
+    ...<8 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 133: 'endif', expected 'empty' or 'endfor'. Did you forget to register or load this tag?
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 200 19233
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /news/1/ HTTP/1.1" 200 17286
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /news/ HTTP/1.1" 200 15402
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /team/ HTTP/1.1" 200 14039
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /matches/ HTTP/1.1" 200 14382
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /standings/ HTTP/1.1" 200 14439
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /management/ HTTP/1.1" 200 20019
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /gallery/ HTTP/1.1" 200 15609
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /management/ HTTP/1.1" 200 20019
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /club/ HTTP/1.1" 200 24091
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 200 19233
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /news/ HTTP/1.1" 200 15402
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /team/ HTTP/1.1" 200 14039
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /news/ HTTP/1.1" 200 15402
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /news/1/ HTTP/1.1" 200 17823
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /news/1/ HTTP/1.1" 200 17823
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /news/1/ HTTP/1.1" 200 17823
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /news/1/ HTTP/1.1" 200 17823
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /news/1/ HTTP/1.1" 200 17823
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /news/1/ HTTP/1.1" 200 17823
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /news/1/ HTTP/1.1" 200 17823
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /news/1/ HTTP/1.1" 200 17823
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /news/1/ HTTP/1.1" 200 17823
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /news/1/ HTTP/1.1" 200 17823
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /news/1/ HTTP/1.1" 200 17823
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /news/1/ HTTP/1.1" 200 17864
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /admin HTTP/1.1" 301 0
+"GET /admin/ HTTP/1.1" 200 13752
+Not Found: /static/admin/css/dashboard.css
+"GET /static/admin/css/dashboard.css HTTP/1.1" 404 179
+Not Found: /static/admin/css/dashboard.css
+"GET /static/admin/css/dashboard.css HTTP/1.1" 404 179
+"GET /admin/football/news/ HTTP/1.1" 200 18103
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /admin/football/news/1/change/ HTTP/1.1" 200 21970
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+Not Found: /static/ckeditor/ckeditor.css
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /static/ckeditor/ckeditor.css HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+Not Found: /static/ckeditor/ckeditor-init.js
+Not Found: /static/ckeditor/ckeditor/ckeditor.js
+"GET /static/ckeditor/ckeditor/ckeditor.js HTTP/1.1" 404 179
+"GET /static/ckeditor/ckeditor-init.js HTTP/1.1" 404 179
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+Not Found: /static/ckeditor/ckeditor.css
+"GET /static/ckeditor/ckeditor.css HTTP/1.1" 404 179
+"GET /admin/football/clubinfo/ HTTP/1.1" 200 14698
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /admin/football/clubinfo/1/change/ HTTP/1.1" 200 22110
+Not Found: /static/ckeditor/ckeditor.css
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/ckeditor/ckeditor-init.js
+Not Found: /static/ckeditor/ckeditor/ckeditor.js
+"GET /static/ckeditor/ckeditor.css HTTP/1.1" 404 179
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+"GET /static/ckeditor/ckeditor-init.js HTTP/1.1" 404 179
+"GET /static/ckeditor/ckeditor/ckeditor.js HTTP/1.1" 404 179
+- Broken pipe from ('127.0.0.1', 54830)
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+Not Found: /static/ckeditor/ckeditor.css
+"GET /static/ckeditor/ckeditor.css HTTP/1.1" 404 179
+"GET /admin/football/news/ HTTP/1.1" 200 18103
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /news/1/ HTTP/1.1" 200 17823
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /admin/football/news/ HTTP/1.1" 200 18103
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /admin/football/news/1/change/ HTTP/1.1" 200 21970
+Not Found: /static/ckeditor/ckeditor.css
+Not Found: /static/ckeditor/ckeditor-init.js
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/ckeditor/ckeditor/ckeditor.js
+"GET /static/ckeditor/ckeditor.css HTTP/1.1" 404 179
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+"GET /static/ckeditor/ckeditor-init.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+"GET /static/ckeditor/ckeditor/ckeditor.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+- Broken pipe from ('127.0.0.1', 54852)
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+Not Found: /static/ckeditor/ckeditor.css
+"GET /static/ckeditor/ckeditor.css HTTP/1.1" 404 179
+Watching for file changes with StatReloader
+"GET /admin/football/news/1/change/ HTTP/1.1" 200 21970
+Not Found: /static/ckeditor/ckeditor.css
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/ckeditor/ckeditor-init.js
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+Not Found: /static/ckeditor/ckeditor/ckeditor.js
+"GET /static/ckeditor/ckeditor-init.js HTTP/1.1" 404 179
+"GET /static/ckeditor/ckeditor.css HTTP/1.1" 404 179
+"GET /static/ckeditor/ckeditor/ckeditor.js HTTP/1.1" 404 179
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+Not Found: /static/ckeditor/ckeditor.css
+"GET /static/ckeditor/ckeditor.css HTTP/1.1" 404 179
+"GET /admin/football/news/1/change/ HTTP/1.1" 200 21970
+Not Found: /static/ckeditor/ckeditor.css
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/ckeditor/ckeditor/ckeditor.js
+Not Found: /static/ckeditor/ckeditor-init.js
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+"GET /static/ckeditor/ckeditor.css HTTP/1.1" 404 179
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /static/ckeditor/ckeditor/ckeditor.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /static/ckeditor/ckeditor-init.js HTTP/1.1" 404 179
+- Broken pipe from ('127.0.0.1', 54911)
+Not Found: /static/ckeditor/ckeditor.css
+"GET /static/ckeditor/ckeditor.css HTTP/1.1" 404 179
+"GET /admin/football/news/1/change/ HTTP/1.1" 200 21970
+Not Found: /static/ckeditor/ckeditor.css
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/ckeditor/ckeditor-init.js
+Not Found: /static/ckeditor/ckeditor/ckeditor.js
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+"GET /static/ckeditor/ckeditor.css HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+"GET /static/ckeditor/ckeditor-init.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /static/ckeditor/ckeditor/ckeditor.js HTTP/1.1" 404 179
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+Not Found: /static/ckeditor/ckeditor.css
+"GET /static/ckeditor/ckeditor.css HTTP/1.1" 404 179
+"GET /admin/football/gallery/ HTTP/1.1" 200 14573
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /admin/football/news/ HTTP/1.1" 200 18103
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /admin/football/news/1/change/ HTTP/1.1" 200 21970
+Not Found: /static/ckeditor/ckeditor.css
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+"GET /static/ckeditor/ckeditor.css HTTP/1.1" 404 179
+Not Found: /static/ckeditor/ckeditor-init.js
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+Not Found: /static/ckeditor/ckeditor/ckeditor.js
+"GET /static/ckeditor/ckeditor-init.js HTTP/1.1" 404 179
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+- Broken pipe from ('127.0.0.1', 54918)
+"GET /static/ckeditor/ckeditor/ckeditor.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+Not Found: /static/ckeditor/ckeditor.css
+"GET /static/ckeditor/ckeditor.css HTTP/1.1" 404 179
+"GET /news/1/ HTTP/1.1" 200 17823
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /admin/football/clubinfo/ HTTP/1.1" 200 14698
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /admin/football/clubinfo/1/change/ HTTP/1.1" 200 22110
+Not Found: /static/ckeditor/ckeditor.css
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/ckeditor/ckeditor-init.js
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+"GET /static/ckeditor/ckeditor.css HTTP/1.1" 404 179
+Not Found: /static/ckeditor/ckeditor/ckeditor.js
+"GET /static/ckeditor/ckeditor-init.js HTTP/1.1" 404 179
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+"GET /static/ckeditor/ckeditor/ckeditor.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+Not Found: /static/ckeditor/ckeditor.css
+"GET /static/ckeditor/ckeditor.css HTTP/1.1" 404 179
+/Users/lpaciorek/Library/Mobile Documents/com~apple~CloudDocs/Dev/fotbal/tjhlavnice3/tjhlavnice/tjhlavnice/settings.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/lpaciorek/Library/Mobile Documents/com~apple~CloudDocs/Dev/fotbal/tjhlavnice3/tjhlavnice/tjhlavnice/settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /admin/football/clubinfo/1/change/ HTTP/1.1" 200 22164
+Not Found: /static/admin/css/base.css
+Not Found: /static/admin/css/dark_mode.css
+Not Found: /static/admin/css/nav_sidebar.css
+Not Found: /static/admin/css/forms.css
+Not Found: /static/admin/css/widgets.css
+Not Found: /static/django_ckeditor_5/dist/styles.css
+"GET /static/admin/css/dark_mode.css HTTP/1.1" 404 179
+"GET /static/admin/css/forms.css HTTP/1.1" 404 179
+"GET /static/admin/css/base.css HTTP/1.1" 404 179
+"GET /static/django_ckeditor_5/dist/styles.css HTTP/1.1" 404 179
+"GET /static/admin/css/widgets.css HTTP/1.1" 404 179
+"GET /static/admin/css/nav_sidebar.css HTTP/1.1" 404 179
+Not Found: /static/admin/css/responsive.css
+Not Found: /static/admin/js/theme.js
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/django_ckeditor_5/dist/bundle.js
+Not Found: /static/admin/js/jquery.init.js
+"GET /static/admin/js/theme.js HTTP/1.1" 404 179
+"GET /static/admin/css/responsive.css HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+"GET /static/django_ckeditor_5/dist/bundle.js HTTP/1.1" 404 179
+Not Found: /static/admin/js/core.js
+Not Found: /static/admin/js/admin/RelatedObjectLookups.js
+"GET /static/admin/js/jquery.init.js HTTP/1.1" 404 179
+Not Found: /static/admin/js/actions.js
+Not Found: /static/admin/css/nav_sidebar.css
+Not Found: /static/admin/js/urlify.js
+"GET /static/admin/js/core.js HTTP/1.1" 404 179
+- Broken pipe from ('127.0.0.1', 55256)
+"GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 404 179
+"GET /static/admin/js/actions.js HTTP/1.1" 404 179
+"GET /static/admin/js/urlify.js HTTP/1.1" 404 179
+Not Found: /static/admin/css/forms.css
+"GET /static/admin/css/nav_sidebar.css HTTP/1.1" 404 179
+Not Found: /static/admin/js/prepopulate.js
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+Not Found: /static/admin/js/prepopulate_init.js
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /static/admin/css/forms.css HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /static/admin/js/prepopulate_init.js HTTP/1.1" 404 179
+"GET /static/admin/js/prepopulate.js HTTP/1.1" 404 179
+Not Found: /static/admin/js/nav_sidebar.js
+Not Found: /static/admin/js/change_form.js
+Not Found: /static/admin/css/widgets.css
+Not Found: /static/django_ckeditor_5/dist/styles.css
+"GET /static/admin/js/nav_sidebar.js HTTP/1.1" 404 179
+"GET /static/admin/css/widgets.css HTTP/1.1" 404 179
+"GET /static/admin/js/change_form.js HTTP/1.1" 404 179
+"GET /static/django_ckeditor_5/dist/styles.css HTTP/1.1" 404 179
+Not Found: /static/admin/css/responsive.css
+"GET /static/admin/css/responsive.css HTTP/1.1" 404 179
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 179
+"GET /admin/football/clubinfo/1/change/ HTTP/1.1" 200 22164
+Not Found: /static/admin/css/base.css
+Not Found: /static/admin/css/nav_sidebar.css
+Not Found: /static/admin/css/forms.css
+Not Found: /static/admin/css/dark_mode.css
+Not Found: /static/admin/css/widgets.css
+"GET /static/admin/css/base.css HTTP/1.1" 404 179
+Not Found: /static/django_ckeditor_5/dist/styles.css
+"GET /static/admin/css/nav_sidebar.css HTTP/1.1" 404 179
+"GET /static/admin/css/forms.css HTTP/1.1" 404 179
+"GET /static/admin/css/dark_mode.css HTTP/1.1" 404 179
+"GET /static/admin/css/widgets.css HTTP/1.1" 404 179
+"GET /static/django_ckeditor_5/dist/styles.css HTTP/1.1" 404 179
+Not Found: /static/admin/css/responsive.css
+Not Found: /static/admin/js/theme.js
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/django_ckeditor_5/dist/bundle.js
+Not Found: /static/admin/js/jquery.init.js
+"GET /static/admin/css/responsive.css HTTP/1.1" 404 179
+"GET /static/admin/js/theme.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+"GET /static/admin/js/jquery.init.js HTTP/1.1" 404 179
+"GET /static/django_ckeditor_5/dist/bundle.js HTTP/1.1" 404 179
+Not Found: /static/admin/js/admin/RelatedObjectLookups.js
+Not Found: /static/admin/js/core.js
+Not Found: /static/admin/js/actions.js
+Not Found: /static/admin/js/prepopulate.js
+Not Found: /static/admin/js/urlify.js
+"GET /static/admin/js/actions.js HTTP/1.1" 404 179
+"GET /static/admin/js/core.js HTTP/1.1" 404 179
+"GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 404 179
+"GET /static/admin/js/prepopulate.js HTTP/1.1" 404 179
+"GET /static/admin/js/urlify.js HTTP/1.1" 404 179
+Not Found: /static/admin/css/forms.css
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+Not Found: /static/admin/js/prepopulate_init.js
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+Not Found: /static/admin/css/nav_sidebar.css
+"GET /static/admin/css/forms.css HTTP/1.1" 404 179
+"GET /static/admin/js/prepopulate_init.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /static/admin/css/nav_sidebar.css HTTP/1.1" 404 179
+Not Found: /static/admin/js/nav_sidebar.js
+Not Found: /static/admin/js/change_form.js
+Not Found: /static/django_ckeditor_5/dist/styles.css
+Not Found: /static/admin/css/widgets.css
+"GET /static/admin/css/widgets.css HTTP/1.1" 404 179
+"GET /static/admin/js/change_form.js HTTP/1.1" 404 179
+"GET /static/admin/js/nav_sidebar.js HTTP/1.1" 404 179
+"GET /static/django_ckeditor_5/dist/styles.css HTTP/1.1" 404 179
+Not Found: /static/admin/css/responsive.css
+"GET /static/admin/css/responsive.css HTTP/1.1" 404 179
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 200 19233
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET / HTTP/1.1" 200 19233
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /news/ HTTP/1.1" 200 15402
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /news/1/ HTTP/1.1" 200 17823
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /team/ HTTP/1.1" 200 14039
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /matches/ HTTP/1.1" 200 14382
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /standings/ HTTP/1.1" 200 14439
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /management/ HTTP/1.1" 200 20019
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /gallery/ HTTP/1.1" 200 15609
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /club/ HTTP/1.1" 200 24091
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /admin/football/clubinfo/1/change/ HTTP/1.1" 200 22164
+Not Found: /static/django_ckeditor_5/dist/styles.css
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/django_ckeditor_5/dist/bundle.js
+"GET /static/django_ckeditor_5/dist/bundle.js HTTP/1.1" 404 179
+"GET /static/django_ckeditor_5/dist/styles.css HTTP/1.1" 404 179
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+Not Found: /static/django_ckeditor_5/dist/styles.css
+"GET /static/django_ckeditor_5/dist/styles.css HTTP/1.1" 404 179
+"GET /admin/football/news/ HTTP/1.1" 200 18103
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /admin/football/news/1/change/ HTTP/1.1" 200 22024
+Not Found: /static/django_ckeditor_5/dist/styles.css
+Not Found: /static/admin/js/vendor/jquery/jquery.min.js
+Not Found: /static/django_ckeditor_5/dist/bundle.js
+"GET /static/django_ckeditor_5/dist/styles.css HTTP/1.1" 404 179
+Not Found: /static/admin/js/vendor/xregexp/xregexp.min.js
+"GET /static/django_ckeditor_5/dist/bundle.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/xregexp/xregexp.min.js HTTP/1.1" 404 179
+"GET /static/admin/js/vendor/jquery/jquery.min.js HTTP/1.1" 404 179
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+Not Found: /static/django_ckeditor_5/dist/styles.css
+"GET /static/django_ckeditor_5/dist/styles.css HTTP/1.1" 404 179
+Watching for file changes with StatReloader
+"GET /admin/football/news/1/change/ HTTP/1.1" 200 22016
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /static/django_ckeditor_5/dist/styles.css HTTP/1.1" 200 213809
+"GET /static/django_ckeditor_5/dist/bundle.js HTTP/1.1" 200 1275904
+/Users/lpaciorek/Library/Mobile Documents/com~apple~CloudDocs/Dev/fotbal/tjhlavnice3/tjhlavnice/tjhlavnice/urls.py changed, reloading.
+Watching for file changes with StatReloader
+"GET /news/ HTTP/1.1" 200 15402
+"GET /static/css/custom.css HTTP/1.1" 200 6493
+"GET /news/1/ HTTP/1.1" 200 17823
+"POST /admin/football/news/1/change/ HTTP/1.1" 302 0
+"GET /admin/football/news/ HTTP/1.1" 200 18328
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /news/1/ HTTP/1.1" 200 18178
+"GET /news/1/ HTTP/1.1" 200 18178
+"GET /admin/football/news/1/change/ HTTP/1.1" 200 22701
+"GET /static/django_ckeditor_5/dist/styles.css HTTP/1.1" 304 0
+"GET /static/django_ckeditor_5/dist/bundle.js HTTP/1.1" 304 0
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"POST /admin/football/news/1/change/ HTTP/1.1" 302 0
+"GET /admin/football/news/ HTTP/1.1" 200 18328
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /news/1/ HTTP/1.1" 200 18140
+Watching for file changes with StatReloader
+"GET /admin/football/news/1/change/ HTTP/1.1" 200 22733
+"GET /static/django_ckeditor_5/dist/bundle.js HTTP/1.1" 304 0
+"GET /static/django_ckeditor_5/dist/styles.css HTTP/1.1" 304 0
+"GET /static/css/custom.css HTTP/1.1" 200 12069
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"POST /admin/football/news/1/change/ HTTP/1.1" 302 0
+"GET /admin/football/news/ HTTP/1.1" 200 18394
+"GET /static/css/custom.css HTTP/1.1" 304 0
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /news/1/ HTTP/1.1" 200 17525
+"GET /static/css/custom.css HTTP/1.1" 200 12069
+"GET /news/1/ HTTP/1.1" 200 17525
+"GET /news/1/ HTTP/1.1" 200 17525
+"GET /admin/football/news/1/change/ HTTP/1.1" 200 21788
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"POST /admin/football/news/1/change/ HTTP/1.1" 302 0
+"GET /admin/football/news/ HTTP/1.1" 200 18394
+"GET /static/css/custom.css HTTP/1.1" 304 0
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /news/1/ HTTP/1.1" 200 18350
+"GET /static/css/custom.css HTTP/1.1" 304 0
+"GET /admin/football/news/1/change/ HTTP/1.1" 200 22943
+"GET /static/css/custom.css HTTP/1.1" 304 0
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"POST /admin/football/news/1/change/ HTTP/1.1" 302 0
+"GET /admin/football/news/ HTTP/1.1" 200 18394
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /news/1/ HTTP/1.1" 200 17525
+"GET /static/css/custom.css HTTP/1.1" 304 0
+"GET /admin/football/news/1/change/ HTTP/1.1" 200 21788
+"GET /static/css/custom.css HTTP/1.1" 304 0
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"POST /admin/football/news/1/change/ HTTP/1.1" 302 0
+"GET /admin/football/news/ HTTP/1.1" 200 18394
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /news/1/ HTTP/1.1" 200 18185
+"GET /static/css/custom.css HTTP/1.1" 304 0
+"GET /admin/football/news/1/change/ HTTP/1.1" 200 22778
+"GET /static/css/custom.css HTTP/1.1" 304 0
+"GET /static/django_ckeditor_5/dist/styles.css HTTP/1.1" 304 0
+"GET /static/django_ckeditor_5/dist/bundle.js HTTP/1.1" 304 0
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"POST /admin/football/news/1/change/ HTTP/1.1" 302 0
+"GET /admin/football/news/ HTTP/1.1" 200 18394
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /admin/football/news/1/change/?id=891f5b76-a9ad-432d-958d-254de4f4dc33&vscodeBrowserReqId=1755600205676 HTTP/1.1" 302 0
+"GET /admin/login/?next=/admin/football/news/1/change/%3Fid%3D891f5b76-a9ad-432d-958d-254de4f4dc33%26vscodeBrowserReqId%3D1755600205676 HTTP/1.1" 200 4437
+"GET /news/1/ HTTP/1.1" 200 17525
+"GET /static/css/custom.css HTTP/1.1" 304 0
+"GET /news/ HTTP/1.1" 200 15410
+"GET /matches/ HTTP/1.1" 200 14382
+"GET /standings/ HTTP/1.1" 200 14439
+"GET /management/ HTTP/1.1" 200 20019
+"GET /gallery/ HTTP/1.1" 200 15609
+"GET /club/ HTTP/1.1" 200 24091
+"GET / HTTP/1.1" 200 19241
+Watching for file changes with StatReloader
+"GET /admin/football/news/ HTTP/1.1" 200 18161
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /static/css/custom.css HTTP/1.1" 200 12520
+"GET / HTTP/1.1" 200 19241
+"GET /static/css/custom.css HTTP/1.1" 200 12520
+"GET /news/ HTTP/1.1" 200 15410
+"GET /news/1/ HTTP/1.1" 200 17571
+"GET /static/css/custom.css HTTP/1.1" 304 0
+"GET /admin/football/news/1/change/ HTTP/1.1" 200 21788
+"GET /static/css/custom.css HTTP/1.1" 304 0
+"GET /static/django_ckeditor_5/dist/bundle.js HTTP/1.1" 304 0
+"GET /static/django_ckeditor_5/dist/styles.css HTTP/1.1" 304 0
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET /news/1/?id=829558c4-73a4-4713-8626-2000c54f37b5&vscodeBrowserReqId=1755600349756 HTTP/1.1" 200 17725

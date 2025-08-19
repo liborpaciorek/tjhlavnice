@@ -4,12 +4,12 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from PIL import Image
 import os
-from ckeditor.fields import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
 
 class ClubInfo(models.Model):
     name = models.CharField(max_length=100, default="TJ Družba Hlavnice", verbose_name=_("Název klubu"))
     founded_year = models.IntegerField(default=1952, verbose_name=_("Rok založení"))
-    history = RichTextField(blank=True, config_name='club_editor', verbose_name=_("Historie klubu"), help_text=_("Historie a informace o klubu"))
+    history = CKEditor5Field(config_name='extends', blank=True, verbose_name=_("Historie klubu"), help_text=_("Historie a informace o klubu"))
     logo = models.ImageField(upload_to='club/', blank=True, null=True, verbose_name=_("Logo"))
     address = models.TextField(blank=True, verbose_name=_("Adresa"))
     contact_email = models.EmailField(blank=True, verbose_name=_("Kontaktní email"))
@@ -113,7 +113,7 @@ class Management(models.Model):
     last_name = models.CharField(max_length=50, verbose_name=_("Příjmení"))
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, verbose_name=_("Funkce"))
     photo = models.ImageField(upload_to='management/', blank=True, null=True, verbose_name=_("Fotografie"))
-    bio = RichTextField(blank=True, config_name='club_editor', verbose_name=_("Biografie"), help_text=_("Biografie a informace"))
+    bio = CKEditor5Field(config_name='extends', blank=True, verbose_name=_("Biografie"), help_text=_("Biografie a informace"))
     phone = models.CharField(max_length=20, blank=True, verbose_name=_("Telefon"))
     email = models.EmailField(blank=True, verbose_name=_("Email"))
     order = models.IntegerField(default=0, verbose_name=_("Pořadí"), help_text=_("Pořadí zobrazení"))
@@ -136,7 +136,7 @@ class Management(models.Model):
 
 class News(models.Model):
     title = models.CharField(max_length=200, verbose_name=_("Nadpis"))
-    content = RichTextField(config_name='news_editor', verbose_name=_("Obsah"), help_text=_("Obsah článku"))
+    content = CKEditor5Field(config_name='extends', verbose_name=_("Obsah"), help_text=_("Obsah článku"))
     image = models.ImageField(upload_to='news/', blank=True, null=True, verbose_name=_("Obrázek"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Vytvořeno"))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Upraveno"))
