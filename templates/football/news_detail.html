@@ -21,12 +21,6 @@ TJ Družba Hlavnice{% endblock %} {% block content %}
         <i class="fas fa-user mr-2"></i>
         <span>{{ news.author.get_full_name|default:news.author.username }}</span>
       </div>
-      {% if news.updated_at != news.created_at %}
-      <div class="flex items-center">
-        <i class="fas fa-edit mr-2"></i>
-        <span>{{ news.updated_at|date:"d.m.Y H:i" }}</span>
-      </div>
-      {% endif %}
     </div>
   </div>
 </section>
@@ -65,7 +59,7 @@ TJ Družba Hlavnice{% endblock %} {% block content %}
         {% endif %}
 
         <!-- Content -->
-        <div class="prose prose-lg max-w-none prose-headings:text-club-black prose-p:text-gray-700 prose-a:text-club-red hover:prose-a:text-club-red-dark">
+        <div class="prose prose-lg max-w-none prose-headings:text-white prose-p:text-white prose-a:text-club-red hover:prose-a:text-club-red-dark prose-strong:text-white prose-em:text-gray-200">
           {{ news.content|safe }}
         </div>
       </div>
