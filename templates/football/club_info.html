@@ -47,8 +47,7 @@ Hlavnice{% endblock %} {% block content %}
             </p>
             {% if club.founded_year %}
             <p class="text-lg opacity-75">
-              {{ club.founded_year|floatformat:0|date:"Y"|add:"0" }}+ let
-              tradice fotbalu
+              {{ years_of_existence }}+ let tradice
             </p>
             {% endif %}
           </div>
