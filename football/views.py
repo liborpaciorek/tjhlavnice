@@ -40,7 +40,13 @@ class NewsListView(ListView):
     paginate_by = 10
     
     def get_queryset(self):
-        return News.objects.filter(published=True)
+        try:
+            return News.objects.filter(published=True)
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error fetching news: {e}")
+            return News.objects.none()
 
 class NewsDetailView(DetailView):
     model = News
@@ -48,7 +54,13 @@ class NewsDetailView(DetailView):
     context_object_name = 'news'
     
     def get_queryset(self):
-        return News.objects.filter(published=True)
+        try:
+            return News.objects.filter(published=True)
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error fetching news detail: {e}")
+            return News.objects.none()
 
 def team_lineup(request):
     """Team lineup view"""
@@ -129,6 +141,15 @@ class GalleryListView(ListView):
     template_name = 'football/gallery.html'
     context_object_name = 'photos'
     paginate_by = 12
+    
+    def get_queryset(self):
+        try:
+            return Gallery.objects.all()
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error fetching gallery: {e}")
+            return Gallery.objects.none()
 
 def club_info(request):
     """Club information view"""

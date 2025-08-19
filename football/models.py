@@ -155,13 +155,25 @@ class News(models.Model):
     def get_absolute_url(self):
         return reverse('news_detail', kwargs={'pk': self.pk})
     
+    def get_image_url(self):
+        """Safely get image URL or return None if image doesn't exist"""
+        try:
+            if self.image and hasattr(self.image, 'url'):
+                return self.image.url
+        except (ValueError, AttributeError):
+            pass
+        return None
+    
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.image:
-            img = Image.open(self.image.path)
-            if img.height > 800 or img.width > 800:
-                img.thumbnail((800, 800))
-                img.save(self.image.path)
+            try:
+                img = Image.open(self.image.path)
+                if img.height > 800 or img.width > 800:
+                    img.thumbnail((800, 800))
+                    img.save(self.image.path)
+            except (FileNotFoundError, OSError, AttributeError):
+                pass
 
 class Match(models.Model):
     home_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='home_matches', verbose_name=_("Domácí tým"))
@@ -248,13 +260,25 @@ class Gallery(models.Model):
     def __str__(self):
         return self.title
     
+    def get_image_url(self):
+        """Safely get image URL or return None if image doesn't exist"""
+        try:
+            if self.image and hasattr(self.image, 'url'):
+                return self.image.url
+        except (ValueError, AttributeError):
+            pass
+        return None
+    
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.image:
-            img = Image.open(self.image.path)
-            if img.height > 1200 or img.width > 1200:
-                img.thumbnail((1200, 1200))
-                img.save(self.image.path)
+            try:
+                img = Image.open(self.image.path)
+                if img.height > 1200 or img.width > 1200:
+                    img.thumbnail((1200, 1200))
+                    img.save(self.image.path)
+            except (FileNotFoundError, OSError, AttributeError):
+                pass
 
 class PageVisit(models.Model):
     page_name = models.CharField(max_length=100, verbose_name=_("Název stránky"))

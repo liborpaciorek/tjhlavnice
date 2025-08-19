@@ -59,6 +59,7 @@ Hlavnice{% endblock %} {% block extra_head %}
     <div
       class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
     >
+      {% if photo.image %}
       <div
         class="aspect-w-4 aspect-h-3 cursor-pointer"
         onclick="openLightbox('{{ photo.image.url }}', '{{ photo.title }}')"
@@ -69,6 +70,11 @@ Hlavnice{% endblock %} {% block extra_head %}
           class="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
         />
       </div>
+      {% else %}
+      <div class="w-full h-48 bg-gradient-to-br from-club-red to-club-red-dark flex items-center justify-center">
+        <i class="fas fa-image text-4xl text-white"></i>
+      </div>
+      {% endif %}
       <div class="p-4">
         <h3 class="text-lg font-semibold text-club-black mb-2">
           {{ photo.title }}
