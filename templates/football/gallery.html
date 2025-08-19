@@ -109,23 +109,22 @@ Hlavnice{% endblock %} {% block extra_head %}
       >
         <i class="fas fa-chevron-left"></i>
       </a>
-      {% endif %} {% for num in page_obj.paginator.page_range %}
-      {% if page_obj.number == num %}
+      {% endif %} {% for num in page_obj.paginator.page_range %} {% if
+      page_obj.number == num %}
       <span
         class="relative inline-flex items-center px-4 py-2 border border-club-red bg-club-red text-sm font-medium text-white"
       >
         {{ num }}
       </span>
-      {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+      {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3'
+      %}
       <a
         href="?page={{ num }}"
         class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
       >
         {{ num }}
       </a>
-      {% endif %}
-      {% endfor %}
-      {% if page_obj.has_next %}
+      {% endif %} {% endfor %} {% if page_obj.has_next %}
       <a
         href="?page={{ page_obj.next_page_number }}"
         class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"

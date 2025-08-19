@@ -25,13 +25,7 @@ SECRET_KEY = 'django-insecure-cg%(1r$b1c(37q!wwiw5*5^5vrryin2p#xd&x#uq!8k9d1+b^k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['tjhlavnice.cz', 'www.tjhlavnice.cz', '127.0.0.1', 'localhost']
-
-# CSRF trusted origins for production
-CSRF_TRUSTED_ORIGINS = [
-    'https://tjhlavnice.cz',
-    'https://www.tjhlavnice.cz',
-]
+ALLOWED_HOSTS = ['tjhlavnice.cz', 'www.tjhlavnice.cz']
 
 
 # Application definition
