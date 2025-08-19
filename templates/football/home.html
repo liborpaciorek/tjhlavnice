@@ -92,7 +92,7 @@ Hlavnice{% endblock %} {% block content %}
           >
             <div class="text-4xl font-bold text-club-red mb-2">VS</div>
             <div class="text-sm text-gray-300 mb-2">
-              {{ match.league.name }}
+              {{ match.league.name }}{% if match.round_number %}<br>{{ match.round_number }}. kolo{% endif %}
             </div>
             <div class="text-lg font-semibold">
               {{ match.date|date:"d.m.Y" }}
@@ -208,7 +208,7 @@ Hlavnice{% endblock %} {% block content %}
                     {{ match.home_team.name }} vs {{ match.away_team.name }}
                   </div>
                   <div class="text-gray-300 text-sm">
-                    {{ match.league.name }}
+                    {{ match.league.name }}{% if match.round_number %} - {{ match.round_number }}. kolo{% endif %}
                   </div>
                 </div>
               </div>

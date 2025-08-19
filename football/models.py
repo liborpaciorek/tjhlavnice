@@ -180,6 +180,7 @@ class Match(models.Model):
     away_team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='away_matches', verbose_name=_("Hostující tým"))
     date = models.DateTimeField(verbose_name=_("Datum a čas"))
     league = models.ForeignKey(League, on_delete=models.CASCADE, verbose_name=_("Soutěž"))
+    round_number = models.IntegerField(blank=True, null=True, verbose_name=_("Kolo"))
     home_score = models.IntegerField(blank=True, null=True, verbose_name=_("Skóre domácích"))
     away_score = models.IntegerField(blank=True, null=True, verbose_name=_("Skóre hostů"))
     location = models.CharField(max_length=100, blank=True, verbose_name=_("Místo konání"))

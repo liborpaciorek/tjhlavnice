@@ -19,7 +19,9 @@ TJ Družba Hlavnice{% endblock %} {% block content %}
       </div>
       <div class="flex items-center">
         <i class="fas fa-user mr-2"></i>
-        <span>{{ news.author.get_full_name|default:news.author.username }}</span>
+        <span
+          >{{ news.author.get_full_name|default:news.author.username }}</span
+        >
       </div>
     </div>
   </div>
@@ -59,7 +61,9 @@ TJ Družba Hlavnice{% endblock %} {% block content %}
         {% endif %}
 
         <!-- Content -->
-        <div class="prose prose-lg max-w-none prose-headings:text-white prose-p:text-white prose-a:text-club-red hover:prose-a:text-club-red-dark prose-strong:text-white prose-em:text-gray-200 prose-li:text-white prose-blockquote:text-gray-200">
+        <div
+          class="prose prose-lg max-w-none prose-headings:text-white prose-p:text-white prose-a:text-club-red hover:prose-a:text-club-red-dark prose-strong:text-white prose-em:text-gray-200 prose-li:text-white prose-blockquote:text-gray-200"
+        >
           {{ news.content|safe }}
         </div>
       </div>
@@ -67,7 +71,9 @@ TJ Družba Hlavnice{% endblock %} {% block content %}
 
     <!-- Share and navigation -->
     <div class="mt-8 glass-card rounded-2xl p-6 lg:p-8">
-      <div class="flex flex-col lg:flex-row justify-between items-center space-y-6 lg:space-y-0">
+      <div
+        class="flex flex-col lg:flex-row justify-between items-center space-y-6 lg:space-y-0"
+      >
         <div>
           <h3 class="text-lg font-semibold text-white mb-4">Sdílet článek</h3>
           <div class="flex space-x-4">

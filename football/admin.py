@@ -107,11 +107,12 @@ class NewsAdmin(admin.ModelAdmin):
 
 @admin.register(Match)
 class MatchAdmin(admin.ModelAdmin):
-    list_display = ['match_display', 'date', 'league', 'is_finished', 'is_club_match']
-    list_filter = ['league', 'date', 'home_team__is_club_team', 'away_team__is_club_team']
+    list_display = ['match_display', 'round_number', 'date', 'league', 'is_finished', 'is_club_match']
+    list_filter = ['league', 'round_number', 'date', 'home_team__is_club_team', 'away_team__is_club_team']
     search_fields = ['home_team__name', 'away_team__name']
     date_hierarchy = 'date'
     ordering = ['-date']
+    fields = ['home_team', 'away_team', 'date', 'league', 'round_number', 'home_score', 'away_score', 'location', 'referee', 'notes']
     
     def match_display(self, obj):
         if obj.is_finished:
