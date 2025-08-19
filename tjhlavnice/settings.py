@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-cg%(1r$b1c(37q!wwiw5*5^5vrryin2p#xd&x#uq!8k9d1+b^k
 import os
 DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = ['tjhlavnice.cz', 'www.tjhlavnice.cz', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['tjhlavnice.cz', 'www.tjhlavnice.cz', '127.0.0.1', 'localhost', 'testserver']
 
 
 # Application definition
