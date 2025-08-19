@@ -1,111 +1,116 @@
 {% extends 'base.html' %} {% load static %} {% block title %}{{ news.title }} -
 TJ Družba Hlavnice{% endblock %} {% block content %}
-<div class="px-4 sm:px-0">
-  <!-- Back link -->
-  <div class="mb-6">
-    <a
-      href="{% url 'news_list' %}"
-      class="text-club-red hover:text-club-red-dark font-medium"
+
+<!-- Hero Section -->
+<section class="hero-bg py-20 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto text-center">
+    <span
+      class="inline-block bg-club-red px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide text-white mb-6"
     >
-      <i class="fas fa-arrow-left mr-2"></i>Zpět na aktuality
-    </a>
-  </div>
-
-  <article class="bg-white rounded-lg shadow-lg overflow-hidden">
-    {% if news.image %}
-    <div class="h-96 overflow-hidden">
-      <img
-        src="{{ news.image.url }}"
-        alt="{{ news.title }}"
-        class="w-full h-full object-cover"
-      />
+      📰 Aktualita
+    </span>
+    <h1 class="text-4xl lg:text-5xl font-bold text-white mb-6">
+      {{ news.title }}
+    </h1>
+    <div class="flex justify-center items-center space-x-6 text-gray-300">
+      <div class="flex items-center">
+        <i class="fas fa-calendar-alt mr-2"></i>
+        <span>{{ news.created_at|date:"d.m.Y H:i" }}</span>
+      </div>
+      <div class="flex items-center">
+        <i class="fas fa-user mr-2"></i>
+        <span>{{ news.author.get_full_name|default:news.author.username }}</span>
+      </div>
+      {% if news.updated_at != news.created_at %}
+      <div class="flex items-center">
+        <i class="fas fa-edit mr-2"></i>
+        <span>{{ news.updated_at|date:"d.m.Y H:i" }}</span>
+      </div>
+      {% endif %}
     </div>
-    {% endif %}
+  </div>
+</section>
 
-    <div class="p-8">
-      <!-- Featured badge -->
-      {% if news.is_featured %}
-      <div
-        class="inline-block bg-club-red text-white text-sm px-3 py-1 rounded-full mb-4"
+<section class="py-20 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto">
+    <!-- Back link -->
+    <div class="mb-8">
+      <a
+        href="{% url 'news_list' %}"
+        class="inline-flex items-center text-club-red hover:text-club-red-dark font-medium transition-colors duration-200"
       >
-        <i class="fas fa-star mr-1"></i>Doporučený článek
+        <i class="fas fa-arrow-left mr-2"></i>Zpět na aktuality
+      </a>
+    </div>
+
+    <article class="glass-card rounded-2xl overflow-hidden">
+      {% if news.image %}
+      <div class="h-96 overflow-hidden">
+        <img
+          src="{{ news.image.url }}"
+          alt="{{ news.title }}"
+          class="w-full h-full object-cover"
+        />
       </div>
       {% endif %}
 
-      <!-- Title -->
-      <h1 class="text-3xl font-bold text-club-black mb-4">{{ news.title }}</h1>
-
-      <!-- Meta info -->
-      <div
-        class="flex items-center text-gray-600 mb-6 pb-6 border-b border-gray-200"
-      >
-        <div class="flex items-center mr-6">
-          <i class="fas fa-calendar-alt mr-2"></i>
-          <span>{{ news.created_at|date:"d.m.Y H:i" }}</span>
-        </div>
-        <div class="flex items-center mr-6">
-          <i class="fas fa-user mr-2"></i>
-          <span
-            >{{ news.author.get_full_name|default:news.author.username }}</span
-          >
-        </div>
-        {% if news.updated_at != news.created_at %}
-        <div class="flex items-center">
-          <i class="fas fa-edit mr-2"></i>
-          <span>Upraveno: {{ news.updated_at|date:"d.m.Y H:i" }}</span>
+      <div class="p-8 lg:p-12">
+        <!-- Featured badge -->
+        {% if news.is_featured %}
+        <div
+          class="inline-block bg-club-red text-white text-sm px-3 py-1 rounded-full mb-6 font-semibold uppercase tracking-wide"
+        >
+          <i class="fas fa-star mr-1"></i>Doporučený článek
         </div>
         {% endif %}
+
+        <!-- Content -->
+        <div class="prose prose-lg max-w-none prose-headings:text-club-black prose-p:text-gray-700 prose-a:text-club-red hover:prose-a:text-club-red-dark">
+          {{ news.content|safe }}
+        </div>
       </div>
+    </article>
 
-      <!-- Content -->
-      <div class="prose prose-lg max-w-none">{{ news.content|safe }}</div>
-    </div>
-  </article>
+    <!-- Share and navigation -->
+    <div class="mt-8 glass-card rounded-2xl p-6 lg:p-8">
+      <div class="flex flex-col lg:flex-row justify-between items-center space-y-6 lg:space-y-0">
+        <div>
+          <h3 class="text-lg font-semibold text-club-black mb-4">Sdílet článek</h3>
+          <div class="flex space-x-4">
+            <a
+              href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
+              target="_blank"
+              class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors duration-200"
+              title="Sdílet na Facebooku"
+            >
+              <i class="fab fa-facebook mr-2"></i>Facebook
+            </a>
+            <a
+              href="mailto:?subject={{ news.title }}&body={{ request.build_absolute_uri }}"
+              class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors duration-200"
+              title="Odeslat e-mailem"
+            >
+              <i class="fas fa-envelope mr-2"></i>E-mail
+            </a>
+          </div>
+        </div>
 
-  <!-- Share and navigation -->
-  <div
-    class="mt-8 flex flex-col sm:flex-row justify-between items-center bg-white rounded-lg shadow-lg p-6"
-  >
-    <div class="mb-4 sm:mb-0">
-      <h3 class="text-lg font-semibold text-club-black mb-2">Sdílet článek</h3>
-      <div class="flex space-x-4">
-        <a
-          href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
-          target="_blank"
-          class="text-blue-600 hover:text-blue-800 transition-colors duration-200"
-        >
-          <i class="fab fa-facebook text-xl"></i>
-        </a>
-        <a
-          href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ news.title }}"
-          target="_blank"
-          class="text-blue-400 hover:text-blue-600 transition-colors duration-200"
-        >
-          <i class="fab fa-twitter text-xl"></i>
-        </a>
-        <a
-          href="mailto:?subject={{ news.title }}&body={{ request.build_absolute_uri }}"
-          class="text-gray-600 hover:text-gray-800 transition-colors duration-200"
-        >
-          <i class="fas fa-envelope text-xl"></i>
-        </a>
+        <div class="flex space-x-4">
+          <a
+            href="{% url 'news_list' %}"
+            class="inline-flex items-center bg-club-red hover:bg-club-red-dark text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200"
+          >
+            <i class="fas fa-list mr-2"></i>Všechny aktuality
+          </a>
+          <a
+            href="{% url 'home' %}"
+            class="inline-flex items-center bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200"
+          >
+            <i class="fas fa-home mr-2"></i>Domů
+          </a>
+        </div>
       </div>
-    </div>
-
-    <div class="flex space-x-4">
-      <a
-        href="{% url 'news_list' %}"
-        class="bg-club-red hover:bg-club-red-dark text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200"
-      >
-        <i class="fas fa-list mr-2"></i>Všechny aktuality
-      </a>
-      <a
-        href="{% url 'home' %}"
-        class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200"
-      >
-        <i class="fas fa-home mr-2"></i>Domů
-      </a>
     </div>
   </div>
-</div>
+</section>
 {% endblock %}
