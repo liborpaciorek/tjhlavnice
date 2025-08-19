@@ -70,7 +70,7 @@ Hlavnice{% endblock %} {% block content %}
         </div>
         {% if club.history %}
         <div class="prose max-w-none text-gray-300">
-          {{ club.history|linebreaks }}
+          {{ club.history|safe }}
         </div>
         {% else %}
         <p class="text-gray-300 leading-relaxed">

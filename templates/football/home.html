@@ -273,7 +273,7 @@ Hlavnice{% endblock %} {% block content %}
             {{ news.title }}
           </h3>
           <p class="text-gray-300 mb-4 line-clamp-3">
-            {{ news.content|truncatewords:20 }}
+            {{ news.content|striptags|truncatewords:20 }}
           </p>
           <a
             href="{% url 'news_detail' news.pk %}"

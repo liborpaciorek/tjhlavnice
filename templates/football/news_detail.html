@@ -58,7 +58,7 @@ TJ Družba Hlavnice{% endblock %} {% block content %}
       </div>
 
       <!-- Content -->
-      <div class="prose prose-lg max-w-none">{{ news.content|linebreaks }}</div>
+      <div class="prose prose-lg max-w-none">{{ news.content|safe }}</div>
     </div>
   </article>
 

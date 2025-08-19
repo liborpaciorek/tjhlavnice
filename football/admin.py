@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 from .models import (
     ClubInfo, League, Team, Player, Management, News, 
     Match, Standing, Event, Gallery, PageVisit, MainPage
@@ -9,6 +10,17 @@ from .models import (
 class ClubInfoAdmin(admin.ModelAdmin):
     list_display = ['name', 'founded_year']
     fields = ['name', 'founded_year', 'history', 'logo', 'address', 'contact_email', 'contact_phone']
+    
+    class Media:
+        css = {
+            'all': ('admin/css/widgets.css',),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Czech admin interface customization
+        self.verbose_name = _('Informace o klubu')
+        self.verbose_name_plural = _('Informace o klubu')
 
 @admin.register(League)
 class LeagueAdmin(admin.ModelAdmin):
@@ -25,8 +37,8 @@ class TeamAdmin(admin.ModelAdmin):
     def flag_preview(self, obj):
         if obj.flag:
             return format_html('<img src="{}" width="30" height="20" />', obj.flag.url)
-        return "No flag"
-    flag_preview.short_description = "Flag"
+        return _("Bez vlajky")
+    flag_preview.short_description = _("Vlajka")
 
 class PlayerInline(admin.TabularInline):
     model = Player
@@ -43,8 +55,8 @@ class PlayerAdmin(admin.ModelAdmin):
     def photo_preview(self, obj):
         if obj.photo:
             return format_html('<img src="{}" width="40" height="40" style="border-radius: 50%;" />', obj.photo.url)
-        return "No photo"
-    photo_preview.short_description = "Photo"
+        return _("Bez fotografie")
+    photo_preview.short_description = _("Fotografie")
 
 @admin.register(Management)
 class ManagementAdmin(admin.ModelAdmin):
@@ -52,6 +64,7 @@ class ManagementAdmin(admin.ModelAdmin):
     list_filter = ['role']
     search_fields = ['first_name', 'last_name']
     ordering = ['order', 'role']
+    fields = ['first_name', 'last_name', 'role', 'photo', 'bio', 'phone', 'email', 'order']
     
     def full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"
@@ -59,8 +72,13 @@ class ManagementAdmin(admin.ModelAdmin):
     def photo_preview(self, obj):
         if obj.photo:
             return format_html('<img src="{}" width="40" height="40" style="border-radius: 50%;" />', obj.photo.url)
-        return "No photo"
-    photo_preview.short_description = "Photo"
+        return _("Bez fotografie")
+    photo_preview.short_description = _("Fotografie")
+    
+    class Media:
+        css = {
+            'all': ('admin/css/widgets.css',),
+        }
 
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
@@ -69,12 +87,23 @@ class NewsAdmin(admin.ModelAdmin):
     search_fields = ['title', 'content']
     date_hierarchy = 'created_at'
     ordering = ['-created_at']
+    fields = ['title', 'content', 'image', 'author', 'published', 'is_featured']
     
     def image_preview(self, obj):
         if obj.image:
             return format_html('<img src="{}" width="60" height="40" />', obj.image.url)
-        return "No image"
-    image_preview.short_description = "Image"
+        return _("Bez obrázku")
+    image_preview.short_description = _("Obrázek")
+    
+    def save_model(self, request, obj, form, change):
+        if not obj.author_id:
+            obj.author = request.user
+        super().save_model(request, obj, form, change)
+    
+    class Media:
+        css = {
+            'all': ('admin/css/widgets.css',),
+        }
 
 @admin.register(Match)
 class MatchAdmin(admin.ModelAdmin):
@@ -88,7 +117,7 @@ class MatchAdmin(admin.ModelAdmin):
         if obj.is_finished:
             return f"{obj.home_team} {obj.home_score}:{obj.away_score} {obj.away_team}"
         return f"{obj.home_team} vs {obj.away_team}"
-    match_display.short_description = "Match"
+    match_display.short_description = _("Zápas")
 
 @admin.register(Standing)
 class StandingAdmin(admin.ModelAdmin):
@@ -100,7 +129,7 @@ class StandingAdmin(admin.ModelAdmin):
         if obj.team.is_club_team:
             return format_html('<span style="color: red; font-weight: bold;">TJ Hlavnice</span>')
         return ""
-    highlight_club.short_description = "Club Team"
+    highlight_club.short_description = _("Náš tým")
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
@@ -121,8 +150,8 @@ class GalleryAdmin(admin.ModelAdmin):
     def image_preview(self, obj):
         if obj.image:
             return format_html('<img src="{}" width="80" height="60" />', obj.image.url)
-        return "No image"
-    image_preview.short_description = "Image"
+        return _("Bez obrázku")
+    image_preview.short_description = _("Obrázek")
 
 @admin.register(PageVisit)
 class PageVisitAdmin(admin.ModelAdmin):
