@@ -19,14 +19,17 @@ def home(request):
     context = {
         'latest_news': News.objects.filter(published=True)[:3],
         'upcoming_match': None,
+        'upcoming_matches': [],
         'recent_matches': [],
         'club_standing': [],
         'club_info': ClubInfo.objects.first(),
     }
     
     if main_page:
+        upcoming_match = main_page.get_upcoming_match()
         context.update({
-            'upcoming_match': main_page.get_upcoming_match(),
+            'upcoming_match': upcoming_match,
+            'upcoming_matches': [upcoming_match] if upcoming_match else [],
             'recent_matches': main_page.get_recent_matches(),
             'club_standing': main_page.get_club_standing(),
         })

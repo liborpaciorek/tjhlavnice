@@ -724,3 +724,84 @@ Watching for file changes with StatReloader
 "GET /static/django_ckeditor_5/dist/styles.css HTTP/1.1" 304 0
 "GET /admin/jsi18n/ HTTP/1.1" 200 9747
 "GET /news/1/?id=829558c4-73a4-4713-8626-2000c54f37b5&vscodeBrowserReqId=1755600349756 HTTP/1.1" 200 17725
+Watching for file changes with StatReloader
+"GET /admin/football/clubinfo/1/change/ HTTP/1.1" 200 22222
+"GET /static/css/custom.css HTTP/1.1" 304 0
+"GET /static/django_ckeditor_5/dist/styles.css HTTP/1.1" 304 0
+"GET /static/django_ckeditor_5/dist/bundle.js HTTP/1.1" 304 0
+"GET /admin/jsi18n/ HTTP/1.1" 200 9747
+"GET / HTTP/1.1" 200 19241
+"GET /club/?id=c62658d3-2465-460c-9413-ca1d14ad63b7&vscodeBrowserReqId=1755602834386 HTTP/1.1" 200 24078
+"GET /club/ HTTP/1.1" 200 24078
+Watching for file changes with StatReloader
+"GET /club/ HTTP/1.1" 200 24065
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /club/ HTTP/1.1" 200 24065
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /club/ HTTP/1.1" 200 24065
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /club/ HTTP/1.1" 200 24065
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /club/ HTTP/1.1" 200 24065
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /club/ HTTP/1.1" 200 24065
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /club/ HTTP/1.1" 200 24065
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /club/ HTTP/1.1" 200 24065
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET / HTTP/1.1" 200 19241
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /club/ HTTP/1.1" 200 24065
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 200 19241
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET / HTTP/1.1" 200 19241
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /standings/ HTTP/1.1" 200 14439
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /standings/ HTTP/1.1" 200 14439
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /standings/ HTTP/1.1" 200 14439
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /standings/ HTTP/1.1" 200 14439
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+"GET /standings/ HTTP/1.1" 200 14439
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+/Users/lpaciorek/Library/Mobile Documents/com~apple~CloudDocs/Dev/fotbal/tjhlavnice3/tjhlavnice/football/admin.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/lpaciorek/Library/Mobile Documents/com~apple~CloudDocs/Dev/fotbal/tjhlavnice3/tjhlavnice/football/models.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/lpaciorek/Library/Mobile Documents/com~apple~CloudDocs/Dev/fotbal/tjhlavnice3/tjhlavnice/football/admin.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /admin/football/match/?id=b5fb5d10-2b21-4e84-9309-5574924b73d2&vscodeBrowserReqId=1755610143007 HTTP/1.1" 302 0
+"GET /admin/login/?next=/admin/football/match/%3Fid%3Db5fb5d10-2b21-4e84-9309-5574924b73d2%26vscodeBrowserReqId%3D1755610143007 HTTP/1.1" 200 4421
+/Users/lpaciorek/Library/Mobile Documents/com~apple~CloudDocs/Dev/fotbal/tjhlavnice3/tjhlavnice/football/models.py changed, reloading.
+Watching for file changes with StatReloader
+"GET /matches/ HTTP/1.1" 200 14382
+Not Found: /static/css/custom.css
+"GET /static/css/custom.css HTTP/1.1" 404 179
+/Users/lpaciorek/Library/Mobile Documents/com~apple~CloudDocs/Dev/fotbal/tjhlavnice3/tjhlavnice/football/views.py changed, reloading.
+Watching for file changes with StatReloader
