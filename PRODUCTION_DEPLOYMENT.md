@@ -3,6 +3,7 @@
 ## 🔧 Error 400 Fix Applied
 
 ### Issue Resolved:
+
 - **Problem**: Error 400 on production server
 - **Cause**: Incorrect `ALLOWED_HOSTS` format with protocols
 - **Solution**: Fixed domain names in settings
@@ -10,6 +11,7 @@
 ## 🚀 Production Server Setup
 
 ### 1. Environment Variables
+
 Set these on your production server:
 
 ```bash
@@ -21,13 +23,21 @@ export DEBUG=False  # or don't set (defaults to False)
 ```
 
 ### 2. Static Files
-Run on production server after deployment:
+
+**IMPORTANT**: Always run after deployment or when static files are missing:
 
 ```bash
 python manage.py collectstatic --noinput
 ```
 
+**Why this is needed:**
+
+- Static files (CSS, JS, images) are not stored in version control
+- CKEditor and Django admin files must be collected from installed packages
+- Missing static files cause 500 errors and broken admin interface
+
 ### 3. Database Migrations
+
 Run migrations on production:
 
 ```bash
@@ -35,23 +45,29 @@ python manage.py migrate
 ```
 
 ### 4. Logging
+
 Django will create a `django.log` file in the project root for debugging issues.
 
 ## ✅ Fixed Settings
 
 ### ALLOWED_HOSTS
+
 **Before (❌ Wrong):**
+
 ```python
 ALLOWED_HOSTS = ['https://tjhlavnice.cz', 'https://www.tjhlavnice.cz/', '127.0.0.1', 'localhost']
 ```
 
 **After (✅ Correct):**
+
 ```python
 ALLOWED_HOSTS = ['tjhlavnice.cz', 'www.tjhlavnice.cz', '127.0.0.1', 'localhost']
 ```
 
 ### Security Headers Added
+
 For production safety:
+
 ```python
 if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
@@ -65,16 +81,22 @@ if not DEBUG:
 ## 🔍 Troubleshooting
 
 ### Check Logs
+
 - View Django logs: `tail -f django.log`
 - Check production server logs for additional errors
 
 ### Common Issues:
-1. **Static files not loading**: Run `collectstatic`
+
+1. **Static files not loading (500 errors)**:
+   - Error: "No such file or directory" for CKEditor/admin files
+   - Solution: Run `python manage.py collectstatic --noinput`
+   - Cause: Static files removed from version control (Aug 2025 cleanup)
 2. **Database errors**: Run migrations
 3. **Permission issues**: Check file/directory permissions
 4. **Domain not working**: Verify DNS points to correct server
 
 ### Test Commands:
+
 ```bash
 # Test settings
 python manage.py check --deploy
@@ -91,7 +113,7 @@ python manage.py shell
 ## 📝 Production Checklist
 
 - ✅ Fixed ALLOWED_HOSTS format
-- ✅ Environment-based DEBUG setting  
+- ✅ Environment-based DEBUG setting
 - ✅ Security headers configured
 - ✅ Logging enabled
 - ✅ Czech localization working
@@ -102,6 +124,7 @@ python manage.py shell
 ## 🔗 URLs to Test:
 
 After deployment, verify these work:
+
 - `https://tjhlavnice.cz/` - Homepage
 - `https://tjhlavnice.cz/admin/` - Admin (Czech interface)
 - `https://www.tjhlavnice.cz/` - Homepage with www
