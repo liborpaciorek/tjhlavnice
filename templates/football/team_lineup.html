@@ -44,7 +44,7 @@
             </p>
             {% endif %} {% if team.founded %}
             <p class="text-sm opacity-75">
-              <i class="fas fa-calendar-alt mr-2"></i>Založen: {{ team.founded }}
+              <i class="fas fa-calendar-alt mr-2"></i>{{ team.founded }}
             </p>
             {% endif %}
           </div>
@@ -103,7 +103,7 @@
                 {% if player.birth_date %}
                 <p class="text-gray-300 text-sm">
                   <i class="fas fa-birthday-cake mr-1"></i>
-                  {{ player.birth_date|date:"d.m.Y" }}
+                  {{ player.birth_date|timesince|truncatewords:1 }}
                 </p>
                 {% endif %}
               </div>
@@ -187,7 +187,7 @@
                 {% if player.birth_date %}
                 <p class="text-gray-300 text-sm">
                   <i class="fas fa-birthday-cake mr-1"></i>
-                  {{ player.birth_date|date:"d.m.Y" }}
+                  {{ player.birth_date|timesince|truncatewords:1 }}
                 </p>
                 {% endif %}
               </div>
@@ -271,7 +271,7 @@
                 {% if player.birth_date %}
                 <p class="text-gray-300 text-sm">
                   <i class="fas fa-birthday-cake mr-1"></i>
-                  {{ player.birth_date|date:"d.m.Y" }}
+                  {{ player.birth_date|timesince|truncatewords:1 }}
                 </p>
                 {% endif %}
               </div>
@@ -355,7 +355,7 @@
                 {% if player.birth_date %}
                 <p class="text-gray-300 text-sm">
                   <i class="fas fa-birthday-cake mr-1"></i>
-                  {{ player.birth_date|date:"d.m.Y" }}
+                  {{ player.birth_date|timesince|truncatewords:1 }}
                 </p>
                 {% endif %}
               </div>
