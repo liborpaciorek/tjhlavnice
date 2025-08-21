@@ -1,5 +1,9 @@
-{% extends 'base.html' %} {% load static %} {% block title %}Tým - TJ Družba
-Hlavnice{% endblock %} {% block content %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tým - TJ Družba Hlavnice{% endblock %}
+
+{% block content %}
 <!-- Hero Section -->
 <section class="hero-bg py-20 px-4 sm:px-6 lg:px-8">
   <div class="max-w-7xl mx-auto text-center">
@@ -38,6 +42,12 @@ Hlavnice{% endblock %} {% block content %}
             <p class="text-lg opacity-90 mb-1">
               <i class="fas fa-map-marker-alt mr-2"></i>{{ team.city }}
             </p>
+            {% endif %} {% if team.founded %}
+            <p class="text-sm opacity-75">
+              <i class="fas fa-calendar-alt mr-2"></i>Založen: {{ team.founded
+              }}
+            </p>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -379,7 +389,8 @@ Hlavnice{% endblock %} {% block content %}
         {% endfor %}
       </div>
     </div>
-    {% endif %} {% else %}
+    {% endif %}
+    {% else %}
     <!-- No Players Message -->
     <div class="text-center py-20">
       <div class="glass-card rounded-2xl p-12 max-w-2xl mx-auto">
@@ -412,4 +423,6 @@ Hlavnice{% endblock %} {% block content %}
     </div>
   </div>
 </section>
-{% endif %} {% endblock %}
+{% endif %}
+
+{% endblock %}
