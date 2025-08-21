@@ -55,92 +55,95 @@ Hlavnice{% endblock %} {% block content %}
       </div>
     </div>
 
-    <!-- Club Information Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-      <!-- History -->
-      <div class="glass-card rounded-2xl p-8">
-        <div class="flex items-center mb-6">
-          <div
-            class="w-12 h-12 bg-gradient-to-br from-club-red to-club-red-dark rounded-full flex items-center justify-center mr-4"
-          >
-            <i class="fas fa-history text-white text-lg"></i>
-          </div>
-          <h3 class="text-2xl font-bold text-white">Historie klubu</h3>
+    <!-- History Section -->
+    <div class="glass-card rounded-2xl p-8 mb-8">
+      <div class="flex items-center mb-6">
+        <div
+          class="w-12 h-12 bg-gradient-to-br from-club-red to-club-red-dark rounded-full flex items-center justify-center mr-4"
+        >
+          <i class="fas fa-history text-white text-lg"></i>
         </div>
-        {% if club.history %}
-        <div class="prose max-w-none text-gray-300">
-          {{ club.history|safe }}
-        </div>
-        {% else %}
-        <p class="text-gray-300 leading-relaxed">
-          TJ Družba Hlavnice je fotbalový klub s dlouholetou tradicí. Od svého
-          založení v roce {{ club.founded_year }} se klub snaží rozvíjet fotbal
-          v regionu a vychovávat nové generace fotbalistů.
-        </p>
-        {% endif %}
+        <h3 class="text-2xl font-bold text-white">Historie klubu</h3>
       </div>
+      {% if club.history %}
+      <div class="prose max-w-none text-gray-300">
+        {{ club.history|safe }}
+      </div>
+      {% else %}
+      <p class="text-gray-300 leading-relaxed">
+        TJ Družba Hlavnice je fotbalový klub s dlouholetou tradicí. Od svého
+        založení v roce {{ club.founded_year }} se klub snaží rozvíjet fotbal
+        v regionu a vychovávat nové generace fotbalistů.
+      </p>
+      {% endif %}
+    </div>
 
-      <!-- Contact Information -->
-      <div class="glass-card rounded-2xl p-8">
-        <div class="flex items-center mb-6">
-          <div
-            class="w-12 h-12 bg-gradient-to-br from-green-600 to-green-800 rounded-full flex items-center justify-center mr-4"
-          >
-            <i class="fas fa-envelope text-white text-lg"></i>
-          </div>
-          <h3 class="text-2xl font-bold text-white">Kontaktní údaje</h3>
+    <!-- Contact Information -->
+    <div class="glass-card rounded-2xl p-8 mb-16">
+      <div class="flex items-center mb-6">
+        <div
+          class="w-12 h-12 bg-gradient-to-br from-green-600 to-green-800 rounded-full flex items-center justify-center mr-4"
+        >
+          <i class="fas fa-envelope text-white text-lg"></i>
         </div>
-        <div class="space-y-6">
-          {% if club.address %}
-          <div class="flex items-start">
-            <i class="fas fa-map-marker-alt text-club-red mr-3 mt-1 w-5"></i>
-            <div>
-              <h4 class="font-semibold text-white mb-1">Adresa</h4>
-              <p class="text-gray-300">{{ club.address|linebreaks }}</p>
-            </div>
+        <h3 class="text-2xl font-bold text-white">Kontaktní údaje</h3>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% if club.address %}
+        <div class="flex items-start">
+          <i class="fas fa-map-marker-alt text-club-red mr-3 mt-1 w-5"></i>
+          <div>
+            <h4 class="font-semibold text-white mb-1">Adresa</h4>
+            <a
+              href="https://maps.app.goo.gl/kbahKo979TH3qEv2A"
+              target="_blank"
+              class="text-club-red hover:text-white transition-colors duration-200"
+            >
+              {{ club.address|linebreaks }}
+            </a>
           </div>
-          {% endif %} {% if club.contact_email %}
-          <div class="flex items-start">
-            <i class="fas fa-envelope text-club-red mr-3 mt-1 w-5"></i>
-            <div>
-              <h4 class="font-semibold text-white mb-1">Email</h4>
-              <a
-                href="mailto:{{ club.contact_email }}"
-                class="text-club-red hover:text-white transition-colors duration-200"
-              >
-                {{ club.contact_email }}
-              </a>
-            </div>
-          </div>
-          {% endif %} {% if club.contact_phone %}
-          <div class="flex items-start">
-            <i class="fas fa-phone text-club-red mr-3 mt-1 w-5"></i>
-            <div>
-              <h4 class="font-semibold text-white mb-1">Telefon</h4>
-              <a
-                href="tel:{{ club.contact_phone }}"
-                class="text-club-red hover:text-white transition-colors duration-200"
-              >
-                {{ club.contact_phone }}
-              </a>
-            </div>
-          </div>
-          {% endif %} {% if club.website %}
-          <div class="flex items-start">
-            <i class="fas fa-globe text-club-red mr-3 mt-1 w-5"></i>
-            <div>
-              <h4 class="font-semibold text-white mb-1">Web</h4>
-              <a
-                href="{{ club.website }}"
-                target="_blank"
-                class="text-club-red hover:text-white transition-colors duration-200"
-              >
-                {{ club.website }}
-              </a>
-            </div>
-          </div>
-          {% endif %}
         </div>
+        {% endif %} {% if club.contact_email %}
+        <div class="flex items-start">
+          <i class="fas fa-envelope text-club-red mr-3 mt-1 w-5"></i>
+          <div>
+            <h4 class="font-semibold text-white mb-1">Email</h4>
+            <a
+              href="mailto:{{ club.contact_email }}"
+              class="text-club-red hover:text-white transition-colors duration-200"
+            >
+              {{ club.contact_email }}
+            </a>
+          </div>
+        </div>
+        {% endif %} {% if club.contact_phone %}
+        <div class="flex items-start">
+          <i class="fas fa-phone text-club-red mr-3 mt-1 w-5"></i>
+          <div>
+            <h4 class="font-semibold text-white mb-1">Telefon</h4>
+            <a
+              href="tel:{{ club.contact_phone }}"
+              class="text-club-red hover:text-white transition-colors duration-200"
+            >
+              {{ club.contact_phone }}
+            </a>
+          </div>
+        </div>
+        {% endif %} {% if club.website %}
+        <div class="flex items-start">
+          <i class="fas fa-globe text-club-red mr-3 mt-1 w-5"></i>
+          <div>
+            <h4 class="font-semibold text-white mb-1">Web</h4>
+            <a
+              href="{{ club.website }}"
+              target="_blank"
+              class="text-club-red hover:text-white transition-colors duration-200"
+            >
+              {{ club.website }}
+            </a>
+          </div>
+        </div>
+        {% endif %}
       </div>
     </div>
 
@@ -217,10 +220,6 @@ Hlavnice{% endblock %} {% block content %}
           <li class="flex items-center">
             <i class="fas fa-check-circle text-club-red mr-3"></i>
             Komunita a tradice
-          </li>
-          <li class="flex items-center">
-            <i class="fas fa-check-circle text-club-red mr-3"></i>
-            Sportovní excellence
           </li>
         </ul>
       </div>
