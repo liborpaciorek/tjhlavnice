@@ -1,9 +1,5 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %}Tým - TJ Družba Hlavnice{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block title %}Tým - TJ Družba
+Hlavnice{% endblock %} {% block content %}
 <!-- Hero Section -->
 <section class="hero-bg py-20 px-4 sm:px-6 lg:px-8">
   <div class="max-w-7xl mx-auto text-center">
@@ -354,8 +350,7 @@
                 </h4>
                 {% if player.birth_date %}
                 <p class="text-gray-300 text-sm">
-                  <i class="fas fa-birthday-cake mr-1"></i>
-                  {{ player.birth_date|timesince|truncatewords:1 }}
+                  Let: {{ player.birth_date|timesince|truncatewords:1 }}
                 </p>
                 {% endif %}
               </div>
@@ -388,8 +383,7 @@
         {% endfor %}
       </div>
     </div>
-    {% endif %}
-    {% else %}
+    {% endif %} {% else %}
     <!-- No Players Message -->
     <div class="text-center py-20">
       <div class="glass-card rounded-2xl p-12 max-w-2xl mx-auto">
@@ -422,6 +416,4 @@
     </div>
   </div>
 </section>
-{% endif %}
-
-{% endblock %}
+{% endif %} {% endblock %}
