@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% load static %} {% block title %}Domů - TJ Družba
+{% extends 'base.html' %} {% load static club_filters %} {% block title %}Domů - TJ Družba
 Hlavnice{% endblock %} {% block content %}
 <!-- Hero Section -->
 <section class="hero-bg relative min-h-screen flex items-center">
@@ -200,19 +200,20 @@ Hlavnice{% endblock %} {% block content %}
 
         <div class="space-y-4">
           {% for match in recent_matches|slice:":3" %}
-          <div class="bg-dark-blue-light/50 rounded-xl p-4 border border-white/10">
-            <!-- Compact mobile layout -->
-            <div class="flex items-center justify-between gap-3 md:gap-4">
+          <div class="bg-dark-blue-light/60 rounded-2xl p-4 md:p-5 border border-white/10">
+            <div class="flex items-center justify-between gap-3 md:gap-5">
               <div class="min-w-0">
-                <div class="text-white font-semibold truncate">
-                  {{ match.home_team.short_name|default:match.home_team.name }} vs {{ match.away_team.short_name|default:match.away_team.name }}
+                <div class="flex items-center gap-2 md:gap-3 text-white font-semibold">
+                  <span class="truncate text-base md:text-xl {{ (match.home_team.name|is_hlavnice or match.home_team.short_name|is_hlavnice)|yesno:'text-club-red font-extrabold,,' }}">{{ match.home_team|team_display }}</span>
+                  <span class="text-gray-400">vs</span>
+                  <span class="truncate text-base md:text-xl {{ (match.away_team.name|is_hlavnice or match.away_team.short_name|is_hlavnice)|yesno:'text-club-red font-extrabold,,' }}">{{ match.away_team|team_display }}</span>
                 </div>
                 <div class="text-gray-300 text-xs sm:text-sm truncate">
                   {{ match.league.name }}{% if match.round_number %} - {{ match.round_number }}. kolo{% endif %}
                 </div>
               </div>
               <div class="text-right shrink-0">
-                <div class="text-white font-bold text-lg sm:text-xl leading-none">
+                <div class="text-white font-black text-2xl md:text-3xl leading-none tracking-tight">
                   {{ match.home_score|default:"0" }}:<span>{{ match.away_score|default:"0" }}</span>
                 </div>
                 <div class="text-[10px] text-gray-400 mt-1">FT • {{ match.date|date:"d.m.Y" }} <span class="ml-1">{{ match.date|date:"H:i" }}</span></div>
