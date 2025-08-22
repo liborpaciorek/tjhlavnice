@@ -44,7 +44,7 @@ Hlavnice{% endblock %} {% block content %}
             <div
               class="text-sm font-semibold uppercase tracking-wide opacity-90"
             >
-              {{ match.league.name }}{% if match.round_number %} - {{ match.round_number|stringformat:':d' }}. kolo{% endif %}
+              {{ match.league.name }}{% if match.round_number %} - {{ match.round_number }}. kolo{% endif %}
             </div>
             <div class="text-lg font-bold mt-1">
               {{ match.date|date:"d. M Y" }}
@@ -150,7 +150,7 @@ Hlavnice{% endblock %} {% block content %}
             {{ match.date|date:"d.m.Y • H:i" }}
           </div>
           <div class="text-gray-300 text-sm">
-            {{ match.league.name }}{% if match.round_number %} - {{ match.round_number|stringformat:':d' }}. kolo{% endif %}
+            {{ match.league.name }}{% if match.round_number %} - {{ match.round_number }}. kolo{% endif %}
           </div>
         </div>
 
