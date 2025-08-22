@@ -26,7 +26,7 @@
 {% block content %}
 <div class="page-header">
   <h1 class="page-title">{{ album.title }}</h1>
-  <p class="page-subtitle">{% if album.event %}📅 {{ album.event.date|date:"d m Y" }}{% elif album.description %}{{ album.description }}{% endif %}</p>
+  <p class="page-subtitle">{% if album.event %}📅 {{ album.event.title }} — {{ album.event.date|date:"d.m.Y" }}{% elif album.description %}{{ album.description }}{% endif %}</p>
 </div>
 
 <div class="max-w-7xl mx-auto px-6 pb-16">
