@@ -9,7 +9,8 @@ Hlavnice{% endblock %} {% block extra_head %}
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(5px);
   }
 
   .lightbox-content {
@@ -24,184 +25,235 @@ Hlavnice{% endblock %} {% block extra_head %}
   .lightbox img {
     width: 100%;
     height: auto;
-    border-radius: 8px;
+    border-radius: 12px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   }
 
   .lightbox-close {
     position: absolute;
-    top: 15px;
-    right: 35px;
+    top: -50px;
+    right: 0;
     color: #f1f1f1;
-    font-size: 40px;
+    font-size: 30px;
     font-weight: bold;
     cursor: pointer;
+    z-index: 1001;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
   }
 
   .lightbox-close:hover {
-    color: #ff0000;
+    background: rgba(220, 38, 38, 0.8);
+    transform: scale(1.1);
+  }
+
+  .lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    font-size: 24px;
+    padding: 15px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.2s;
+  }
+
+  .lightbox-nav:hover {
+    background: rgba(220, 38, 38, 0.8);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .lightbox-prev {
+    left: 20px;
+  }
+
+  .lightbox-next {
+    right: 20px;
   }
 </style>
 {% endblock %} {% block content %}
-<div class="px-4 sm:px-0">
-  <div class="mb-8">
-    <h1 class="text-3xl font-bold text-club-black">
-      <i class="fas fa-images text-club-red mr-3"></i>
-      Fotogalerie
-    </h1>
-    <p class="text-gray-600 mt-2">Fotky z akcí a zápasů TJ Družba Hlavnice</p>
-  </div>
 
-  {% if photos %}
-  <div
-    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-  >
-    {% for photo in photos %}
-    <div
-      class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+<!-- Hero Section -->
+<section class="hero-bg py-20 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto text-center">
+    <span
+      class="inline-block bg-club-red px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide text-white mb-6"
     >
-      {% if photo.image %}
-      <div
-        class="aspect-w-4 aspect-h-3 cursor-pointer"
-        onclick="openLightbox('{{ photo.image.url }}', '{{ photo.title }}')"
-      >
-        <img
-          src="{{ photo.image.url }}"
-          alt="{{ photo.title }}"
-          class="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
-        />
+      📸 Fotogalerie
+    </span>
+    <h1 class="text-4xl lg:text-6xl font-bold text-white mb-6">
+      NAŠE <span class="text-club-red">GALERIE</span>
+    </h1>
+    <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+      Prohlédněte si fotky z našich zápasů, tréninků a klubových akcí
+    </p>
+  </div>
+</section>
+
+<section class="py-20 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    {% if photos %}
+      <div class="text-center mb-12">
+        <span class="text-club-red text-sm font-semibold uppercase tracking-wide">Fotky</span>
+        <h2 class="text-4xl font-bold text-white mt-2 mb-4">NAŠE MOMENTKY</h2>
+        <p class="text-gray-300 text-lg">Zachycené okamžiky z klubového života</p>
       </div>
-      {% else %}
-      <div class="w-full h-48 bg-gradient-to-br from-club-red to-club-red-dark flex items-center justify-center">
-        <i class="fas fa-image text-4xl text-white"></i>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {% for photo in photos %}
+        <div class="glass-card rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300 cursor-pointer group"
+             onclick="openLightbox({{ forloop.counter0 }})">
+          {% if photo.image %}
+          <div class="aspect-w-4 aspect-h-3 relative overflow-hidden">
+            <img
+              src="{{ photo.image.url }}"
+              alt="{{ photo.title }}"
+              class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300"
+            />
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+              <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></i>
+            </div>
+          </div>
+          {% else %}
+          <div class="w-full h-64 bg-gradient-to-br from-club-red to-club-red-dark flex items-center justify-center">
+            <i class="fas fa-image text-4xl text-white"></i>
+          </div>
+          {% endif %}
+          
+          <div class="p-4">
+            <h3 class="text-lg font-semibold text-white mb-2">
+              {{ photo.title }}
+            </h3>
+            {% if photo.description %}
+            <p class="text-gray-300 text-sm mb-3 line-clamp-2">
+              {{ photo.description|truncatewords:15 }}
+            </p>
+            {% endif %}
+            <div class="flex items-center justify-between text-xs text-gray-400">
+              <span class="flex items-center">
+                <i class="fas fa-calendar-alt mr-1 text-club-red"></i>
+                {{ photo.uploaded_at|date:"d.m.Y" }}
+              </span>
+              {% if photo.event %}
+              <span class="flex items-center">
+                <i class="fas fa-tag mr-1 text-club-red"></i>
+                {{ photo.event.title|truncatechars:15 }}
+              </span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination -->
+      {% if is_paginated %}
+      <div class="mt-12 flex justify-center">
+        <nav class="relative z-0 inline-flex rounded-lg shadow-sm -space-x-px bg-dark-blue-light/50 backdrop-blur-sm border border-white/10" aria-label="Pagination">
+          {% if page_obj.has_previous %}
+          <a
+            href="?page={{ page_obj.previous_page_number }}"
+            class="relative inline-flex items-center px-3 py-2 rounded-l-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-colors duration-200"
+          >
+            <i class="fas fa-chevron-left"></i>
+          </a>
+          {% endif %}
+          
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <span
+                class="relative inline-flex items-center px-4 py-2 text-sm font-medium bg-club-red text-white"
+              >
+                {{ num }}
+              </span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <a
+                href="?page={{ num }}"
+                class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-colors duration-200"
+              >
+                {{ num }}
+              </a>
+            {% endif %}
+          {% endfor %}
+          
+          {% if page_obj.has_next %}
+          <a
+            href="?page={{ page_obj.next_page_number }}"
+            class="relative inline-flex items-center px-3 py-2 rounded-r-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-colors duration-200"
+          >
+            <i class="fas fa-chevron-right"></i>
+          </a>
+          {% endif %}
+        </nav>
       </div>
       {% endif %}
-      <div class="p-4">
-        <h3 class="text-lg font-semibold text-club-black mb-2">
-          {{ photo.title }}
-        </h3>
-        {% if photo.description %}
-        <p class="text-gray-600 text-sm mb-2">
-          {{ photo.description|truncatewords:15 }}
-        </p>
-        {% endif %}
-        <div class="flex items-center justify-between text-xs text-gray-500">
-          <span>
-            <i class="fas fa-calendar-alt mr-1"></i>
-            {{ photo.uploaded_at|date:"d.m.Y" }}
-          </span>
-          {% if photo.event %}
-          <span>
-            <i class="fas fa-tag mr-1"></i>
-            {{ photo.event.title|truncatechars:15 }}
-          </span>
-          {% endif %}
+
+    {% else %}
+      <!-- Empty State -->
+      <div class="text-center py-20">
+        <div class="glass-card rounded-2xl p-12 max-w-2xl mx-auto">
+          <div class="text-gray-400 mb-6">
+            <i class="fas fa-images text-8xl"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-4">Žádné fotky</h3>
+          <p class="text-gray-300 text-lg">
+            Galerie je zatím prázdná. Sledujte nás pro nové fotky z akcí a zápasů!
+          </p>
         </div>
       </div>
-    </div>
-    {% endfor %}
+    {% endif %}
   </div>
-
-  <!-- Pagination -->
-  {% if is_paginated %}
-  <div class="mt-12 flex justify-center">
-    <nav
-      class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-      aria-label="Pagination"
-    >
-      {% if page_obj.has_previous %}
-      <a
-        href="?page={{ page_obj.previous_page_number }}"
-        class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-      >
-        <i class="fas fa-chevron-left"></i>
-      </a>
-      {% endif %}
-      
-      {% for num in page_obj.paginator.page_range %}
-        {% if page_obj.number == num %}
-          <span
-            class="relative inline-flex items-center px-4 py-2 border border-club-red bg-club-red text-sm font-medium text-white"
-          >
-            {{ num }}
-          </span>
-        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-          <a
-            href="?page={{ num }}"
-            class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-          >
-            {{ num }}
-          </a>
-        {% endif %}
-      {% endfor %}
-      
-      {% if page_obj.has_next %}
-      <a
-        href="?page={{ page_obj.next_page_number }}"
-        class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-      >
-        <i class="fas fa-chevron-right"></i>
-      </a>
-      {% endif %}
-    </nav>
-  </div>
-  {% endif %}
-
-  <!-- Upload Information -->
-  <div class="mt-12 bg-white rounded-lg shadow-lg p-6">
-    <h2 class="text-xl font-bold text-club-black mb-4">
-      <i class="fas fa-upload text-club-red mr-2"></i>
-      Přidání fotek
-    </h2>
-    <p class="text-gray-600 mb-4">
-      Chcete přidat fotky z akce nebo zápasu? Použijte admin panel pro nahrání
-      nových fotek do galerie.
-    </p>
-    <a
-      href="/admin/football/gallery/add/"
-      target="_blank"
-      class="inline-flex items-center bg-club-red hover:bg-club-red-dark text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
-    >
-      <i class="fas fa-plus mr-2"></i>
-      Přidat fotku
-    </a>
-  </div>
-  {% else %}
-  <div class="text-center py-12">
-    <div class="text-gray-400 mb-4">
-      <i class="fas fa-image text-6xl"></i>
-    </div>
-    <h3 class="text-xl font-semibold text-gray-600 mb-2">Žádné fotky</h3>
-    <p class="text-gray-500 mb-6">
-      Galerie je zatím prázdná. Buďte první, kdo přidá fotku!
-    </p>
-    <a
-      href="/admin/football/gallery/add/"
-      target="_blank"
-      class="inline-flex items-center bg-club-red hover:bg-club-red-dark text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
-    >
-      <i class="fas fa-plus mr-2"></i>
-      Přidat první fotku
-    </a>
-  </div>
-  {% endif %}
-</div>
+</section>
 
 <!-- Lightbox -->
 <div id="lightbox" class="lightbox" onclick="closeLightbox()">
   <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+  <button class="lightbox-nav lightbox-prev" onclick="previousImage(event)">
+    <i class="fas fa-chevron-left"></i>
+  </button>
+  <button class="lightbox-nav lightbox-next" onclick="nextImage(event)">
+    <i class="fas fa-chevron-right"></i>
+  </button>
   <div class="lightbox-content">
     <img id="lightbox-img" src="" alt="" />
     <div class="text-center mt-4">
-      <p id="lightbox-title" class="text-white text-lg font-semibold"></p>
+      <p id="lightbox-title" class="text-white text-xl font-semibold mb-2"></p>
+      <p id="lightbox-description" class="text-gray-300 text-sm"></p>
+      <p id="lightbox-date" class="text-gray-400 text-xs mt-2"></p>
     </div>
   </div>
 </div>
-{% endblock %} {% block extra_js %}
+{% endblock %} 
+
+{% block extra_js %}
 <script>
-  function openLightbox(src, title) {
+  let currentImageIndex = 0;
+  const photos = [
+    {% for photo in photos %}
+    {
+      src: "{{ photo.image.url }}",
+      title: "{{ photo.title|escapejs }}",
+      description: "{{ photo.description|escapejs|default:'' }}",
+      date: "{{ photo.uploaded_at|date:'d.m.Y' }}"
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ];
+
+  function openLightbox(index) {
+    if (photos.length === 0) return;
+    
+    currentImageIndex = index;
     document.getElementById("lightbox").style.display = "block";
-    document.getElementById("lightbox-img").src = src;
-    document.getElementById("lightbox-title").textContent = title;
+    updateLightboxContent();
     document.body.style.overflow = "hidden";
   }
 
@@ -210,18 +262,46 @@ Hlavnice{% endblock %} {% block extra_head %}
     document.body.style.overflow = "auto";
   }
 
+  function nextImage(event) {
+    event.stopPropagation();
+    currentImageIndex = (currentImageIndex + 1) % photos.length;
+    updateLightboxContent();
+  }
+
+  function previousImage(event) {
+    event.stopPropagation();
+    currentImageIndex = (currentImageIndex - 1 + photos.length) % photos.length;
+    updateLightboxContent();
+  }
+
+  function updateLightboxContent() {
+    if (photos.length === 0) return;
+    
+    const photo = photos[currentImageIndex];
+    document.getElementById("lightbox-img").src = photo.src;
+    document.getElementById("lightbox-title").textContent = photo.title;
+    document.getElementById("lightbox-description").textContent = photo.description;
+    document.getElementById("lightbox-date").textContent = photo.date;
+  }
+
   // Close lightbox with Escape key
   document.addEventListener("keydown", function (event) {
     if (event.key === "Escape") {
       closeLightbox();
+    } else if (event.key === "ArrowRight") {
+      nextImage(event);
+    } else if (event.key === "ArrowLeft") {
+      previousImage(event);
     }
   });
 
-  // Prevent closing when clicking on the image
-  document
-    .getElementById("lightbox-img")
-    .addEventListener("click", function (event) {
-      event.stopPropagation();
-    });
+  // Prevent closing when clicking on the image or content
+  document.getElementById("lightbox-img").addEventListener("click", function (event) {
+    event.stopPropagation();
+  });
+  
+  document.querySelector(".lightbox-content").addEventListener("click", function (event) {
+    event.stopPropagation();
+  });
 </script>
 {% endblock %}
