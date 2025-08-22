@@ -50,8 +50,8 @@ Družba Hlavnice{% endblock %} {% block content %}
                 {% endif %} {% if event.is_match and event.match %}
                 <div class="flex items-center">
                   <i class="fas fa-vs mr-1"></i>
-                  {{ event.match.home_team.name }} vs {{
-                  event.match.away_team.name }}
+                  {{ event.match.home_team.short_name|default:event.match.home_team.name }} vs {{
+                  event.match.away_team.short_name|default:event.match.away_team.name }}
                 </div>
                 {% endif %}
               </div>
