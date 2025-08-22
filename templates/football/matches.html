@@ -12,11 +12,33 @@ Hlavnice{% endblock %} {% block content %}
       ZÁPASY & <span class="text-club-red">VÝSLEDKY</span>
     </h1>
     <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-      Sledujte všechny naše zápasy, výsledky a budoucí utkání. Nechte se
-      vtáhnout do atmosféry fotbalu.
+      Sledujte všechny naše zápasy, výsledky a budoucí utkání.
     </p>
   </div>
 </section>
+
+<!-- League Filter -->
+<section class="px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <form method="get" class="glass-card rounded-2xl p-4 md:p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <label for="league" class="text-sm text-gray-300">Soutěž</label>
+        <select id="league" name="league" class="bg-dark-blue-light border border-white/10 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-club-red/60" onchange="this.form.submit()">
+          <option value="" {% if not selected_league %}selected{% endif %}>Všechny soutěže</option>
+          {% for league in leagues %}
+            <option value="{{ league.id }}" {% if selected_league and selected_league.id == league.id %}selected{% endif %}>{{ league.name }} — {{ league.season }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% if selected_league %}
+      <div class="text-xs text-gray-400">
+        Filtrováno podle: <span class="text-white font-semibold">{{ selected_league.name }} • {{ selected_league.season }}</span>
+        <a href="{% url 'matches' %}" class="ml-3 text-club-red hover:text-white underline underline-offset-4">Zrušit filtr</a>
+      </div>
+      {% endif %}
+    </form>
+  </div>
+  </section>
 
 <!-- Upcoming Matches -->
 {% if upcoming_matches %}
@@ -24,8 +46,11 @@ Hlavnice{% endblock %} {% block content %}
   <div class="max-w-7xl mx-auto">
     <div class="text-center mb-12">
       <h2 class="text-4xl font-bold text-white mt-2 mb-4">
-        NADCHÁZEJÍCÍ ZÁPASY
+        NADCHÁZEJÍCÍ
       </h2>
+      {% if selected_league %}
+      <div class="text-gray-400">{{ selected_league.name }} • {{ selected_league.season }}</div>
+      {% endif %}
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
@@ -121,7 +146,10 @@ Hlavnice{% endblock %} {% block content %}
 <section class="py-20 px-4 sm:px-6 lg:px-8">
   <div class="max-w-7xl mx-auto">
     <div class="text-center mb-12">
-      <h2 class="text-4xl font-bold text-white mt-2 mb-4">NEDÁVNÉ VÝSLEDKY</h2>
+      <h2 class="text-4xl font-bold text-white mt-2 mb-4">ODEHRANÉ</h2>
+  {% if selected_league %}
+  <div class="text-gray-400">{{ selected_league.name }} • {{ selected_league.season }}</div>
+  {% endif %}
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">

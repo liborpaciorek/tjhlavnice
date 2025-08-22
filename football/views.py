@@ -90,16 +90,34 @@ class MatchListView(ListView):
     context_object_name = 'matches'
     paginate_by = 20
     
-    def get_queryset(self):
+    def _club_matches_qs(self):
         return Match.objects.filter(
             Q(home_team__is_club_team=True) | Q(away_team__is_club_team=True)
         )
+
+    def get_queryset(self):
+        qs = self._club_matches_qs()
+        # Optional filter by league via query param (?league=<id>)
+        self.selected_league = None
+        league_id = self.request.GET.get('league') or self.request.GET.get('league_id')
+        if league_id:
+            try:
+                self.selected_league = League.objects.get(pk=int(league_id))
+                qs = qs.filter(league=self.selected_league)
+            except (ValueError, League.DoesNotExist):
+                self.selected_league = None
+        return qs
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         now = timezone.now()
-        context['upcoming_matches'] = self.get_queryset().filter(date__gte=now)[:5]
-        context['recent_matches'] = self.get_queryset().filter(date__lt=now, home_score__isnull=False)[:10]
+        filtered_qs = self.get_queryset()
+        context['upcoming_matches'] = filtered_qs.filter(date__gte=now)[:5]
+        context['recent_matches'] = filtered_qs.filter(date__lt=now, home_score__isnull=False)[:10]
+        # Provide leagues for filter dropdown (only leagues where club plays)
+        base_qs = self._club_matches_qs()
+        context['leagues'] = League.objects.filter(pk__in=base_qs.values_list('league_id', flat=True).distinct()).order_by('name', 'season')
+        context['selected_league'] = getattr(self, 'selected_league', None)
         return context
 
 def standings(request):
