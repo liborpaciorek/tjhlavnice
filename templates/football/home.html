@@ -205,17 +205,14 @@ Hlavnice{% endblock %} {% block content %}
             <div class="flex items-center justify-between gap-3 md:gap-4">
               <div class="min-w-0">
                 <div class="text-white font-semibold truncate">
-                  <span class="text-club-red font-extrabold text-base sm:text-lg">{{ match.home_team.short_name|default:match.home_team.name }}</span>
-                  <span class="ml-1 px-1.5 py-0.5 text-[10px] rounded bg-club-red/20 border border-club-red/40 text-club-red align-middle">HOME</span>
-                  <span class="mx-1 text-gray-400">vs</span>
-                  <span class="text-white/90 font-semibold text-base sm:text-lg">{{ match.away_team.short_name|default:match.away_team.name }}</span>
+                  {{ match.home_team.short_name|default:match.home_team.name }} vs {{ match.away_team.short_name|default:match.away_team.name }}
                 </div>
                 <div class="text-gray-300 text-xs sm:text-sm truncate">
                   {{ match.league.name }}{% if match.round_number %} - {{ match.round_number }}. kolo{% endif %}
                 </div>
               </div>
               <div class="text-right shrink-0">
-                <div class="text-white font-extrabold text-2xl sm:text-3xl leading-none">
+                <div class="text-white font-bold text-lg sm:text-xl leading-none">
                   {{ match.home_score|default:"0" }}:<span>{{ match.away_score|default:"0" }}</span>
                 </div>
                 <div class="text-[10px] text-gray-400 mt-1">FT • {{ match.date|date:"d.m.Y" }} <span class="ml-1">{{ match.date|date:"H:i" }}</span></div>
