@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Galerie - TJ Družba Hlavnice{% endblock %}
+
+{% block extra_head %}
+<style>
+  .page-header { background: linear-gradient(90deg, #0F172A 0%, #1E293B 50%, #0F172A 100%); color: #fff; text-align: center; padding: 4rem 2rem; margin-bottom: 3rem; }
+  .page-title { font-size: 3rem; font-weight: 800; text-shadow: 0 2px 6px rgba(0,0,0,.4); }
+  .page-subtitle { color: #cbd5e1; }
+  .albums-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+  .album-card { background: rgba(30,41,59,.8); border: 1px solid rgba(255,255,255,.1); border-radius: 1rem; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,.2); transition: transform .3s ease, box-shadow .3s ease; }
+  .album-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,.35); }
+  .album-cover { width: 100%; height: 200px; object-fit: cover; display: block; }
+  .album-body { padding: 1rem 1.25rem; color: #e5e7eb; }
+  .album-title { color: #fff; font-weight: 700; font-size: 1.25rem; }
+  .album-meta { display: flex; justify-content: space-between; align-items: center; margin-top: .5rem; font-size: .9rem; color: #9ca3af; }
+  .album-btn { display: inline-flex; align-items: center; gap: .5rem; background: rgba(220,38,38,.9); color: #fff; border: 0; padding: .5rem .9rem; border-radius: .5rem; cursor: pointer; text-decoration: none; transition: background .2s ease; }
+  .album-btn:hover { background: rgb(153,27,27); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">🏆 Fotogalerie</h1>
+  <p class="page-subtitle">Prohlédněte si alba z našich zápasů, tréninků a klubových akcí</p>
+</div>
+
+<div class="max-w-7xl mx-auto px-6 pb-16">
+  {% if albums %}
+  <div class="albums-grid">
+    {% for album in albums %}
+    <a class="album-card" href="{% url 'gallery_detail' album.pk %}">
+      {% with cover=album.get_cover_url %}
+        {% if cover %}
+          <img class="album-cover" src="{{ cover }}" alt="{{ album.title }}">
+        {% else %}
+          <div class="album-cover" style="background: linear-gradient(135deg,#1E293B,#334155);"></div>
+        {% endif %}
+      {% endwith %}
+      <div class="album-body">
+        <div class="album-title">{{ album.title }}</div>
+        <div class="album-meta">
+          <span>{{ album.photos.count }} fotek</span>
+          <span>{% if album.event %}📅 {{ album.event.date|date:"d. m. Y" }}{% else %}{{ album.created_at|date:"d. m. Y" }}{% endif %}</span>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="text-center text-gray-300 py-16">Zatím zde nejsou žádná alba.</div>
+  {% endif %}
+</div>
+{% endblock %}

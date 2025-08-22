@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ album.title }} - Galerie - TJ Družba Hlavnice{% endblock %}
+
+{% block extra_head %}
+<style>
+  .page-header { background: linear-gradient(90deg, #0F172A 0%, #1E293B 50%, #0F172A 100%); color: #fff; text-align: center; padding: 3rem 2rem 2rem; margin-bottom: 2rem; }
+  .page-title { font-size: 2.25rem; font-weight: 800; text-shadow: 0 2px 6px rgba(0,0,0,.4); }
+  .page-subtitle { color: #cbd5e1; }
+  .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+  .photo-item { position: relative; border-radius: .75rem; overflow: hidden; background: #0b1220; border: 1px solid rgba(255,255,255,.08); box-shadow: 0 8px 30px rgba(0,0,0,.2); }
+  .photo-item img { width: 100%; height: 220px; object-fit: cover; display: block; transition: transform .3s ease; }
+  .photo-item:hover img { transform: scale(1.03); }
+  .lightbox-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: none; align-items: center; justify-content: center; z-index: 1000; }
+  .lightbox-overlay.open { display: flex; }
+  .lightbox-content { position: relative; max-width: 92%; max-height: 88%; }
+  .lightbox-content img { max-width: 100%; max-height: 80vh; border-radius: .75rem; box-shadow: 0 14px 60px rgba(0,0,0,.6); }
+  .lightbox-close { position: absolute; top: -48px; right: 0; background: rgba(220,38,38,.95); border: none; color: #fff; width: 42px; height: 42px; border-radius: .5rem; cursor: pointer; display: grid; place-items: center; box-shadow: 0 6px 20px rgba(220,38,38,.4); }
+  .lightbox-nav { position: absolute; inset: 0; display: flex; align-items: center; justify-content: space-between; pointer-events: none; }
+  .nav-btn { pointer-events: all; background: rgba(15,23,42,.65); color: #fff; width: 52px; height: 52px; border-radius: 999px; border: 1px solid rgba(255,255,255,.15); display: grid; place-items: center; cursor: pointer; transition: background .2s ease; }
+  .nav-btn:hover { background: rgba(15,23,42,.85); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="page-title">{{ album.title }}</h1>
+  <p class="page-subtitle">{% if album.event %}📅 {{ album.event }}{% elif album.description %}{{ album.description }}{% endif %}</p>
+</div>
+
+<div class="max-w-7xl mx-auto px-6 pb-16">
+  <div class="mb-6">
+    <a href="{% url 'gallery' %}" class="inline-flex items-center gap-2 text-gray-300 hover:text-white">
+      ← Zpět na alba
+    </a>
+  </div>
+
+  {% if photos %}
+  <div class="photo-grid">
+    {% for photo in photos %}
+    <div class="photo-item">
+      <img src="{{ photo.image.url }}" alt="{{ photo.title|default:album.title }}" data-index="{{ forloop.counter0 }}" class="album-photo" loading="lazy">
+    </div>
+    {% endfor %}
+  </div>
+
+  <div id="lightbox" class="lightbox-overlay" aria-hidden="true">
+    <div class="lightbox-content">
+      <button id="lightboxClose" class="lightbox-close" aria-label="Zavřít">✕</button>
+      <img id="lightboxImage" src="" alt="">
+      <div class="lightbox-nav">
+        <button id="prevBtn" class="nav-btn" aria-label="Předchozí">⟨</button>
+        <button id="nextBtn" class="nav-btn" aria-label="Další">⟩</button>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="text-center text-gray-300 py-16">Toto album je prázdné.</div>
+  {% endif %}
+</div>
+
+<script>
+(function(){
+  const state = { index: 0, images: [] };
+  function qs(sel, el=document){ return el.querySelector(sel); }
+  function qsa(sel, el=document){ return Array.from(el.querySelectorAll(sel)); }
+
+  function openAt(i){
+    if(!state.images.length) return;
+    state.index = (i + state.images.length) % state.images.length;
+    const img = qs('#lightboxImage');
+    img.src = state.images[state.index].src;
+    img.alt = state.images[state.index].alt || '';
+    qs('#lightbox').classList.add('open');
+    qs('#lightbox').setAttribute('aria-hidden','false');
+  }
+  function close(){
+    qs('#lightbox').classList.remove('open');
+    qs('#lightbox').setAttribute('aria-hidden','true');
+  }
+  function next(){ openAt(state.index + 1); }
+  function prev(){ openAt(state.index - 1); }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    state.images = qsa('.album-photo');
+    qsa('.album-photo').forEach((el, i) => {
+      el.addEventListener('click', () => openAt(i));
+    });
+
+    qs('#lightboxClose')?.addEventListener('click', close);
+    qs('#nextBtn')?.addEventListener('click', next);
+    qs('#prevBtn')?.addEventListener('click', prev);
+
+    qs('#lightbox')?.addEventListener('click', (e) => {
+      if(e.target.id === 'lightbox') close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if(!qs('#lightbox').classList.contains('open')) return;
+      if(e.key === 'Escape') close();
+      if(e.key === 'ArrowRight') next();
+      if(e.key === 'ArrowLeft') prev();
+    });
+
+    // Legacy global shims (if something calls these)
+    window.openLightbox = (i=0) => openAt(i);
+    window.openLightboxByPhotoIndex = (i=0) => openAt(i);
+    window.closeLightbox = close;
+    window.nextPhoto = next;
+    window.prevPhoto = prev;
+  });
+})();
+</script>
+{% endblock %}

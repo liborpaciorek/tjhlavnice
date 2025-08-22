@@ -246,12 +246,41 @@ class Event(models.Model):
     def __str__(self):
         return f"{self.title} - {self.date.strftime('%Y-%m-%d')}"
 
+class GalleryAlbum(models.Model):
+    title = models.CharField(max_length=200, verbose_name=("Název galerie"))
+    description = models.TextField(blank=True, verbose_name=("Popis"))
+    cover_image = models.ImageField(upload_to='gallery/covers/', blank=True, null=True, verbose_name=("Titulní obrázek"))
+    event = models.ForeignKey(Event, on_delete=models.SET_NULL, blank=True, null=True, verbose_name=("Událost"))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=("Vytvořeno"))
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = ("Galerie (album)")
+        verbose_name_plural = ("Galerie (alba)")
+    
+    def __str__(self):
+        return self.title
+    
+    def get_cover_url(self):
+        try:
+            if self.cover_image and hasattr(self.cover_image, 'url'):
+                return self.cover_image.url
+        except (ValueError, AttributeError):
+            pass
+        # fallback to first photo
+        first = self.photos.first()
+        if first:
+            return first.get_image_url()
+        return None
+
+
 class Gallery(models.Model):
-    title = models.CharField(max_length=200, verbose_name=_("Název"))
-    description = models.TextField(blank=True, verbose_name=_("Popis"))
-    image = models.ImageField(upload_to='gallery/', verbose_name=_("Obrázek"))
-    uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Nahráno"))
-    event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=True, null=True, verbose_name=_("Událost"))
+    title = models.CharField(max_length=200, verbose_name=("Název"))
+    description = models.TextField(blank=True, verbose_name=("Popis"))
+    image = models.ImageField(upload_to='gallery/', verbose_name=("Obrázek"))
+    uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name=("Nahráno"))
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=True, null=True, verbose_name=("Událost"))
+    album = models.ForeignKey(GalleryAlbum, on_delete=models.SET_NULL, null=True, blank=True, related_name='photos', verbose_name=("Album"))
     
     class Meta:
         ordering = ['-uploaded_at']

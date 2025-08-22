@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.db.models import Q
 from .models import (
     ClubInfo, News, Team, Player, Management, Match, 
-    Standing, Event, Gallery, MainPage, League
+    Standing, Event, Gallery, GalleryAlbum, MainPage, League
 )
 
 def home(request):
@@ -139,20 +139,24 @@ class EventListView(ListView):
     def get_queryset(self):
         return Event.objects.filter(date__gte=timezone.now())
 
-class GalleryListView(ListView):
-    model = Gallery
-    template_name = 'football/gallery.html'
-    context_object_name = 'photos'
+class GalleryAlbumListView(ListView):
+    model = GalleryAlbum
+    template_name = 'football/gallery_albums.html'
+    context_object_name = 'albums'
     paginate_by = 12
     
     def get_queryset(self):
-        try:
-            return Gallery.objects.all()
-        except Exception as e:
-            import logging
-            logger = logging.getLogger(__name__)
-            logger.error(f"Error fetching gallery: {e}")
-            return Gallery.objects.none()
+        return GalleryAlbum.objects.all()
+
+class GalleryAlbumDetailView(DetailView):
+    model = GalleryAlbum
+    template_name = 'football/gallery_album_detail.html'
+    context_object_name = 'album'
+    
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['photos'] = self.object.photos.all()
+        return ctx
 
 def club_info(request):
     """Club information view"""

@@ -1,0 +1,269 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Galerie - TJ Družba Hlavnice{% endblock %}
+
+{% block extra_head %}
+<style>
+  .lightbox {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+
+  .lightbox-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 900px;
+    max-height: 80%;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 20px;
+    cursor: pointer;
+    font-size: 24px;
+  }
+
+  .lightbox-prev {
+    left: 20px;
+  }
+
+  .lightbox-next {
+    right: 20px;
+  }
+
+  .lightbox img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .glass-card {
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen pt-24 pb-16">
+  <div class="container mx-auto px-6">
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-green-800 mb-4">Fotogalerie</h1>
+      <p class="text-lg text-gray-600">Zachycené okamžiky našich fotbalových zápasů a akcí</p>
+    </div>
+
+    <!-- Photo Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for photo in photos %}
+        {% if photo.image %}
+        <div class="glass-card rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300 cursor-pointer group photo-card"
+             data-photo-index="{{ forloop.counter0 }}" onclick="openLightboxByPhotoIndex(this)">
+          <div class="aspect-w-4 aspect-h-3 relative overflow-hidden">
+            <img
+              src="{{ photo.image.url }}"
+              alt="{{ photo.title }}"
+              class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+            <div class="absolute bottom-4 left-4 text-white">
+              <h3 class="text-lg font-semibold mb-1">{{ photo.title }}</h3>
+              {% if photo.description %}
+              <p class="text-sm opacity-90">{{ photo.description|truncatewords:10 }}</p>
+              {% endif %}
+              <p class="text-xs opacity-75 mt-1">{{ photo.uploaded_at|date:"d.m.Y" }}</p>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      {% empty %}
+      <div class="col-span-full text-center py-12">
+        <p class="text-gray-600 text-lg">Zatím zde nejsou žádné fotografie.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+  <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+  <button class="lightbox-nav lightbox-prev" onclick="previousImage(event)">
+    &#10094;
+  </button>
+  <button class="lightbox-nav lightbox-next" onclick="nextImage(event)">
+    &#10095;
+  </button>
+  <div class="lightbox-content" onclick="event.stopPropagation()">
+    <img id="lightbox-img" src="" alt="">
+    <div class="mt-4 text-white text-center">
+      <h3 id="lightbox-title" class="text-xl font-bold mb-2"></h3>
+      <p id="lightbox-description" class="mb-2"></p>
+      <p id="lightbox-date" class="text-sm opacity-75"></p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Gallery JavaScript - Global scope
+var currentImageIndex = 0;
+var photos = [
+  {% for photo in photos %}
+  {% if photo.image %}
+  {
+    src: "{{ photo.image.url }}",
+    title: "{{ photo.title|escapejs }}",
+    description: "{{ photo.description|escapejs|default:'' }}",
+    date: "{{ photo.uploaded_at|date:'d.m.Y' }}",
+    originalIndex: {{ forloop.counter0 }}
+  }{% if not forloop.last %},{% endif %}
+  {% endif %}
+  {% endfor %}
+];
+
+console.log('Gallery JavaScript loaded. Photos array:', photos);
+
+// Global function for photo click handler
+function openLightboxByPhotoIndex(element) {
+  console.log('openLightboxByPhotoIndex called with element:', element);
+  const originalIndex = parseInt(element.getAttribute('data-photo-index'));
+  console.log('Original index from data attribute:', originalIndex);
+  
+  if (originalIndex >= 0 && originalIndex < photos.length) {
+    openLightbox(originalIndex);
+  } else {
+    console.error('Invalid photo index:', originalIndex);
+  }
+}
+
+// Global function to open lightbox with specific index
+function openLightbox(index) {
+  console.log('Opening lightbox for index:', index, 'Photos length:', photos.length);
+  
+  if (photos.length === 0) {
+    console.log('No photos available');
+    return;
+  }
+  
+  if (index < 0 || index >= photos.length) {
+    console.log('Invalid index:', index);
+    return;
+  }
+  
+  currentImageIndex = index;
+  const lightbox = document.getElementById("lightbox");
+  if (lightbox) {
+    lightbox.style.display = "block";
+    updateLightboxContent();
+    document.body.style.overflow = "hidden";
+  } else {
+    console.error('Lightbox element not found');
+  }
+}
+
+// Global function to update lightbox content
+function updateLightboxContent() {
+  if (photos.length === 0 || currentImageIndex < 0 || currentImageIndex >= photos.length) {
+    console.log('Cannot update lightbox content - invalid state');
+    return;
+  }
+  
+  const photo = photos[currentImageIndex];
+  const imgElement = document.getElementById("lightbox-img");
+  const titleElement = document.getElementById("lightbox-title");
+  const descElement = document.getElementById("lightbox-description");
+  const dateElement = document.getElementById("lightbox-date");
+  
+  if (imgElement) {
+    imgElement.src = photo.src;
+    imgElement.alt = photo.title;
+  }
+  if (titleElement) titleElement.textContent = photo.title;
+  if (descElement) descElement.textContent = photo.description;
+  if (dateElement) dateElement.textContent = photo.date;
+}
+
+// Global function to close lightbox
+function closeLightbox() {
+  const lightbox = document.getElementById("lightbox");
+  if (lightbox) {
+    lightbox.style.display = "none";
+    document.body.style.overflow = "auto";
+  }
+}
+
+// Global navigation functions
+function nextImage(event) {
+  event.stopPropagation();
+  if (photos.length > 0) {
+    currentImageIndex = (currentImageIndex + 1) % photos.length;
+    updateLightboxContent();
+  }
+}
+
+function previousImage(event) {
+  event.stopPropagation();
+  if (photos.length > 0) {
+    currentImageIndex = (currentImageIndex - 1 + photos.length) % photos.length;
+    updateLightboxContent();
+  }
+}
+
+// Make all functions globally accessible
+window.openLightboxByPhotoIndex = openLightboxByPhotoIndex;
+window.openLightbox = openLightbox;
+window.updateLightboxContent = updateLightboxContent;
+window.closeLightbox = closeLightbox;
+window.nextImage = nextImage;
+window.previousImage = previousImage;
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM loaded, gallery initialized with', photos.length, 'photos');
+  
+  // Close lightbox with Escape key
+  document.addEventListener("keydown", function (event) {
+    const lightbox = document.getElementById("lightbox");
+    if (lightbox && lightbox.style.display === "block") {
+      if (event.key === "Escape") {
+        closeLightbox();
+      } else if (event.key === "ArrowRight") {
+        nextImage(event);
+      } else if (event.key === "ArrowLeft") {
+        previousImage(event);
+      }
+    }
+  });
+});
+</script>
+{% endblock %}

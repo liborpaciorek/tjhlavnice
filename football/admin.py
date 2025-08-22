@@ -3,7 +3,7 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from .models import (
     ClubInfo, League, Team, Player, Management, News, 
-    Match, Standing, Event, Gallery, PageVisit, MainPage
+    Match, Standing, Event, Gallery, GalleryAlbum, PageVisit, MainPage
 )
 
 @admin.register(ClubInfo)
@@ -140,13 +140,37 @@ class EventAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
     ordering = ['-date']
 
+class GalleryInline(admin.TabularInline):
+    model = Gallery
+    extra = 1
+    fields = ['title', 'image', 'description', 'uploaded_at']
+    readonly_fields = ['uploaded_at']
+
+@admin.register(GalleryAlbum)
+class GalleryAlbumAdmin(admin.ModelAdmin):
+    list_display = ['title', 'created_at', 'event', 'cover_preview']
+    list_filter = ['created_at', 'event']
+    search_fields = ['title', 'description']
+    date_hierarchy = 'created_at'
+    ordering = ['-created_at']
+    inlines = [GalleryInline]
+    fields = ['title', 'description', 'event', 'cover_image']
+    
+    def cover_preview(self, obj):
+        url = obj.get_cover_url()
+        if url:
+            return format_html('<img src="{}" width="80" height="60" />', url)
+        return _("Bez obrázku")
+    cover_preview.short_description = _("Titulka")
+
 @admin.register(Gallery)
 class GalleryAdmin(admin.ModelAdmin):
-    list_display = ['title', 'uploaded_at', 'event', 'image_preview']
-    list_filter = ['uploaded_at', 'event']
+    list_display = ['title', 'uploaded_at', 'album', 'event', 'image_preview']
+    list_filter = ['uploaded_at', 'event', 'album']
     search_fields = ['title', 'description']
     date_hierarchy = 'uploaded_at'
     ordering = ['-uploaded_at']
+    fields = ['title', 'description', 'image', 'album', 'event']
     
     def image_preview(self, obj):
         if obj.image:
