@@ -145,10 +145,26 @@ Hlavnice{% endblock %} {% block content %}
       <div class="glass-card rounded-2xl p-4 sm:p-5 hover:scale-[1.01] transition-all duration-300">
         <div class="flex items-center justify-between gap-3">
           <div class="min-w-0">
-            <div class="flex items-center gap-2 md:gap-3 text-white font-semibold">
-              <span class="truncate text-base md:text-xl {{ match.home_team|is_hlavnice_team|yesno:'text-club-red font-extrabold,,' }}">{{ match.home_team|team_display }}</span>
+            <div class="flex items-center gap-3 text-white font-semibold">
+              <span class="inline-flex items-center gap-2 truncate text-base md:text-xl {{ match.home_team|is_hlavnice_team|yesno:'text-club-red font-extrabold,,' }}">
+                {% if match.home_team.flag %}
+                  <img src="{{ match.home_team.flag.url }}" alt="{{ match.home_team.short_name|default:match.home_team.name }}"
+                       class="w-5 h-5 md:w-6 md:h-6 object-cover rounded-sm ring-1 ring-white/20" />
+                {% else %}
+                  <span class="w-5 h-5 md:w-6 md:h-6 bg-club-red/60 rounded-sm flex items-center justify-center"><i class="fas fa-futbol text-[10px] md:text-xs text-white"></i></span>
+                {% endif %}
+                {{ match.home_team|team_display }}
+              </span>
               <span class="text-gray-400">vs</span>
-              <span class="truncate text-base md:text-xl {{ match.away_team|is_hlavnice_team|yesno:'text-club-red font-extrabold,,' }}">{{ match.away_team|team_display }}</span>
+              <span class="inline-flex items-center gap-2 truncate text-base md:text-xl {{ match.away_team|is_hlavnice_team|yesno:'text-club-red font-extrabold,,' }}">
+                {% if match.away_team.flag %}
+                  <img src="{{ match.away_team.flag.url }}" alt="{{ match.away_team.short_name|default:match.away_team.name }}"
+                       class="w-5 h-5 md:w-6 md:h-6 object-cover rounded-sm ring-1 ring-white/20" />
+                {% else %}
+                  <span class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-sm flex items-center justify-center"><i class="fas fa-shield-alt text-[10px] md:text-xs text-white"></i></span>
+                {% endif %}
+                {{ match.away_team|team_display }}
+              </span>
             </div>
             <div class="text-gray-300 text-xs sm:text-sm truncate">
               {{ match.league.name }}{% if match.round_number %} - {{ match.round_number }}. kolo{% endif %}
