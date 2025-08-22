@@ -30,9 +30,10 @@ class LeagueAdmin(admin.ModelAdmin):
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ['name', 'city', 'league', 'is_club_team', 'flag_preview']
+    list_display = ['name', 'short_name', 'city', 'league', 'is_club_team', 'flag_preview']
     list_filter = ['league', 'is_club_team', 'city']
-    search_fields = ['name', 'city']
+    search_fields = ['name', 'short_name', 'city']
+    fields = ['name', 'short_name', 'flag', 'founded', 'city', 'league', 'is_club_team']
     
     def flag_preview(self, obj):
         if obj.flag:

@@ -92,7 +92,7 @@
                                                 <div>
                                                     <div class="text-white font-semibold 
                                                                 {% if standing.team.is_club_team %}text-club-red font-bold{% endif %}">
-                                                        {{ standing.team.name }}
+                                                        {{ standing.team.short_name|default:standing.team.name }}
                                                     </div>
                                                     {% if standing.team.city %}
                                                         <div class="text-gray-400 text-xs">{{ standing.team.city }}</div>

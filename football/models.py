@@ -37,6 +37,7 @@ class League(models.Model):
 
 class Team(models.Model):
     name = models.CharField(max_length=100, verbose_name=_("Název týmu"))
+    short_name = models.CharField(max_length=30, blank=True, null=True, verbose_name=("Zkrácený název"))
     flag = models.ImageField(upload_to='teams/', blank=True, null=True, verbose_name=_("Vlajka/Logo"))
     founded = models.IntegerField(blank=True, null=True, verbose_name=_("Rok založení"))
     city = models.CharField(max_length=100, blank=True, verbose_name=_("Město"))
