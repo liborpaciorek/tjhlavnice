@@ -112,13 +112,13 @@ class MatchListView(ListView):
         context = super().get_context_data(**kwargs)
         now = timezone.now()
         filtered_qs = self.get_queryset()
-        # Upcoming: soonest first (ascending)
+        # Upcoming: soonest first (ascending) — show all
         context['upcoming_matches'] = (
-            filtered_qs.filter(date__gte=now).order_by('date')[:5]
+            filtered_qs.filter(date__gte=now).order_by('date')
         )
-        # Recent: latest first (descending)
+        # Recent (played): latest first (descending) — show all with a recorded score
         context['recent_matches'] = (
-            filtered_qs.filter(date__lt=now, home_score__isnull=False).order_by('-date')[:10]
+            filtered_qs.filter(date__lt=now, home_score__isnull=False).order_by('-date')
         )
         # Provide leagues for filter dropdown (only leagues where club plays)
         base_qs = self._club_matches_qs()
