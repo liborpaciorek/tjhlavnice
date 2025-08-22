@@ -94,9 +94,7 @@
                                                                 {% if standing.team.is_club_team %}text-club-red font-bold{% endif %}">
                                                         {{ standing.team.short_name|default:standing.team.name }}
                                                     </div>
-                                                    {% if standing.team.city %}
-                                                        <div class="text-gray-400 text-xs">{{ standing.team.city }}</div>
-                                                    {% endif %}
+                                                    
                                                 </div>
                                             </div>
                                         </td>
@@ -271,12 +269,7 @@
                                                                 {% if standing.team.is_club_team %}text-white{% else %}text-club-black{% endif %}">
                                                         {{ standing.team.name }}
                                                     </div>
-                                                    {% if standing.team.city %}
-                                                        <div class="text-xs 
-                                                                    {% if standing.team.is_club_team %}text-gray-200{% else %}text-gray-500{% endif %}">
-                                                            {{ standing.team.city }}
-                                                        </div>
-                                                    {% endif %}
+                                                    
                                                 </div>
                                             </div>
                                         </td>
