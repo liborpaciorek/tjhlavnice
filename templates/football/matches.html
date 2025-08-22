@@ -20,10 +20,10 @@ Hlavnice{% endblock %} {% block content %}
 <!-- League Filter -->
 <section class="px-4 sm:px-6 lg:px-8">
   <div class="max-w-7xl mx-auto">
-    <form method="get" class="glass-card rounded-2xl p-4 md:p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <label for="league" class="text-sm text-gray-300">Soutěž</label>
-        <select id="league" name="league" class="bg-dark-blue-light border border-white/10 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-club-red/60" onchange="this.form.submit()">
+    <form method="get" class="glass-card rounded-2xl p-4 md:p-5 grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+      <div class="w-full min-w-0 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+        <label for="league" class="block text-sm text-gray-300">Soutěž</label>
+        <select id="league" name="league" aria-label="Vyberte soutěž" class="w-full max-w-full bg-dark-blue-light border border-white/10 text-white rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-club-red/60" onchange="this.form.submit()">
           <option value="" {% if not selected_league %}selected{% endif %}>Všechny soutěže</option>
           {% for league in leagues %}
             <option value="{{ league.id }}" {% if selected_league and selected_league.id == league.id %}selected{% endif %}>{{ league.name }} — {{ league.season }}</option>
@@ -31,9 +31,9 @@ Hlavnice{% endblock %} {% block content %}
         </select>
       </div>
       {% if selected_league %}
-      <div class="text-xs text-gray-400">
+      <div class="w-full min-w-0 text-center sm:text-right text-xs text-gray-400">
         Filtrováno podle: <span class="text-white font-semibold">{{ selected_league.name }} • {{ selected_league.season }}</span>
-        <a href="{% url 'matches' %}" class="ml-3 text-club-red hover:text-white underline underline-offset-4">Zrušit filtr</a>
+        <a href="{% url 'matches' %}" class="ml-2 sm:ml-3 inline-block text-club-red hover:text-white underline underline-offset-4">Zrušit filtr</a>
       </div>
       {% endif %}
     </form>
