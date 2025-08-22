@@ -81,11 +81,11 @@
                                         <td class="px-4 py-4 whitespace-nowrap">
                                             <div class="flex items-center space-x-3">
                                                 {% if standing.team.flag %}
-                                                    <img src="{{ standing.team.flag.url }}" 
-                                                         alt="{{ standing.team.name }}" 
-                                                         class="w-6 h-6 object-cover rounded-sm ring-1 ring-white/10">
+                                          <img src="{{ standing.team.flag.url }}" 
+                                              alt="{{ standing.team.name }}" 
+                                              class="w-6 h-6 object-cover rounded-sm">
                                                 {% else %}
-                                                    <div class="w-6 h-6 bg-white/10 rounded-sm flex items-center justify-center ring-1 ring-white/10">
+                                                    <div class="w-6 h-6 bg-white/10 rounded-sm flex items-center justify-center">
                                                         <i class="fas fa-futbol text-white text-[10px]"></i>
                                                     </div>
                                                 {% endif %}

@@ -86,7 +86,7 @@ Hlavnice{% endblock %} {% block content %}
         <div class="text-center text-white">
           {% if match.home_team.flag %}
             <img src="{{ match.home_team.flag.url }}" alt="{{ match.home_team.short_name|default:match.home_team.name }}"
-                 class="w-24 h-24 md:w-28 md:h-28 object-cover rounded-full ring-2 ring-white/20 mx-auto mb-4">
+                 class="w-24 h-24 md:w-28 md:h-28 object-cover rounded-full mx-auto mb-4">
           {% else %}
             <div class="w-24 h-24 md:w-28 md:h-28 bg-club-red rounded-full flex items-center justify-center mx-auto mb-4">
               <i class="fas fa-futbol text-3xl md:text-4xl text-white"></i>
@@ -121,7 +121,7 @@ Hlavnice{% endblock %} {% block content %}
         <div class="text-center text-white">
           {% if match.away_team.flag %}
             <img src="{{ match.away_team.flag.url }}" alt="{{ match.away_team.short_name|default:match.away_team.name }}"
-                 class="w-24 h-24 md:w-28 md:h-28 object-cover rounded-full ring-2 ring-white/20 mx-auto mb-4">
+                 class="w-24 h-24 md:w-28 md:h-28 object-cover rounded-full mx-auto mb-4">
           {% else %}
             <div class="w-24 h-24 md:w-28 md:h-28 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <i class="fas fa-shield-alt text-3xl md:text-4xl text-white"></i>
@@ -134,128 +134,62 @@ Hlavnice{% endblock %} {% block content %}
     </div>
     {% endfor %} {% endif %}
 
-    <!-- Fixtures and Schedule -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <!-- Our Next Fixtures -->
-      <div class="glass-card rounded-2xl p-8">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-2xl font-bold text-white">
-            <span class="text-club-red text-sm uppercase block">Zápasy</span>
-            NAŠE PŘÍŠTÍ ZÁPASY<br />A ROZPIS
-          </h3>
-          <a
-            href="{% url 'matches' %}"
-            class="bg-club-red hover:bg-club-red-dark text-white px-6 py-2 rounded-lg font-semibold transition-colors duration-200"
-          >
-            VŠECHNY ZÁPASY
-          </a>
-        </div>
-
-        <div class="space-y-4">
-          {% for match in upcoming_matches|slice:"1:4" %}
-          <div
-            class="bg-dark-blue-light/50 rounded-xl p-4 border border-white/10"
-          >
-            <div class="flex justify-between items-center">
-              <div class="flex items-center space-x-4">
-                <div class="flex items-center gap-2">
-                  {% if match.home_team.flag %}
-                    <img src="{{ match.home_team.flag.url }}" alt="{{ match.home_team.short_name|default:match.home_team.name }}" class="w-7 h-7 object-cover rounded-sm ring-1 ring-white/10">
-                  {% else %}
-                    <span class="w-7 h-7 bg-club-red/70 rounded-sm flex items-center justify-center"><i class="fas fa-futbol text-white text-xs"></i></span>
-                  {% endif %}
-                  <span class="text-white font-semibold">{{ match.home_team.short_name|default:match.home_team.name }}</span>
-                  <span class="text-gray-400">vs</span>
-                  {% if match.away_team.flag %}
-                    <img src="{{ match.away_team.flag.url }}" alt="{{ match.away_team.short_name|default:match.away_team.name }}" class="w-7 h-7 object-cover rounded-sm ring-1 ring-white/10">
-                  {% else %}
-                    <span class="w-7 h-7 bg-white/20 rounded-sm flex items-center justify-center"><i class="fas fa-shield-alt text-white text-xs"></i></span>
-                  {% endif %}
-                  <span class="text-white font-semibold">{{ match.away_team.short_name|default:match.away_team.name }}</span>
-                </div>
-                <div class="text-gray-300 text-sm">
-                  {{ match.league.name }}
-                </div>
-              </div>
-              <div class="text-right text-white">
-                <div class="font-semibold">{{ match.date|date:"d.m.Y" }}</div>
-                <div class="text-gray-300 text-sm">
-                  {{ match.date|date:"H:i" }}
-                </div>
-              </div>
-            </div>
-          </div>
-          {% empty %}
-          <div class="text-center py-8 text-gray-400">
-            <i class="fas fa-calendar-times text-4xl mb-2"></i>
-            <p>Žádné nadcházející zápasy</p>
-          </div>
-          {% endfor %}
-        </div>
+    <!-- Last Result (hero-style) -->
+    {% if recent_matches %}
+    {% for match in recent_matches|slice:":1" %}
+    <div class="glass-card rounded-3xl p-8 mt-6">
+      <div class="text-center mb-8">
+        <span class="text-club-red text-sm font-semibold uppercase tracking-wide">Výsledek</span>
+        <h2 class="text-3xl font-bold text-white mt-2">POSLEDNÍ VÝSLEDEK</h2>
       </div>
 
-      <!-- Latest Results -->
-      <div class="glass-card rounded-2xl p-8">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-2xl font-bold text-white">
-            <span class="text-club-red text-sm uppercase block">Výsledky</span>
-            NEJNOVĚJŠÍ VÝSLEDKY<br />NAŠICH ZÁPASŮ
-          </h3>
-          <a
-            href="{% url 'matches' %}"
-            class="border border-white/30 text-white hover:bg-white hover:text-dark-blue px-6 py-2 rounded-lg font-semibold transition-all duration-200"
-          >
-            VŠECHNY VÝSLEDKY
-          </a>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center text-white">
+        <!-- Home Team -->
+        <div class="text-center">
+          {% if match.home_team.flag %}
+            <img src="{{ match.home_team.flag.url }}" alt="{{ match.home_team.short_name|default:match.home_team.name }}"
+                 class="w-24 h-24 md:w-28 md:h-28 object-cover rounded-full mx-auto mb-4">
+          {% else %}
+            <div class="w-24 h-24 md:w-28 md:h-28 bg-club-red rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-futbol text-3xl md:text-4xl text-white"></i>
+            </div>
+          {% endif %}
+          <h3 class="text-2xl font-bold {{ match.home_team|is_hlavnice_team|yesno:'text-club-red,,' }}">{{ match.home_team|team_display }}</h3>
+          <p class="text-gray-300">{{ match.home_team.city }}</p>
         </div>
 
-        <div class="space-y-4">
-          {% for match in recent_matches|slice:":3" %}
-          <div class="bg-dark-blue-light/60 rounded-2xl p-4 md:p-5 border border-white/10">
-            <div class="flex items-center justify-between gap-3 md:gap-5">
-              <div class="min-w-0">
-                <div class="flex items-center gap-3 text-white font-semibold">
-                  <span class="inline-flex items-center gap-2 truncate text-base md:text-xl {{ match.home_team|is_hlavnice_team|yesno:'text-club-red font-extrabold,,' }}">
-                    {% if match.home_team.flag %}
-                      <img src="{{ match.home_team.flag.url }}" alt="{{ match.home_team.short_name|default:match.home_team.name }}"
-                           class="w-5 h-5 md:w-6 md:h-6 object-cover rounded-sm ring-1 ring-white/20" />
-                    {% else %}
-                      <span class="w-5 h-5 md:w-6 md:h-6 bg-club-red/60 rounded-sm flex items-center justify-center"><i class="fas fa-futbol text-[10px] md:text-xs text-white"></i></span>
-                    {% endif %}
-                    {{ match.home_team|team_display }}
-                  </span>
-                  <span class="text-gray-400">vs</span>
-                  <span class="inline-flex items-center gap-2 truncate text-base md:text-xl {{ match.away_team|is_hlavnice_team|yesno:'text-club-red font-extrabold,,' }}">
-                    {% if match.away_team.flag %}
-                      <img src="{{ match.away_team.flag.url }}" alt="{{ match.away_team.short_name|default:match.away_team.name }}"
-                           class="w-5 h-5 md:w-6 md:h-6 object-cover rounded-sm ring-1 ring-white/20" />
-                    {% else %}
-                      <span class="w-5 h-5 md:w-6 md:h-6 bg-white/20 rounded-sm flex items-center justify-center"><i class="fas fa-shield-alt text-[10px] md:text-xs text-white"></i></span>
-                    {% endif %}
-                    {{ match.away_team|team_display }}
-                  </span>
-                </div>
-                <div class="text-gray-300 text-xs sm:text-sm truncate">
-                  {{ match.league.name }}{% if match.round_number %} - {{ match.round_number }}. kolo{% endif %}
-                </div>
-              </div>
-              <div class="text-right shrink-0">
-                <div class="text-white font-black text-2xl md:text-3xl leading-none tracking-tight">
-                  {{ match.home_score|default:"0" }}:<span>{{ match.away_score|default:"0" }}</span>
-                </div>
-                <div class="text-[10px] text-gray-400 mt-1">FT • {{ match.date|date:"d.m.Y" }} <span class="ml-1">{{ match.date|date:"H:i" }}</span></div>
-              </div>
+        <!-- Result Info -->
+        <div class="text-center">
+          <div class="bg-dark-blue-light rounded-2xl p-6 border border-white/10">
+            <div class="text-4xl font-black text-white mb-2">{{ match.home_score|default:"0" }}<span class="text-club-red">:</span>{{ match.away_score|default:"0" }}</div>
+            <div class="text-xs text-gray-400 mb-2">FT</div>
+            <div class="text-sm text-gray-300 mb-1">
+              {{ match.league.name }}{% if match.round_number %}<br />{{ match.round_number }}. kolo{% endif %}
             </div>
+            <div class="text-sm text-gray-300">{{ match.date|date:"d.m.Y" }} • {{ match.date|date:"H:i" }}</div>
+            {% if match.location %}
+            <div class="text-sm text-gray-300 mt-2"><i class="fas fa-map-marker-alt mr-1"></i>{{ match.location }}</div>
+            {% endif %}
           </div>
-          {% empty %}
-          <div class="text-center py-8 text-gray-400">
-            <i class="fas fa-history text-4xl mb-2"></i>
-            <p>Žádné nedávné výsledky</p>
-          </div>
-          {% endfor %}
+        </div>
+
+        <!-- Away Team -->
+        <div class="text-center">
+          {% if match.away_team.flag %}
+            <img src="{{ match.away_team.flag.url }}" alt="{{ match.away_team.short_name|default:match.away_team.name }}"
+                 class="w-24 h-24 md:w-28 md:h-28 object-cover rounded-full mx-auto mb-4">
+          {% else %}
+            <div class="w-24 h-24 md:w-28 md:h-28 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-shield-alt text-3xl md:text-4xl text-white"></i>
+            </div>
+          {% endif %}
+          <h3 class="text-2xl font-bold {{ match.away_team|is_hlavnice_team|yesno:'text-club-red,,' }}">{{ match.away_team|team_display }}</h3>
+          <p class="text-gray-300">{{ match.away_team.city }}</p>
         </div>
       </div>
     </div>
+    {% endfor %}
+    {% endif %}
   </div>
 </section>
 
