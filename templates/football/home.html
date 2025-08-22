@@ -204,9 +204,9 @@ Hlavnice{% endblock %} {% block content %}
             <div class="flex items-center justify-between gap-3 md:gap-5">
               <div class="min-w-0">
                 <div class="flex items-center gap-2 md:gap-3 text-white font-semibold">
-                  <span class="truncate text-base md:text-xl {{ (match.home_team.name|is_hlavnice or match.home_team.short_name|is_hlavnice)|yesno:'text-club-red font-extrabold,,' }}">{{ match.home_team|team_display }}</span>
+                  <span class="truncate text-base md:text-xl {{ match.home_team|is_hlavnice_team|yesno:'text-club-red font-extrabold,,' }}">{{ match.home_team|team_display }}</span>
                   <span class="text-gray-400">vs</span>
-                  <span class="truncate text-base md:text-xl {{ (match.away_team.name|is_hlavnice or match.away_team.short_name|is_hlavnice)|yesno:'text-club-red font-extrabold,,' }}">{{ match.away_team|team_display }}</span>
+                  <span class="truncate text-base md:text-xl {{ match.away_team|is_hlavnice_team|yesno:'text-club-red font-extrabold,,' }}">{{ match.away_team|team_display }}</span>
                 </div>
                 <div class="text-gray-300 text-xs sm:text-sm truncate">
                   {{ match.league.name }}{% if match.round_number %} - {{ match.round_number }}. kolo{% endif %}

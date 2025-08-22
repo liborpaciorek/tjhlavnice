@@ -3,15 +3,10 @@ from django import template
 register = template.Library()
 
 
-@register.filter
-def is_hlavnice(team_name: str) -> bool:
-    """
-    Returns True if the provided team name looks like Hlavnice.
-    Accepts None. Case-insensitive. Matches common variants.
-    """
-    if not team_name:
+def _is_hlavnice_name(value: str) -> bool:
+    if not value:
         return False
-    name = str(team_name).lower()
+    name = str(value).lower()
     aliases = {
         "hlavnice",
         "tj hlavnice",
@@ -22,11 +17,28 @@ def is_hlavnice(team_name: str) -> bool:
         "tj hlavnice a",
         "tj hlavnice b",
     }
-    # direct alias hit
     if name in aliases:
         return True
-    # contains 'hlavnice' is a strong signal
     return "hlavnice" in name
+
+
+@register.filter
+def is_hlavnice(team_name: str) -> bool:
+    """
+    Returns True if the provided team name looks like Hlavnice.
+    Accepts None. Case-insensitive. Matches common variants.
+    """
+    return _is_hlavnice_name(team_name)
+
+
+@register.filter
+def is_hlavnice_team(team) -> bool:
+    """Returns True if the team object (or dict-like) looks like Hlavnice."""
+    if not team:
+        return False
+    short = getattr(team, "short_name", None) or getattr(team, "shortName", None)
+    name = getattr(team, "name", None)
+    return _is_hlavnice_name(short or name)
 
 
 @register.filter

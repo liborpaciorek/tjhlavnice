@@ -24,8 +24,9 @@ SECRET_KEY = 'django-insecure-cg%(1r$b1c(37q!wwiw5*5^5vrryin2p#xd&x#uq!8k9d1+b^k
 
 # SECURITY WARNING: don't run with debug turned on in production!
 import os
-# Temporarily force DEBUG=True for local development to serve media files
-DEBUG = True  # os.getenv('DEBUG', 'False').lower() in ('true', '1', 'yes')
+# DEBUG is controlled by environment, defaults to False in production
+DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 'yes')
+PRODUCTION = os.getenv('ENV', '').lower() == 'production'
 
 ALLOWED_HOSTS = ['tjhlavnice.cz', 'www.tjhlavnice.cz', '127.0.0.1', 'localhost', 'testserver']
 
