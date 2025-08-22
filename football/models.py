@@ -341,13 +341,16 @@ class MainPage(models.Model):
     
     def get_upcoming_match(self):
         from django.utils import timezone
-        return Match.objects.filter(
-            date__gte=timezone.now(),
-            home_team__is_club_team=True
-        ).first() or Match.objects.filter(
-            date__gte=timezone.now(),
-            away_team__is_club_team=True
-        ).first()
+        from django.db.models import Q
+        # Earliest upcoming match where the club participates (home or away)
+        return (
+            Match.objects.filter(
+                date__gte=timezone.now()
+            )
+            .filter(Q(home_team__is_club_team=True) | Q(away_team__is_club_team=True))
+            .order_by('date')
+            .first()
+        )
     
     def get_recent_matches(self):
         from django.utils import timezone
