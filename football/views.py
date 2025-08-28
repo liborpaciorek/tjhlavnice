@@ -208,11 +208,12 @@ def club_info(request):
 def fetch_google_calendar_events(calendar_id, api_key, max_results=50, show_past_events=True, past_events_days=30):
     """Fetch events from Google Calendar API"""
     try:
-        now = datetime.now()
+        # Use timezone-aware datetime
+        now = timezone.now()
         
         # Fetch upcoming events
         upcoming_events = []
-        time_min_upcoming = now.isoformat() + 'Z'
+        time_min_upcoming = now.isoformat()
         
         url = 'https://www.googleapis.com/calendar/v3/calendars/{}/events'.format(calendar_id)
         
@@ -245,8 +246,8 @@ def fetch_google_calendar_events(calendar_id, api_key, max_results=50, show_past
         # Fetch past events if requested
         past_events = []
         if show_past_events:
-            time_min_past = (now - timedelta(days=past_events_days)).isoformat() + 'Z'
-            time_max_past = now.isoformat() + 'Z'
+            time_min_past = (now - timedelta(days=past_events_days)).isoformat()
+            time_max_past = now.isoformat()
             
             params_past = {
                 'key': api_key,
@@ -298,24 +299,43 @@ def parse_calendar_event(item):
             'html_link': item.get('htmlLink', ''),
         }
         
-        # Parse start time
+        # Parse start time - ensure timezone awareness
         start = item.get('start', {})
         if 'dateTime' in start:
-            event['start'] = datetime.fromisoformat(start['dateTime'].replace('Z', '+00:00'))
+            # Parse timezone-aware datetime
+            start_str = start['dateTime']
+            if start_str.endswith('Z'):
+                start_str = start_str.replace('Z', '+00:00')
+            event['start'] = datetime.fromisoformat(start_str)
+            # Convert to Django's timezone
+            if timezone.is_naive(event['start']):
+                event['start'] = timezone.make_aware(event['start'])
             event['all_day'] = False
         elif 'date' in start:
-            event['start'] = datetime.strptime(start['date'], '%Y-%m-%d')
+            # All-day event - create timezone-aware datetime at start of day
+            date_obj = datetime.strptime(start['date'], '%Y-%m-%d')
+            event['start'] = timezone.make_aware(date_obj.replace(hour=0, minute=0, second=0))
             event['all_day'] = True
         
-        # Parse end time
+        # Parse end time - ensure timezone awareness
         end = item.get('end', {})
         if 'dateTime' in end:
-            event['end'] = datetime.fromisoformat(end['dateTime'].replace('Z', '+00:00'))
+            end_str = end['dateTime']
+            if end_str.endswith('Z'):
+                end_str = end_str.replace('Z', '+00:00')
+            event['end'] = datetime.fromisoformat(end_str)
+            if timezone.is_naive(event['end']):
+                event['end'] = timezone.make_aware(event['end'])
         elif 'date' in end:
-            event['end'] = datetime.strptime(end['date'], '%Y-%m-%d')
+            date_obj = datetime.strptime(end['date'], '%Y-%m-%d')
+            event['end'] = timezone.make_aware(date_obj.replace(hour=23, minute=59, second=59))
         
         return event if event['start'] else None
-    except Exception:
+    except Exception as e:
+        # Log the error for debugging
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error parsing calendar event: {str(e)}, event data: {item}")
         return None
 
 
@@ -354,15 +374,23 @@ def google_calendar_view(request):
     
     if calendar_settings and calendar_settings.is_active:
         if calendar_settings.calendar_id and calendar_settings.api_key:
-            events, error_message = fetch_google_calendar_events(
-                calendar_settings.calendar_id,
-                calendar_settings.api_key,
-                calendar_settings.max_events,
-                calendar_settings.show_past_events,
-                calendar_settings.past_events_days
-            )
-            if error_message:
-                messages.error(request, f"Nepodařilo se načíst kalendář: {error_message}")
+            try:
+                events, error_message = fetch_google_calendar_events(
+                    calendar_settings.calendar_id,
+                    calendar_settings.api_key,
+                    calendar_settings.max_events,
+                    calendar_settings.show_past_events,
+                    calendar_settings.past_events_days
+                )
+                if error_message:
+                    messages.error(request, f"Nepodařilo se načíst kalendář: {error_message}")
+            except Exception as e:
+                error_message = f"Neočekávaná chyba při načítání kalendáře: {str(e)}"
+                messages.error(request, error_message)
+                # Log the error for debugging
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f"Calendar view error: {str(e)}", exc_info=True)
         else:
             messages.warning(request, "Kalendář není správně nakonfigurován. Kontaktujte správce.")
     elif calendar_settings:

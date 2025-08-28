@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.utils import timezone
 from football.models import GoogleCalendarSettings
 import requests
 
@@ -31,8 +32,13 @@ class Command(BaseCommand):
 
             # Test the API connection
             url = f'https://www.googleapis.com/calendar/v3/calendars/{settings.calendar_id}/events'
+            
+            # Use timezone-aware datetime
+            time_min = timezone.now().isoformat()
+            
             params = {
                 'key': settings.api_key,
+                'timeMin': time_min,
                 'maxResults': 1,
                 'singleEvents': 'true',
                 'orderBy': 'startTime'
@@ -97,7 +103,7 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.ERROR(f'❌ HTTP {response.status_code}: {response.text}'))
 
             # Show test URL for manual testing
-            test_url = f"{url}?key={settings.api_key}&maxResults=1"
+            test_url = f"{url}?key={settings.api_key}&maxResults=1&timeMin={time_min}"
             self.stdout.write(f"\nManual test URL (open in browser):")
             self.stdout.write(f"{test_url}")
 

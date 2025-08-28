@@ -192,6 +192,10 @@ Run `python manage.py setup_google_calendar` to create initial settings.
    - No internet connection
    - Google API is temporarily unavailable
 
+6. **"Error: can't compare offset-naive and offset-aware datetimes"**
+   - Fixed in the latest version with proper timezone handling
+   - All datetime comparisons are now timezone-aware
+
 ### Debugging Tools
 
 **Use the test command:**
