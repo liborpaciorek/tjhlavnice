@@ -377,3 +377,34 @@ class MainPage(models.Model):
             except Standing.DoesNotExist:
                 return Standing.objects.none()
         return Standing.objects.none()
+
+
+class GoogleCalendarSettings(models.Model):
+    """Google Calendar integration settings"""
+    name = models.CharField(max_length=100, default="Kalendář TJ Družba Hlavnice", verbose_name=_("Název kalendáře"))
+    calendar_id = models.CharField(max_length=255, blank=True, verbose_name=_("ID Google kalendáře"), 
+                                  help_text=_("ID Google kalendáře (např. abcd1234@group.calendar.google.com)"))
+    api_key = models.CharField(max_length=255, blank=True, verbose_name=_("Google API klíč"), 
+                              help_text=_("API klíč pro přístup k Google Calendar API"))
+    is_active = models.BooleanField(default=False, verbose_name=_("Aktivní"), 
+                                   help_text=_("Zapnout zobrazení kalendáře"))
+    max_events = models.IntegerField(default=50, verbose_name=_("Maximum událostí"), 
+                                   help_text=_("Maximální počet událostí k zobrazení"))
+    show_past_events = models.BooleanField(default=True, verbose_name=_("Zobrazit minulé události"))
+    past_events_days = models.IntegerField(default=30, verbose_name=_("Dny zpět"), 
+                                         help_text=_("Kolik dní zpět zobrazit minulé události"))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Vytvořeno"))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Aktualizováno"))
+    
+    class Meta:
+        verbose_name = _("Nastavení Google kalendáře")
+        verbose_name_plural = _("Nastavení Google kalendáře")
+    
+    def __str__(self):
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        # Ensure only one instance exists
+        if not self.pk and GoogleCalendarSettings.objects.exists():
+            raise ValueError(_("Lze vytvořit pouze jedno nastavení kalendáře"))
+        super().save(*args, **kwargs)

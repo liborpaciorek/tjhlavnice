@@ -2,9 +2,13 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.utils import timezone
 from django.db.models import Q
+from django.contrib import messages
+import requests
+import json
+from datetime import datetime, timedelta
 from .models import (
     ClubInfo, News, Team, Player, Management, Match, 
-    Standing, Event, Gallery, GalleryAlbum, MainPage, League
+    Standing, Event, Gallery, GalleryAlbum, MainPage, League, GoogleCalendarSettings
 )
 
 def home(request):
@@ -199,3 +203,109 @@ def club_info(request):
         'years_of_existence': years_of_existence
     }
     return render(request, 'football/club_info.html', context)
+
+
+def fetch_google_calendar_events(calendar_id, api_key, max_results=50, show_past_events=True, past_events_days=30):
+    """Fetch events from Google Calendar API"""
+    try:
+        # Set time boundaries
+        now = datetime.now()
+        if show_past_events:
+            time_min = (now - timedelta(days=past_events_days)).isoformat() + 'Z'
+        else:
+            time_min = now.isoformat() + 'Z'
+        
+        # Google Calendar API endpoint
+        url = 'https://www.googleapis.com/calendar/v3/calendars/{}/events'.format(calendar_id)
+        
+        params = {
+            'key': api_key,
+            'timeMin': time_min,
+            'maxResults': max_results,
+            'singleEvents': 'true',
+            'orderBy': 'startTime'
+        }
+        
+        response = requests.get(url, params=params, timeout=10)
+        
+        if response.status_code == 200:
+            data = response.json()
+            events = []
+            
+            for item in data.get('items', []):
+                # Parse event data
+                event = {
+                    'id': item.get('id'),
+                    'summary': item.get('summary', 'Bez názvu'),
+                    'description': item.get('description', ''),
+                    'location': item.get('location', ''),
+                    'start': None,
+                    'end': None,
+                    'all_day': False,
+                    'html_link': item.get('htmlLink', ''),
+                }
+                
+                # Parse start time
+                start = item.get('start', {})
+                if 'dateTime' in start:
+                    event['start'] = datetime.fromisoformat(start['dateTime'].replace('Z', '+00:00'))
+                    event['all_day'] = False
+                elif 'date' in start:
+                    event['start'] = datetime.strptime(start['date'], '%Y-%m-%d')
+                    event['all_day'] = True
+                
+                # Parse end time
+                end = item.get('end', {})
+                if 'dateTime' in end:
+                    event['end'] = datetime.fromisoformat(end['dateTime'].replace('Z', '+00:00'))
+                elif 'date' in end:
+                    event['end'] = datetime.strptime(end['date'], '%Y-%m-%d')
+                
+                events.append(event)
+            
+            return events, None
+        else:
+            return [], f"API Error: {response.status_code}"
+    
+    except requests.exceptions.RequestException as e:
+        return [], f"Connection Error: {str(e)}"
+    except Exception as e:
+        return [], f"Error: {str(e)}"
+
+
+def google_calendar_view(request):
+    """Google Calendar view"""
+    try:
+        calendar_settings = GoogleCalendarSettings.objects.first()
+    except GoogleCalendarSettings.DoesNotExist:
+        calendar_settings = None
+    
+    events = []
+    error_message = None
+    
+    if calendar_settings and calendar_settings.is_active:
+        if calendar_settings.calendar_id and calendar_settings.api_key:
+            events, error_message = fetch_google_calendar_events(
+                calendar_settings.calendar_id,
+                calendar_settings.api_key,
+                calendar_settings.max_events,
+                calendar_settings.show_past_events,
+                calendar_settings.past_events_days
+            )
+            if error_message:
+                messages.error(request, f"Nepodařilo se načíst kalendář: {error_message}")
+        else:
+            messages.warning(request, "Kalendář není správně nakonfigurován. Kontaktujte správce.")
+    elif calendar_settings:
+        messages.info(request, "Kalendář je momentálně deaktivován.")
+    else:
+        messages.warning(request, "Kalendář není nakonfigurován. Kontaktujte správce.")
+    
+    context = {
+        'events': events,
+        'calendar_settings': calendar_settings,
+        'error_message': error_message,
+        'today': timezone.now().date(),
+    }
+    
+    return render(request, 'football/google_calendar.html', context)

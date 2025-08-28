@@ -10,6 +10,7 @@ urlpatterns = [
     path('matches/', views.MatchListView.as_view(), name='matches'),
     path('standings/', views.standings, name='standings'),
     path('calendar/', views.EventListView.as_view(), name='calendar'),
+    path('kalendar/', views.google_calendar_view, name='google_calendar'),
     path('gallery/', views.GalleryAlbumListView.as_view(), name='gallery'),
     path('gallery/<int:pk>/', views.GalleryAlbumDetailView.as_view(), name='gallery_detail'),
     path('club/', views.club_info, name='club_info'),

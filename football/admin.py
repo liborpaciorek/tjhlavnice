@@ -3,7 +3,7 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from .models import (
     ClubInfo, League, Team, Player, Management, News, 
-    Match, Standing, Event, Gallery, GalleryAlbum, PageVisit, MainPage
+    Match, Standing, Event, Gallery, GalleryAlbum, PageVisit, MainPage, GoogleCalendarSettings
 )
 
 @admin.register(ClubInfo)
@@ -205,3 +205,30 @@ class MainPageAdmin(admin.ModelAdmin):
     
     def has_delete_permission(self, request, obj=None):
         return False
+
+
+@admin.register(GoogleCalendarSettings)
+class GoogleCalendarSettingsAdmin(admin.ModelAdmin):
+    list_display = ['name', 'is_active', 'calendar_id', 'updated_at']
+    fields = [
+        'name', 
+        'calendar_id', 
+        'api_key', 
+        'is_active', 
+        'max_events', 
+        'show_past_events', 
+        'past_events_days'
+    ]
+    readonly_fields = ['created_at', 'updated_at']
+    
+    def has_add_permission(self, request):
+        # Only allow one instance
+        return not GoogleCalendarSettings.objects.exists()
+    
+    def has_delete_permission(self, request, obj=None):
+        return False
+    
+    class Media:
+        css = {
+            'all': ('admin/css/widgets.css', 'css/custom.css',),
+        }

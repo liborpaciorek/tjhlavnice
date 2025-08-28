@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Kalendář - TJ Družba Hlavnice{% endblock %}
+
+{% block content %}
+<div class="pt-20">
+    <!-- Hero Section -->
+    <div class="hero-bg py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                    <i class="fas fa-calendar-alt text-club-red mr-4"></i>
+                    KALENDÁŘ
+                </h1>
+                <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                    Aktuální události a termíny klubu TJ Družba Hlavnice
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendar Content -->
+    <div class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            {% if messages %}
+                <div class="mb-8">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} bg-{% if message.tags == 'error' %}red{% elif message.tags == 'warning' %}yellow{% else %}blue{% endif %}-100 border border-{% if message.tags == 'error' %}red{% elif message.tags == 'warning' %}yellow{% else %}blue{% endif %}-400 text-{% if message.tags == 'error' %}red{% elif message.tags == 'warning' %}yellow{% else %}blue{% endif %}-700 px-4 py-3 rounded mb-4">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if calendar_settings and calendar_settings.is_active %}
+                {% if events %}
+                    <!-- Calendar Events Grid -->
+                    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        {% for event in events %}
+                            <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                                <div class="p-6">
+                                    <!-- Date Badge -->
+                                    <div class="flex items-start justify-between mb-4">
+                                        <div class="bg-club-red text-white px-3 py-1 rounded-lg text-sm font-semibold">
+                                            {% if event.all_day %}
+                                                {{ event.start|date:"j. n. Y" }}
+                                            {% else %}
+                                                {{ event.start|date:"j. n." }} • {{ event.start|time:"H:i" }}
+                                            {% endif %}
+                                        </div>
+                                        {% if event.start.date < today %}
+                                            <span class="bg-gray-200 text-gray-600 px-2 py-1 rounded text-xs">Proběhlo</span>
+                                        {% elif event.start.date == today %}
+                                            <span class="bg-green-200 text-green-800 px-2 py-1 rounded text-xs">Dnes</span>
+                                        {% else %}
+                                            <span class="bg-blue-200 text-blue-800 px-2 py-1 rounded text-xs">Nadcházející</span>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <!-- Event Title -->
+                                    <h3 class="text-xl font-bold text-gray-900 mb-3 leading-tight">
+                                        {{ event.summary }}
+                                    </h3>
+                                    
+                                    <!-- Event Details -->
+                                    {% if event.description %}
+                                        <div class="text-gray-600 mb-3 text-sm leading-relaxed">
+                                            {{ event.description|truncatewords:20|linebreaks }}
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <!-- Time Info -->
+                                    <div class="text-sm text-gray-500 mb-3">
+                                        <i class="fas fa-clock mr-2"></i>
+                                        {% if event.all_day %}
+                                            Celý den
+                                        {% else %}
+                                            {{ event.start|time:"H:i" }}
+                                            {% if event.end %}
+                                                - {{ event.end|time:"H:i" }}
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <!-- Location -->
+                                    {% if event.location %}
+                                        <div class="text-sm text-gray-500 mb-4">
+                                            <i class="fas fa-map-marker-alt mr-2"></i>
+                                            {{ event.location }}
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <!-- Action Button -->
+                                    {% if event.html_link %}
+                                        <a href="{{ event.html_link }}" target="_blank" class="inline-flex items-center text-club-red hover:text-club-red-dark font-medium transition-colors duration-200">
+                                            Zobrazit v Google kalendáři
+                                            <i class="fas fa-external-link-alt ml-2 text-xs"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Calendar Link -->
+                    {% if calendar_settings.calendar_id %}
+                        <div class="mt-12 text-center">
+                            <a href="https://calendar.google.com/calendar/embed?src={{ calendar_settings.calendar_id }}&ctz=Europe/Prague" 
+                               target="_blank" 
+                               class="inline-flex items-center bg-club-red hover:bg-club-red-dark text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                                <i class="fas fa-calendar-plus mr-3"></i>
+                                Zobrazit kompletní kalendář
+                            </a>
+                        </div>
+                    {% endif %}
+                    
+                {% else %}
+                    <!-- No Events Message -->
+                    <div class="text-center py-16">
+                        <div class="bg-white rounded-xl shadow-lg p-12 max-w-lg mx-auto">
+                            <i class="fas fa-calendar-times text-6xl text-gray-300 mb-6"></i>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-4">Žádné události</h3>
+                            <p class="text-gray-600">
+                                V kalendáři momentálně nejsou žádné nadcházející události.
+                            </p>
+                        </div>
+                    </div>
+                {% endif %}
+            {% else %}
+                <!-- Calendar Disabled Message -->
+                <div class="text-center py-16">
+                    <div class="bg-white rounded-xl shadow-lg p-12 max-w-lg mx-auto">
+                        <i class="fas fa-calendar-times text-6xl text-gray-300 mb-6"></i>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Kalendář nedostupný</h3>
+                        <p class="text-gray-600">
+                            Kalendář není momentálně dostupný nebo není správně nakonfigurován.
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add today's date for comparison
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0];
+    
+    // You can add additional JavaScript functionality here if needed
+});
+</script>
+{% endblock %}
