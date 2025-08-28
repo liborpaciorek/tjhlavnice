@@ -299,6 +299,22 @@ class Gallery(models.Model):
         except (ValueError, AttributeError):
             pass
         return None
+
+
+class BulkImageUpload(models.Model):
+    """Temporary model for bulk image uploads"""
+    album = models.ForeignKey(GalleryAlbum, on_delete=models.CASCADE, verbose_name=_("Album"))
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=True, null=True, verbose_name=_("Událost"))
+    images = models.FileField(upload_to='temp_uploads/', verbose_name=_("Obrázky"), 
+                             help_text=_("Vyberte více obrázků najednou (Ctrl+Click nebo Cmd+Click)"))
+    default_title_prefix = models.CharField(max_length=100, default="Fotka", 
+                                          verbose_name=_("Předpona názvu"), 
+                                          help_text=_("Každý obrázek bude pojmenován: 'Předpona + číslo'"))
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = _("Hromadné nahrání fotek")
+        verbose_name_plural = _("Hromadné nahrání fotek")
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

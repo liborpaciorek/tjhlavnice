@@ -1,10 +1,12 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
+from django.shortcuts import redirect
 from .models import (
     ClubInfo, League, Team, Player, Management, News, 
-    Match, Standing, Event, Gallery, GalleryAlbum, PageVisit, MainPage, GoogleCalendarSettings
+    Match, Standing, Event, Gallery, GalleryAlbum, PageVisit, MainPage, GoogleCalendarSettings, BulkImageUpload
 )
+from .forms import BulkImageUploadForm
 
 @admin.register(ClubInfo)
 class ClubInfoAdmin(admin.ModelAdmin):
@@ -149,7 +151,7 @@ class GalleryInline(admin.TabularInline):
 
 @admin.register(GalleryAlbum)
 class GalleryAlbumAdmin(admin.ModelAdmin):
-    list_display = ['title', 'created_at', 'event', 'cover_preview']
+    list_display = ['title', 'created_at', 'event', 'cover_preview', 'bulk_upload_link']
     list_filter = ['created_at', 'event']
     search_fields = ['title', 'description']
     date_hierarchy = 'created_at'
@@ -163,6 +165,19 @@ class GalleryAlbumAdmin(admin.ModelAdmin):
             return format_html('<img src="{}" width="80" height="60" />', url)
         return _("Bez obrázku")
     cover_preview.short_description = _("Titulka")
+    
+    def bulk_upload_link(self, obj):
+        from django.urls import reverse
+        url = reverse('admin:football_bulkimageupload_add') + f'?album={obj.pk}'
+        return format_html(
+            '<a href="{}" class="button" style="background: #007cba; color: white; padding: 5px 10px; '
+            'text-decoration: none; border-radius: 3px; font-size: 11px;">'
+            '<i class="fas fa-upload"></i> Hromadné nahrání'
+            '</a>',
+            url
+        )
+    bulk_upload_link.short_description = _("Akce")
+    bulk_upload_link.allow_tags = True
 
 @admin.register(Gallery)
 class GalleryAdmin(admin.ModelAdmin):
@@ -178,6 +193,74 @@ class GalleryAdmin(admin.ModelAdmin):
             return format_html('<img src="{}" width="80" height="60" />', obj.image.url)
         return _("Bez obrázku")
     image_preview.short_description = _("Obrázek")
+
+
+@admin.register(BulkImageUpload)
+class BulkImageUploadAdmin(admin.ModelAdmin):
+    """Admin for bulk image upload"""
+    form = BulkImageUploadForm
+    list_display = ['album', 'event', 'uploaded_at', 'default_title_prefix']
+    list_filter = ['uploaded_at', 'album', 'event']
+    ordering = ['-uploaded_at']
+    fields = ['album', 'event', 'default_title_prefix', 'images']
+    
+    def get_form(self, request, obj=None, **kwargs):
+        """Pre-fill album field if passed in URL"""
+        form = super().get_form(request, obj, **kwargs)
+        
+        # Pre-fill album from URL parameter
+        album_id = request.GET.get('album')
+        if album_id and not obj:
+            try:
+                album = GalleryAlbum.objects.get(pk=album_id)
+                form.base_fields['album'].initial = album
+                # Also set default title prefix based on album name
+                form.base_fields['default_title_prefix'].initial = f"{album.title} -"
+            except GalleryAlbum.DoesNotExist:
+                pass
+        
+        return form
+    
+    def save_model(self, request, obj, form, change):
+        """Override save to handle multiple images"""
+        if not change:  # Only for new instances
+            created_galleries = form.save(commit=True)
+            if created_galleries:
+                from django.contrib import messages
+                count = len(created_galleries)
+                messages.success(
+                    request, 
+                    f"Úspěšně nahráno {count} obrázků do galerie '{obj.album.title}'"
+                )
+        else:
+            # For existing instances, just save normally (shouldn't happen much)
+            super().save_model(request, obj, form, change)
+    
+    def response_add(self, request, obj, post_url_continue=None):
+        """Redirect back to album admin after successful upload"""
+        from django.contrib import admin
+        from django.http import HttpResponseRedirect
+        from django.urls import reverse
+        
+        # If we came from an album, redirect back to the album list
+        if obj and obj.album:
+            return HttpResponseRedirect(reverse('admin:football_galleryalbum_changelist'))
+        
+        return super().response_add(request, obj, post_url_continue)
+    
+    def has_change_permission(self, request, obj=None):
+        """Disable editing of bulk uploads"""
+        return False
+    
+    def has_delete_permission(self, request, obj=None):
+        """Allow deletion of bulk upload records"""
+        return True
+    
+    class Media:
+        css = {
+            'all': ('admin/css/widgets.css', 'css/custom.css',),
+        }
+        js = ('admin/js/bulk_upload.js',)
 
 @admin.register(PageVisit)
 class PageVisitAdmin(admin.ModelAdmin):
@@ -227,6 +310,12 @@ class GoogleCalendarSettingsAdmin(admin.ModelAdmin):
     
     def has_delete_permission(self, request, obj=None):
         return False
+    
+    class Media:
+        css = {
+            'all': ('admin/css/widgets.css', 'css/custom.css',),
+        }
+
     
     class Media:
         css = {
