@@ -72,7 +72,7 @@ The TJ Družba Hlavnice website now includes Google Calendar integration that al
 ## Features
 
 ### Calendar Display
-- Events are displayed in a responsive card grid
+- **Event Order**: Shows 6 upcoming events (nearest first) followed by 6 past events (most recent first)
 - Each event shows:
   - Date and time
   - Event title
@@ -81,15 +81,19 @@ The TJ Družba Hlavnice website now includes Google Calendar integration that al
   - Link to Google Calendar
 
 ### Event Status Indicators
-- **Proběhlo**: Past events (gray badge)
-- **Dnes**: Today's events (green badge)  
+- **DNES**: Today's events (green badge)  
 - **Nadcházející**: Future events (blue badge)
+- **Proběhlo**: Past events (gray badge)
+
+### Event Sections
+- **Nadcházející události**: Up to 6 upcoming events, sorted by date (nearest first)
+- **Nedávné události**: Up to 6 past events, sorted by date (most recent first)
 
 ### Admin Configuration Options
 - **is_active**: Enable/disable calendar display
-- **max_events**: Limit number of events shown
-- **show_past_events**: Include past events
-- **past_events_days**: How many days back to show past events
+- **max_events**: Currently displays 6 upcoming + 6 past events (total 12)
+- **show_past_events**: Include past events section
+- **past_events_days**: How many days back to search for past events
 
 ## Navigation Integration
 

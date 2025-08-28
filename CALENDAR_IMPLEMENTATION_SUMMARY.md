@@ -39,11 +39,20 @@
 
 ## Features:
 - ✅ Configurable through admin panel
-- ✅ Shows upcoming and past events  
+- ✅ Shows **6 upcoming events** (nearest first) followed by **6 past events** (most recent first)
 - ✅ Event status indicators (past/today/upcoming)
 - ✅ Direct links to Google Calendar
-- ✅ Error handling and user messages
+- ✅ Enhanced error handling with specific 403 referrer error fix
+- ✅ Diagnostic management command (`python manage.py test_google_calendar`)
 - ✅ Responsive design matching site style
 - ✅ Security considerations implemented
 
-The integration is now fully functional and ready for production use!
+## Event Display Order:
+1. **Nadcházející události** (Upcoming Events): Up to 6 events, starting with the nearest
+2. **Nedávné události** (Recent Events): Up to 6 past events, starting with the most recent
+
+## New Management Commands:
+- `python manage.py setup_google_calendar` - Creates initial settings
+- `python manage.py test_google_calendar` - Diagnoses API connection issues
+
+The integration is now fully functional with improved event ordering and comprehensive error handling for production use!

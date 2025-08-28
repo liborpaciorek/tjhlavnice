@@ -389,10 +389,10 @@ class GoogleCalendarSettings(models.Model):
     is_active = models.BooleanField(default=False, verbose_name=_("Aktivní"), 
                                    help_text=_("Zapnout zobrazení kalendáře"))
     max_events = models.IntegerField(default=50, verbose_name=_("Maximum událostí"), 
-                                   help_text=_("Maximální počet událostí k zobrazení"))
+                                   help_text=_("Maximální počet událostí k zobrazení (nyní: 6 nadcházejících + 6 minulých)"))
     show_past_events = models.BooleanField(default=True, verbose_name=_("Zobrazit minulé události"))
     past_events_days = models.IntegerField(default=30, verbose_name=_("Dny zpět"), 
-                                         help_text=_("Kolik dní zpět zobrazit minulé události"))
+                                         help_text=_("Kolik dní zpět hledat minulé události (zobrazí se posledních 6)"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Vytvořeno"))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Aktualizováno"))
     

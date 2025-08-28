@@ -38,8 +38,14 @@ class Command(BaseCommand):
                 'orderBy': 'startTime'
             }
 
+            # Add headers to avoid referrer blocking
+            headers = {
+                'User-Agent': 'TJ-Hlavnice-Website/1.0',
+                'Referer': 'https://tjhlavnice.cz/'
+            }
+
             self.stdout.write("\nTesting API connection...")
-            response = requests.get(url, params=params, timeout=10)
+            response = requests.get(url, params=params, headers=headers, timeout=10)
             
             if response.status_code == 200:
                 data = response.json()

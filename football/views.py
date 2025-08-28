@@ -208,88 +208,138 @@ def club_info(request):
 def fetch_google_calendar_events(calendar_id, api_key, max_results=50, show_past_events=True, past_events_days=30):
     """Fetch events from Google Calendar API"""
     try:
-        # Set time boundaries
         now = datetime.now()
-        if show_past_events:
-            time_min = (now - timedelta(days=past_events_days)).isoformat() + 'Z'
-        else:
-            time_min = now.isoformat() + 'Z'
         
-        # Google Calendar API endpoint
+        # Fetch upcoming events
+        upcoming_events = []
+        time_min_upcoming = now.isoformat() + 'Z'
+        
         url = 'https://www.googleapis.com/calendar/v3/calendars/{}/events'.format(calendar_id)
         
-        params = {
+        params_upcoming = {
             'key': api_key,
-            'timeMin': time_min,
-            'maxResults': max_results,
+            'timeMin': time_min_upcoming,
+            'maxResults': 6,  # Get 6 upcoming events
             'singleEvents': 'true',
             'orderBy': 'startTime'
         }
         
-        response = requests.get(url, params=params, timeout=10)
+        # Add headers to avoid referrer blocking
+        headers = {
+            'User-Agent': 'TJ-Hlavnice-Website/1.0',
+            'Referer': 'https://tjhlavnice.cz/'
+        }
+        
+        # Fetch upcoming events
+        response = requests.get(url, params=params_upcoming, headers=headers, timeout=10)
         
         if response.status_code == 200:
             data = response.json()
-            events = []
-            
             for item in data.get('items', []):
-                # Parse event data
-                event = {
-                    'id': item.get('id'),
-                    'summary': item.get('summary', 'Bez názvu'),
-                    'description': item.get('description', ''),
-                    'location': item.get('location', ''),
-                    'start': None,
-                    'end': None,
-                    'all_day': False,
-                    'html_link': item.get('htmlLink', ''),
-                }
-                
-                # Parse start time
-                start = item.get('start', {})
-                if 'dateTime' in start:
-                    event['start'] = datetime.fromisoformat(start['dateTime'].replace('Z', '+00:00'))
-                    event['all_day'] = False
-                elif 'date' in start:
-                    event['start'] = datetime.strptime(start['date'], '%Y-%m-%d')
-                    event['all_day'] = True
-                
-                # Parse end time
-                end = item.get('end', {})
-                if 'dateTime' in end:
-                    event['end'] = datetime.fromisoformat(end['dateTime'].replace('Z', '+00:00'))
-                elif 'date' in end:
-                    event['end'] = datetime.strptime(end['date'], '%Y-%m-%d')
-                
-                events.append(event)
-            
-            return events, None
+                event = parse_calendar_event(item)
+                if event:
+                    upcoming_events.append(event)
         else:
-            # Enhanced error handling for different status codes
-            error_details = ""
-            try:
-                error_response = response.json()
-                if 'error' in error_response:
-                    error_info = error_response['error']
-                    error_details = f" - {error_info.get('message', 'Unknown error')}"
-            except:
-                pass
+            return handle_api_error(response)
+        
+        # Fetch past events if requested
+        past_events = []
+        if show_past_events:
+            time_min_past = (now - timedelta(days=past_events_days)).isoformat() + 'Z'
+            time_max_past = now.isoformat() + 'Z'
             
-            if response.status_code == 403:
-                error_msg = f"API Error 403: Přístup odmítnut{error_details}. Zkontrolujte API klíč a oprávnění kalendáře."
-            elif response.status_code == 404:
-                error_msg = f"API Error 404: Kalendář nenalezen{error_details}. Zkontrolujte ID kalendáře."
-            elif response.status_code == 400:
-                error_msg = f"API Error 400: Neplatný požadavek{error_details}. Zkontrolujte formát ID kalendáře."
+            params_past = {
+                'key': api_key,
+                'timeMin': time_min_past,
+                'timeMax': time_max_past,
+                'maxResults': 6,  # Get 6 past events
+                'singleEvents': 'true',
+                'orderBy': 'startTime'
+            }
+            
+            response_past = requests.get(url, params=params_past, headers=headers, timeout=10)
+            
+            if response_past.status_code == 200:
+                data_past = response_past.json()
+                for item in data_past.get('items', []):
+                    event = parse_calendar_event(item)
+                    if event and event['start'] < now:
+                        past_events.append(event)
+                
+                # Sort past events by start time descending (most recent first)
+                past_events.sort(key=lambda x: x['start'], reverse=True)
+                # Keep only the last 6 events
+                past_events = past_events[:6]
             else:
-                error_msg = f"API Error {response.status_code}{error_details}"
-            
-            return [], error_msg
+                return handle_api_error(response_past)
+        
+        # Combine events: upcoming first, then past
+        all_events = upcoming_events + past_events
+        
+        return all_events, None
     
     except requests.exceptions.RequestException as e:
         return [], f"Connection Error: {str(e)}"
     except Exception as e:
         return [], f"Error: {str(e)}"
+
+
+def parse_calendar_event(item):
+    """Parse a calendar event item from Google Calendar API"""
+    try:
+        event = {
+            'id': item.get('id'),
+            'summary': item.get('summary', 'Bez názvu'),
+            'description': item.get('description', ''),
+            'location': item.get('location', ''),
+            'start': None,
+            'end': None,
+            'all_day': False,
+            'html_link': item.get('htmlLink', ''),
+        }
+        
+        # Parse start time
+        start = item.get('start', {})
+        if 'dateTime' in start:
+            event['start'] = datetime.fromisoformat(start['dateTime'].replace('Z', '+00:00'))
+            event['all_day'] = False
+        elif 'date' in start:
+            event['start'] = datetime.strptime(start['date'], '%Y-%m-%d')
+            event['all_day'] = True
+        
+        # Parse end time
+        end = item.get('end', {})
+        if 'dateTime' in end:
+            event['end'] = datetime.fromisoformat(end['dateTime'].replace('Z', '+00:00'))
+        elif 'date' in end:
+            event['end'] = datetime.strptime(end['date'], '%Y-%m-%d')
+        
+        return event if event['start'] else None
+    except Exception:
+        return None
+
+
+def handle_api_error(response):
+    """Handle API error responses"""
+    error_details = ""
+    try:
+        error_response = response.json()
+        if 'error' in error_response:
+            error_info = error_response['error']
+            error_details = f" - {error_info.get('message', 'Unknown error')}"
+    except:
+        pass
+    
+    if response.status_code == 403:
+        error_msg = f"API Error 403: Přístup odmítnut{error_details}. Zkontrolujte API klíč a oprávnění kalendáře."
+    elif response.status_code == 404:
+        error_msg = f"API Error 404: Kalendář nenalezen{error_details}. Zkontrolujte ID kalendáře."
+    elif response.status_code == 400:
+        error_msg = f"API Error 400: Neplatný požadavek{error_details}. Zkontrolujte formát ID kalendáře."
+    else:
+        error_msg = f"API Error {response.status_code}{error_details}"
+    
+    return [], error_msg
 
 
 def google_calendar_view(request):
