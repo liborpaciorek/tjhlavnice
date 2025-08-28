@@ -265,7 +265,26 @@ def fetch_google_calendar_events(calendar_id, api_key, max_results=50, show_past
             
             return events, None
         else:
-            return [], f"API Error: {response.status_code}"
+            # Enhanced error handling for different status codes
+            error_details = ""
+            try:
+                error_response = response.json()
+                if 'error' in error_response:
+                    error_info = error_response['error']
+                    error_details = f" - {error_info.get('message', 'Unknown error')}"
+            except:
+                pass
+            
+            if response.status_code == 403:
+                error_msg = f"API Error 403: Přístup odmítnut{error_details}. Zkontrolujte API klíč a oprávnění kalendáře."
+            elif response.status_code == 404:
+                error_msg = f"API Error 404: Kalendář nenalezen{error_details}. Zkontrolujte ID kalendáře."
+            elif response.status_code == 400:
+                error_msg = f"API Error 400: Neplatný požadavek{error_details}. Zkontrolujte formát ID kalendáře."
+            else:
+                error_msg = f"API Error {response.status_code}{error_details}"
+            
+            return [], error_msg
     
     except requests.exceptions.RequestException as e:
         return [], f"Connection Error: {str(e)}"
